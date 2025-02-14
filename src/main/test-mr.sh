@@ -7,32 +7,44 @@
 # un-comment this to run the tests with the Go race detector.
 # RACE=-race
 
+# 检查当前操作系统是否是 macOS
 if [[ "$OSTYPE" = "darwin"* ]]
 then
+  # 检查当前 Go 版本是否是 1.17.0 到 1.17.5 之间的版本
   if go version | grep 'go1.17.[012345]'
   then
     # -race with plug-ins on x86 MacOS 12 with
     # go1.17 before 1.17.6 sometimes crash.
+    # 将 RACE 变量设置为空
     RACE=
     echo '*** Turning off -race since it may not work on a Mac'
     echo '    with ' `go version`
   fi
 fi
 
+# $1: 第一个参数的值
 ISQUIET=$1
 maybe_quiet() {
     if [ "$ISQUIET" == "quiet" ]; then
+    # "$@" 表示传递给函数的所有参数（即要运行的命令）
+    # > /dev/null 将命令的标准输出（stdout）重定向到 /dev/null，即丢弃输出
+    # 2>& 1 将标准错误（stderr）重定向到标准输出，因此错误信息也会被丢弃
       "$@" > /dev/null 2>&1
     else
+    # 正常执行命令，输出会显示在终端
       "$@"
     fi
 }
 
 
+# 默认使用 timeout 命令
 TIMEOUT=timeout
 TIMEOUT2=""
+# 即让 sleep 1 命令在 2 秒后超时
+# 如果命令成功执行
 if timeout 2s sleep 1 > /dev/null 2>&1
 then
+#  : 是一个空操作，表示什么都不做
   :
 else
   if gtimeout 2s sleep 1 > /dev/null 2>&1
@@ -47,6 +59,7 @@ fi
 if [ "$TIMEOUT" != "" ]
 then
   TIMEOUT2=$TIMEOUT
+  # 如果命令在超时 (120s, 45s) 后仍未终止，则在 2 秒后强制终止
   TIMEOUT2+=" -k 2s 120s "
   TIMEOUT+=" -k 2s 45s "
 fi
@@ -289,6 +302,7 @@ sort mr-out-0 > mr-correct-crash.txt
 rm -f mr-out*
 
 rm -f mr-done
+# mr-done: 用于标记 Coordinator 是否完成
 ((maybe_quiet $TIMEOUT2 ../mrcoordinator ../pg*txt); touch mr-done ) &
 sleep 1
 
@@ -298,6 +312,7 @@ maybe_quiet $TIMEOUT2 ../mrworker ../../mrapps/crash.so &
 # mimic rpc.go's coordinatorSock()
 SOCKNAME=/var/tmp/5840-mr-`id -u`
 
+# （）中的子 shell: 只要 $SOCKNAME 存在且 mr-done 文件不存在，就不断启动 mrworker
 ( while [ -e $SOCKNAME -a ! -f mr-done ]
   do
     maybe_quiet $TIMEOUT2 ../mrworker ../../mrapps/crash.so
@@ -316,6 +331,7 @@ do
   sleep 1
 done
 
+# 等待所有后台进程完成
 wait
 
 rm $SOCKNAME
