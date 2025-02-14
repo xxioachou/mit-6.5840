@@ -48,7 +48,7 @@ func Worker(mapf func(string, string) []KeyValue,
 		var task Task
 		ok := call("Coordinator.GetTask", &ReqTask{}, &task)
 		if !ok {
-			log.Println("call Coordinator.GetTask failed")
+			// log.Println("call Coordinator.GetTask failed")
 			break
 		}
 		// log.Printf("worker got task %v\n", task)

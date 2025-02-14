@@ -5,7 +5,7 @@
 #
 
 # un-comment this to run the tests with the Go race detector.
-# RACE=-race
+RACE=-race
 
 # 检查当前操作系统是否是 macOS
 if [[ "$OSTYPE" = "darwin"* ]]
