@@ -67,6 +67,7 @@ const UNVOTE = -1
 const MINTIMEOUT = 200
 const MAXTIMEOUT = 300
 const HEARTBEATTIMEOUT = 100
+const CHANSIZE = 30
 
 // A Go object implementing a single Raft peer.
 type Raft struct {
@@ -80,18 +81,11 @@ type Raft struct {
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
 
-	// 当前服务器的 term
-	currentTerm			int
-	// 当前服务器的身份 (follower,candidate,leader)
-	identity 			int
-	// 当前服务器给哪个候选人投票
-	voteFor				int
-	// 当前服务器得到的票数
-	votes				int
-	// 当前服务器的计时器过去了多少时间(ms)
-	passedMs			int
-	// 当前服务器发生 timeout 需要多少时长(ms)
-	timeoutNeedMs		int
+	currentTerm			int			// 当前服务器的 term
+	identity 			int			// 当前服务器的身份 (follower,candidate,leader)
+	voteFor				int			// 当前服务器给哪个候选人投票
+	votes				int			// 当前服务器得到的票数
+	changeStatus		chan int	// 状态改变时用于通知 ticker
 
 	// // 当前服务器维护的 logs
 	// logs			[]LogEntry
@@ -375,6 +369,8 @@ func (rf *Raft) toFollower(term int) {
 	rf.identity = FOLLOWER
 	rf.voteFor = UNVOTE
 	rf.votes = 0
+	rf.passedMs = 0
+	rf.timeoutNeedMs = getRand(MINTIMEOUT, MAXTIMEOUT)
 }
 
 // 辅助函数（调用者加锁）：从 follower 变成 candidate
@@ -540,25 +536,33 @@ func (rf *Raft) ticker() {
 
 		// Your code here (3A)
 		// Check if a leader election should be started.
-		// 检查是否需要重新选举(计时器是否结束)
-		rf.mu.Lock()
-		if rf.passedMs < rf.timeoutNeedMs {
-			rf.passedMs ++
+
+		switch rf.identity {
+		case FOLLOWER:
+			select {
+			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
+				// ...
+			}
+			break
+		case CANDIDATE:
+			rf.mu.Lock()
+			rf.currentTerm ++
+			rf.voteFor = rf.me
+			rf.votes = 1
 			rf.mu.Unlock()
-
-			time.Sleep(1 * time.Millisecond)
-			continue
-		}
-		rf.mu.Unlock()
-
-		// 计时器结束
-		// 两种情况：
-		// 1. follower 如果一段时间没有收到心跳且没有在给 candidate 投票，就发起选举
-		// 2. candidate 发起选举一段时间后，没有成为 leader，重新发起选举
-		// 非 leader 就发起选举
-		_, isLeader := rf.GetState()
-		if !isLeader {
-			rf.kickOffNewElection()
+			go rf.kickOffNewElection()
+			select {
+			case <-rf.changeStatus:
+			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
+			}
+			break
+		case LEADER:
+			go rf.sendHeartBeat()
+			select {
+			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
+				// ...
+			}
+			break
 		}
 
 
@@ -592,8 +596,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.identity = FOLLOWER
 	rf.voteFor = UNVOTE
 	rf.votes = 0
-	rf.passedMs = 0
-	rf.timeoutNeedMs = getRand(MINTIMEOUT, MAXTIMEOUT)
+	rf.changeStatus = make(chan int, CHANSIZE)
 	DPrintf("Make() %s", rf.String())
 
 	// initialize from state persisted before a crash

@@ -1,0 +1,17 @@
+每个 ticker 不同状态的执行逻辑：
+1. Follower
+    初始化：无
+    1.1 超时：
+            发起选举（成为 Candidate）
+        
+2. Candidate
+    初始化：term ++ | 给自己投票 | 重置计时器 | 发送拉票 RPC
+    2.1 超时：
+            重新发起选举
+    2.2 状态改变（受到 Leader 的心跳 -> Follower、受到选举的结果 -> Leader）：
+            重置计时器
+
+3. Leader
+    初始动作：发送心跳 RPC
+    2.1 状态改变：
+        
