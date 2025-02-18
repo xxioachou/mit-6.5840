@@ -1,0 +1,1427 @@
+=== RUN   TestInitialElection3A
+2025/02/18 01:44:51 Make() server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:51 Make() server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 236
+2025/02/18 01:44:51 Make() server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 248
+Test (3A): initial election ...
+2025/02/18 01:44:51 kickOffNewElection()-begin server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 236, timeoutNeedMs: 236
+2025/02/18 01:44:51 toCandidate()1 server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 236, timeoutNeedMs: 236
+2025/02/18 01:44:51 toCandidate()2 server: 1, currentTerm: 1, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:51 kickOffNewElection()-end server: 1, currentTerm: 1, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+, votes are 1
+2025/02/18 01:44:51 kickOffNewElection()-begin server: 1, currentTerm: 1, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 227
+2025/02/18 01:44:51 toCandidate()1 server: 1, currentTerm: 1, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 227
+2025/02/18 01:44:51 toCandidate()2 server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+2025/02/18 01:44:51 kickOffNewElection()-end server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+, votes are 1
+2025/02/18 01:44:51 server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+ sendRequestVote to server 2
+2025/02/18 01:44:51 server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+ sendRequestVote to server 0
+2025/02/18 01:44:51 kickOffNewElection()-begin server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+2025/02/18 01:44:51 toCandidate()1 server: 1, currentTerm: 2, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 272
+2025/02/18 01:44:51 toCandidate()2 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:51 kickOffNewElection()-end server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+, votes are 1
+2025/02/18 01:44:51 kickOffNewElection()-begin server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:51 toCandidate()1 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:51 toCandidate()2 server: 1, currentTerm: 4, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:51 kickOffNewElection()-begin server: 1, currentTerm: 4, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:51 toCandidate()1 server: 1, currentTerm: 4, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:51 toCandidate()2 server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+2025/02/18 01:44:51 server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+ sendRequestVote to server 0
+2025/02/18 01:44:51 kickOffNewElection()-end server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+, votes are 1
+2025/02/18 01:44:51 kickOffNewElection()-end server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+, votes are 1
+2025/02/18 01:44:51 server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 238, timeoutNeedMs: 248
+ RequestVote(), args: &{Term:2 CandidateId:1}
+2025/02/18 01:44:51 server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+ sendRequestVote to server 2
+2025/02/18 01:44:51 server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 238, timeoutNeedMs: 297
+ RequestVote(), args: &{Term:2 CandidateId:1}
+2025/02/18 01:44:51 toFollower() server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 245
+2025/02/18 01:44:51 toFollower() server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 298
+2025/02/18 01:44:51 server: 0, currentTerm: 2, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 298
+ RequestVote(), args: &{Term:5 CandidateId:1}
+2025/02/18 01:44:51 toFollower() server: 0, currentTerm: 2, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 299
+2025/02/18 01:44:51 server: 2, currentTerm: 2, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 245
+ RequestVote(), args: &{Term:5 CandidateId:1}
+2025/02/18 01:44:51 toFollower() server: 2, currentTerm: 2, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 5, identity: follower, voteFor: 1, votes: 0, passedMs: 235, timeoutNeedMs: 235
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 5, identity: follower, voteFor: 1, votes: 0, passedMs: 235, timeoutNeedMs: 235
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 6, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 6, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+, votes are 1
+2025/02/18 01:44:52 server: 2, currentTerm: 6, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+ sendRequestVote to server 0
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 6, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 279
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 6, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 279
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 7, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 7, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 257
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 7, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 7, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:52 server: 0, currentTerm: 5, identity: follower, voteFor: 1, votes: 0, passedMs: 237, timeoutNeedMs: 299
+ RequestVote(), args: &{Term:6 CandidateId:2}
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:52 toFollower() server: 0, currentTerm: 5, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+, votes are 1
+2025/02/18 01:44:52 server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+ sendRequestVote to server 1
+2025/02/18 01:44:52 server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+ sendRequestVote to server 0
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 8, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 9, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 9, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+, votes are 1
+2025/02/18 01:44:52 server: 2, currentTerm: 9, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+ sendRequestVote to server 1
+2025/02/18 01:44:52 server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 3, passedMs: 238, timeoutNeedMs: 300
+ RequestVote(), args: &{Term:8 CandidateId:2}
+2025/02/18 01:44:52 server: 0, currentTerm: 6, identity: follower, voteFor: 2, votes: 0, passedMs: 1, timeoutNeedMs: 254
+ RequestVote(), args: &{Term:8 CandidateId:2}
+2025/02/18 01:44:52 toFollower() server: 1, currentTerm: 5, identity: candidate, voteFor: 1, votes: 3, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 9, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 9, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 10, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 10, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 204
+, votes are 1
+2025/02/18 01:44:52 server: 2, currentTerm: 10, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 204
+ sendRequestVote to server 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 2, currentTerm: 10, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:52 toCandidate()1 server: 2, currentTerm: 10, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:52 server: 1, currentTerm: 8, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 249
+ RequestVote(), args: &{Term:9 CandidateId:2}
+2025/02/18 01:44:52 toCandidate()2 server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 218
+2025/02/18 01:44:52 toFollower() server: 1, currentTerm: 8, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 270
+2025/02/18 01:44:52 kickOffNewElection()-end server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 218
+, votes are 1
+2025/02/18 01:44:52 toFollower() server: 0, currentTerm: 6, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:52 server: 1, currentTerm: 9, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 270
+ RequestVote(), args: &{Term:10 CandidateId:2}
+2025/02/18 01:44:52 toFollower() server: 1, currentTerm: 9, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 213
+2025/02/18 01:44:52 server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 218
+ sendRequestVote to server 0
+2025/02/18 01:44:52 server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 218
+ sendRequestVote to server 1
+2025/02/18 01:44:52 server: 0, currentTerm: 8, identity: follower, voteFor: 2, votes: 0, passedMs: 1, timeoutNeedMs: 273
+ RequestVote(), args: &{Term:11 CandidateId:2}
+2025/02/18 01:44:52 toFollower() server: 0, currentTerm: 8, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:52 server: 1, currentTerm: 10, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 213
+ RequestVote(), args: &{Term:11 CandidateId:2}
+2025/02/18 01:44:52 toFollower() server: 1, currentTerm: 10, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 11, identity: follower, voteFor: 2, votes: 0, passedMs: 206, timeoutNeedMs: 206
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 11, identity: follower, voteFor: 2, votes: 0, passedMs: 206, timeoutNeedMs: 206
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 12, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 12, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 12, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 12, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 13, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 216
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 13, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 216
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 13, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 216
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 13, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 216
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 14, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 14, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+, votes are 1
+2025/02/18 01:44:52 server: 1, currentTerm: 14, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+ sendRequestVote to server 2
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 14, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 14, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 15, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 15, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 15, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 15, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:52 server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 3, passedMs: 209, timeoutNeedMs: 218
+ RequestVote(), args: &{Term:14 CandidateId:1}
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 16, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:52 toFollower() server: 2, currentTerm: 11, identity: candidate, voteFor: 2, votes: 3, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 16, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+, votes are 1
+2025/02/18 01:44:52 server: 1, currentTerm: 16, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+ sendRequestVote to server 2
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 16, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 16, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 17, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:52 server: 2, currentTerm: 14, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 230
+ RequestVote(), args: &{Term:16 CandidateId:1}
+2025/02/18 01:44:52 toFollower() server: 2, currentTerm: 14, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 300
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 17, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 17, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 18, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 18, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 18, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 18, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 19, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 1, currentTerm: 19, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:52 toCandidate()1 server: 1, currentTerm: 19, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:52 toCandidate()2 server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 276
+2025/02/18 01:44:52 server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 276
+ sendRequestVote to server 2
+2025/02/18 01:44:52 server: 2, currentTerm: 16, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 300
+ RequestVote(), args: &{Term:15 CandidateId:1}
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 276
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 276
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-end server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 276
+, votes are 1
+2025/02/18 01:44:52 server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 276
+ sendRequestVote to server 2
+2025/02/18 01:44:52 server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 276
+ sendRequestVote to server 0
+2025/02/18 01:44:52 server: 0, currentTerm: 11, identity: follower, voteFor: 2, votes: 0, passedMs: 209, timeoutNeedMs: 274
+ RequestVote(), args: &{Term:20 CandidateId:1}
+2025/02/18 01:44:52 toFollower() server: 0, currentTerm: 11, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:52 server: 2, currentTerm: 16, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 300
+ RequestVote(), args: &{Term:20 CandidateId:1}
+2025/02/18 01:44:52 toFollower() server: 2, currentTerm: 16, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 276
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 0, currentTerm: 20, identity: follower, voteFor: 1, votes: 0, passedMs: 257, timeoutNeedMs: 257
+2025/02/18 01:44:52 toCandidate()1 server: 0, currentTerm: 20, identity: follower, voteFor: 1, votes: 0, passedMs: 257, timeoutNeedMs: 257
+2025/02/18 01:44:52 toCandidate()2 server: 0, currentTerm: 21, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+2025/02/18 01:44:52 kickOffNewElection()-end server: 0, currentTerm: 21, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+, votes are 1
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 0, currentTerm: 21, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 276
+2025/02/18 01:44:52 toCandidate()1 server: 0, currentTerm: 21, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 276
+2025/02/18 01:44:52 toCandidate()2 server: 0, currentTerm: 22, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:52 kickOffNewElection()-end server: 0, currentTerm: 22, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+, votes are 1
+2025/02/18 01:44:52 server: 0, currentTerm: 22, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+ sendRequestVote to server 2
+2025/02/18 01:44:52 kickOffNewElection()-begin server: 0, currentTerm: 22, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:52 toCandidate()1 server: 0, currentTerm: 22, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:52 toCandidate()2 server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 275
+2025/02/18 01:44:52 kickOffNewElection()-end server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 275
+, votes are 1
+2025/02/18 01:44:52 server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 275
+ sendRequestVote to server 2
+2025/02/18 01:44:52 server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 275
+ sendRequestVote to server 1
+2025/02/18 01:44:52 server: 2, currentTerm: 20, identity: follower, voteFor: 1, votes: 0, passedMs: 258, timeoutNeedMs: 276
+ RequestVote(), args: &{Term:22 CandidateId:0}
+2025/02/18 01:44:52 toFollower() server: 2, currentTerm: 20, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 299
+2025/02/18 01:44:52 server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 3, passedMs: 260, timeoutNeedMs: 276
+ RequestVote(), args: &{Term:23 CandidateId:0}
+2025/02/18 01:44:52 server: 2, currentTerm: 22, identity: follower, voteFor: 0, votes: 0, passedMs: 1, timeoutNeedMs: 299
+ RequestVote(), args: &{Term:23 CandidateId:0}
+2025/02/18 01:44:52 toFollower() server: 1, currentTerm: 20, identity: candidate, voteFor: 1, votes: 3, passedMs: 0, timeoutNeedMs: 226
+2025/02/18 01:44:52 toFollower() server: 2, currentTerm: 22, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 23, identity: follower, voteFor: 0, votes: 0, passedMs: 226, timeoutNeedMs: 226
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 23, identity: follower, voteFor: 0, votes: 0, passedMs: 226, timeoutNeedMs: 226
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+ sendRequestVote to server 2
+2025/02/18 01:44:53 server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+ sendRequestVote to server 0
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 282
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 24, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 282
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 25, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:53 server: 2, currentTerm: 23, identity: follower, voteFor: 0, votes: 0, passedMs: 228, timeoutNeedMs: 235
+ RequestVote(), args: &{Term:24 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 23, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 25, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+, votes are 1
+2025/02/18 01:44:53 server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 3, passedMs: 229, timeoutNeedMs: 275
+ RequestVote(), args: &{Term:24 CandidateId:1}
+2025/02/18 01:44:53 server: 1, currentTerm: 25, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+ sendRequestVote to server 2
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 23, identity: candidate, voteFor: 0, votes: 3, passedMs: 0, timeoutNeedMs: 218
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 25, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 25, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 26, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 258
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 26, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 258
+, votes are 1
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 26, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 258
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 26, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 258
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 27, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:53 server: 2, currentTerm: 24, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 291
+ RequestVote(), args: &{Term:25 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 27, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+, votes are 1
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 24, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 226
+2025/02/18 01:44:53 server: 1, currentTerm: 27, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+ sendRequestVote to server 0
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 27, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 27, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 28, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 28, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+, votes are 1
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 28, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 28, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:53 server: 0, currentTerm: 24, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 218
+ RequestVote(), args: &{Term:27 CandidateId:1}
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 24, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+ sendRequestVote to server 0
+2025/02/18 01:44:53 server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+ sendRequestVote to server 2
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 252
+2025/02/18 01:44:53 server: 0, currentTerm: 27, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 277
+ RequestVote(), args: &{Term:29 CandidateId:1}
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 29, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 252
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 27, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 224
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+, votes are 1
+2025/02/18 01:44:53 server: 2, currentTerm: 25, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 226
+ RequestVote(), args: &{Term:29 CandidateId:1}
+2025/02/18 01:44:53 server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+ sendRequestVote to server 0
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 25, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:53 server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+ sendRequestVote to server 2
+2025/02/18 01:44:53 server: 0, currentTerm: 29, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 224
+ RequestVote(), args: &{Term:30 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 29, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 209
+2025/02/18 01:44:53 server: 2, currentTerm: 29, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 223
+ RequestVote(), args: &{Term:30 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 29, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 3, passedMs: 202, timeoutNeedMs: 202
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 30, identity: candidate, voteFor: 1, votes: 3, passedMs: 202, timeoutNeedMs: 202
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 31, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 31, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+, votes are 1
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 31, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 282
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 31, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 282
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+ sendRequestVote to server 2
+2025/02/18 01:44:53 server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+ sendRequestVote to server 0
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 32, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 33, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:53 server: 2, currentTerm: 30, identity: follower, voteFor: 1, votes: 0, passedMs: 204, timeoutNeedMs: 257
+ RequestVote(), args: &{Term:32 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 33, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 269
+, votes are 1
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 30, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:53 server: 1, currentTerm: 33, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 269
+ sendRequestVote to server 0
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 33, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 33, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 34, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 260
+2025/02/18 01:44:53 server: 0, currentTerm: 30, identity: follower, voteFor: 1, votes: 0, passedMs: 203, timeoutNeedMs: 209
+ RequestVote(), args: &{Term:32 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 34, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 260
+, votes are 1
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 30, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:53 server: 1, currentTerm: 34, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 260
+ sendRequestVote to server 2
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 34, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 260
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 34, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 260
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 35, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:53 server: 0, currentTerm: 32, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 251
+ RequestVote(), args: &{Term:33 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 32, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 35, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 35, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+ sendRequestVote to server 0
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 35, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:53 server: 2, currentTerm: 32, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 259
+ RequestVote(), args: &{Term:34 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 32, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 252
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 35, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 36, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 36, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 36, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+ sendRequestVote to server 2
+2025/02/18 01:44:53 server: 0, currentTerm: 33, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 204
+ RequestVote(), args: &{Term:35 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 36, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 33, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 36, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 37, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 37, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 37, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+ sendRequestVote to server 2
+2025/02/18 01:44:53 server: 2, currentTerm: 34, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 252
+ RequestVote(), args: &{Term:36 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 37, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 34, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 288
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 37, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 38, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 38, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+, votes are 1
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 38, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 38, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:53 server: 2, currentTerm: 36, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 288
+ RequestVote(), args: &{Term:37 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+, votes are 1
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 36, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:53 server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+ sendRequestVote to server 0
+2025/02/18 01:44:53 server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+ sendRequestVote to server 2
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 39, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+ sendRequestVote to server 0
+2025/02/18 01:44:53 server: 0, currentTerm: 35, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 206
+ RequestVote(), args: &{Term:39 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 35, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 283
+2025/02/18 01:44:53 server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+ sendRequestVote to server 2
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:53 server: 0, currentTerm: 39, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 283
+ RequestVote(), args: &{Term:40 CandidateId:1}
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 40, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 39, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 221
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 41, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 218
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 41, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 218
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 41, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 218
+2025/02/18 01:44:53 server: 2, currentTerm: 37, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 206
+ RequestVote(), args: &{Term:39 CandidateId:1}
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 42, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 37, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:53 server: 1, currentTerm: 42, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+ sendRequestVote to server 0
+2025/02/18 01:44:53 server: 2, currentTerm: 39, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 273
+ RequestVote(), args: &{Term:40 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 39, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 242
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 42, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 234
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 42, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 234
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 43, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:53 kickOffNewElection()-begin server: 1, currentTerm: 43, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:53 toCandidate()1 server: 1, currentTerm: 43, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:53 toCandidate()2 server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+2025/02/18 01:44:53 server: 0, currentTerm: 40, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 221
+ RequestVote(), args: &{Term:31 CandidateId:1}
+2025/02/18 01:44:53 server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+ sendRequestVote to server 2
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:53 server: 2, currentTerm: 40, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 242
+ RequestVote(), args: &{Term:44 CandidateId:1}
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:53 toFollower() server: 2, currentTerm: 40, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:53 kickOffNewElection()-end server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:53 server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+ sendRequestVote to server 0
+2025/02/18 01:44:53 server: 0, currentTerm: 40, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 221
+ RequestVote(), args: &{Term:44 CandidateId:1}
+2025/02/18 01:44:53 toFollower() server: 0, currentTerm: 40, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 3, passedMs: 233, timeoutNeedMs: 233
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 44, identity: candidate, voteFor: 1, votes: 3, passedMs: 233, timeoutNeedMs: 233
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 45, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 215
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 45, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 215
+, votes are 1
+2025/02/18 01:44:54 server: 1, currentTerm: 45, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 215
+ sendRequestVote to server 0
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 45, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 215
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 45, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 215
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+, votes are 1
+2025/02/18 01:44:54 server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+ sendRequestVote to server 0
+2025/02/18 01:44:54 server: 0, currentTerm: 44, identity: follower, voteFor: 1, votes: 0, passedMs: 234, timeoutNeedMs: 250
+ RequestVote(), args: &{Term:45 CandidateId:1}
+2025/02/18 01:44:54 toFollower() server: 0, currentTerm: 44, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:54 server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+ sendRequestVote to server 2
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:54 server: 0, currentTerm: 45, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 223
+ RequestVote(), args: &{Term:46 CandidateId:1}
+2025/02/18 01:44:54 toFollower() server: 0, currentTerm: 45, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 236
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 46, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 47, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:54 server: 2, currentTerm: 44, identity: follower, voteFor: 1, votes: 0, passedMs: 235, timeoutNeedMs: 235
+ RequestVote(), args: &{Term:46 CandidateId:1}
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 47, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+, votes are 1
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 44, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:54 server: 1, currentTerm: 47, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+ sendRequestVote to server 2
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 47, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 47, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 48, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 48, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 48, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 48, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 49, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 268
+2025/02/18 01:44:54 server: 2, currentTerm: 46, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 267
+ RequestVote(), args: &{Term:47 CandidateId:1}
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 49, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 268
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 46, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 49, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 268
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 50, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 292
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 50, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 292
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 50, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 292
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 51, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 51, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 51, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 52, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 52, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 52, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 53, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 53, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 53, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 54, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 54, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 54, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 55, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 1, currentTerm: 55, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:54 toCandidate()1 server: 1, currentTerm: 55, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:54 toCandidate()2 server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:54 server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+ sendRequestVote to server 2
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 server: 2, currentTerm: 47, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 230
+ RequestVote(), args: &{Term:56 CandidateId:1}
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 47, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 216
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 kickOffNewElection()-end server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+, votes are 1
+2025/02/18 01:44:54 server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 217
+ sendRequestVote to server 0
+2025/02/18 01:44:54 server: 0, currentTerm: 46, identity: follower, voteFor: 1, votes: 0, passedMs: 2, timeoutNeedMs: 236
+ RequestVote(), args: &{Term:56 CandidateId:1}
+2025/02/18 01:44:54 toFollower() server: 0, currentTerm: 46, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 209
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 0, currentTerm: 56, identity: follower, voteFor: 1, votes: 0, passedMs: 209, timeoutNeedMs: 209
+2025/02/18 01:44:54 toCandidate()1 server: 0, currentTerm: 56, identity: follower, voteFor: 1, votes: 0, passedMs: 209, timeoutNeedMs: 209
+2025/02/18 01:44:54 toCandidate()2 server: 0, currentTerm: 57, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:54 kickOffNewElection()-end server: 0, currentTerm: 57, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 223
+, votes are 1
+2025/02/18 01:44:54 server: 0, currentTerm: 57, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 223
+ sendRequestVote to server 1
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 0, currentTerm: 57, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 223
+2025/02/18 01:44:54 toCandidate()1 server: 0, currentTerm: 57, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 223
+2025/02/18 01:44:54 toCandidate()2 server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 280
+2025/02/18 01:44:54 kickOffNewElection()-end server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 280
+, votes are 1
+2025/02/18 01:44:54 server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 280
+ sendRequestVote to server 1
+2025/02/18 01:44:54 server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 3, passedMs: 211, timeoutNeedMs: 217
+ RequestVote(), args: &{Term:57 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 1, currentTerm: 56, identity: candidate, voteFor: 1, votes: 3, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:54 server: 1, currentTerm: 57, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 207
+ RequestVote(), args: &{Term:58 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 1, currentTerm: 57, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 287
+2025/02/18 01:44:54 server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 2, passedMs: 0, timeoutNeedMs: 280
+ sendRequestVote to server 2
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 2, passedMs: 0, timeoutNeedMs: 280
+2025/02/18 01:44:54 toCandidate()1 server: 0, currentTerm: 58, identity: candidate, voteFor: 0, votes: 2, passedMs: 0, timeoutNeedMs: 280
+2025/02/18 01:44:54 toCandidate()2 server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:54 kickOffNewElection()-end server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+, votes are 1
+2025/02/18 01:44:54 server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+ sendRequestVote to server 2
+2025/02/18 01:44:54 server: 2, currentTerm: 56, identity: follower, voteFor: 1, votes: 0, passedMs: 211, timeoutNeedMs: 216
+ RequestVote(), args: &{Term:58 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 56, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 242
+2025/02/18 01:44:54 server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+ sendRequestVote to server 1
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:54 toCandidate()1 server: 0, currentTerm: 59, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:54 toCandidate()2 server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:54 kickOffNewElection()-end server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 201
+, votes are 1
+2025/02/18 01:44:54 server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 201
+ sendRequestVote to server 2
+2025/02/18 01:44:54 server: 1, currentTerm: 58, identity: follower, voteFor: 0, votes: 0, passedMs: 1, timeoutNeedMs: 287
+ RequestVote(), args: &{Term:59 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 1, currentTerm: 58, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:54 server: 2, currentTerm: 58, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 242
+ RequestVote(), args: &{Term:59 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 58, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:54 server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 201
+ sendRequestVote to server 1
+2025/02/18 01:44:54 server: 2, currentTerm: 59, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 241
+ RequestVote(), args: &{Term:60 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 59, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:54 server: 1, currentTerm: 59, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 269
+ RequestVote(), args: &{Term:60 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 1, currentTerm: 59, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:54 kickOffNewElection()-begin server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 3, passedMs: 201, timeoutNeedMs: 201
+2025/02/18 01:44:54 toCandidate()1 server: 0, currentTerm: 60, identity: candidate, voteFor: 0, votes: 3, passedMs: 201, timeoutNeedMs: 201
+2025/02/18 01:44:54 toCandidate()2 server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+2025/02/18 01:44:54 kickOffNewElection()-end server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+, votes are 1
+2025/02/18 01:44:54 server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+ sendRequestVote to server 1
+2025/02/18 01:44:54 server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 276
+ sendRequestVote to server 2
+2025/02/18 01:44:54 server: 1, currentTerm: 60, identity: follower, voteFor: 0, votes: 0, passedMs: 202, timeoutNeedMs: 297
+ RequestVote(), args: &{Term:61 CandidateId:0}
+2025/02/18 01:44:54 server: 2, currentTerm: 60, identity: follower, voteFor: 0, votes: 0, passedMs: 201, timeoutNeedMs: 294
+ RequestVote(), args: &{Term:61 CandidateId:0}
+2025/02/18 01:44:54 toFollower() server: 2, currentTerm: 60, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:54 toFollower() server: 1, currentTerm: 60, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 61, identity: follower, voteFor: 0, votes: 0, passedMs: 228, timeoutNeedMs: 228
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 61, identity: follower, voteFor: 0, votes: 0, passedMs: 228, timeoutNeedMs: 228
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 62, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 62, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+, votes are 1
+2025/02/18 01:44:55 server: 2, currentTerm: 62, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+ sendRequestVote to server 0
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 62, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 62, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 279
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 63, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 63, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 228
+, votes are 1
+2025/02/18 01:44:55 server: 2, currentTerm: 63, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 228
+ sendRequestVote to server 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 63, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 63, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 64, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 64, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 291
+, votes are 1
+2025/02/18 01:44:55 server: 2, currentTerm: 64, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 291
+ sendRequestVote to server 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 64, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 64, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+, votes are 1
+2025/02/18 01:44:55 server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+ sendRequestVote to server 1
+2025/02/18 01:44:55 server: 1, currentTerm: 61, identity: follower, voteFor: 0, votes: 0, passedMs: 227, timeoutNeedMs: 282
+ RequestVote(), args: &{Term:63 CandidateId:2}
+2025/02/18 01:44:55 server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+ sendRequestVote to server 0
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 61, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:55 server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 3, passedMs: 228, timeoutNeedMs: 276
+ RequestVote(), args: &{Term:62 CandidateId:2}
+2025/02/18 01:44:55 toFollower() server: 0, currentTerm: 61, identity: candidate, voteFor: 0, votes: 3, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:55 server: 1, currentTerm: 63, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 204
+ RequestVote(), args: &{Term:64 CandidateId:2}
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 65, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:55 server: 0, currentTerm: 62, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 217
+ RequestVote(), args: &{Term:65 CandidateId:2}
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 63, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 66, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:55 toFollower() server: 0, currentTerm: 62, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 66, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 66, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:55 server: 1, currentTerm: 64, identity: follower, voteFor: 2, votes: 0, passedMs: 1, timeoutNeedMs: 297
+ RequestVote(), args: &{Term:65 CandidateId:2}
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 64, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 67, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 67, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 67, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 68, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 68, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 68, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 69, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 69, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 69, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 269
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 70, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 2, currentTerm: 70, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 toCandidate()1 server: 2, currentTerm: 70, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:55 toCandidate()2 server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+, votes are 1
+2025/02/18 01:44:55 server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+ sendRequestVote to server 1
+2025/02/18 01:44:55 server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+ sendRequestVote to server 0
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+, votes are 1
+2025/02/18 01:44:55 server: 0, currentTerm: 65, identity: follower, voteFor: 2, votes: 0, passedMs: 1, timeoutNeedMs: 256
+ RequestVote(), args: &{Term:71 CandidateId:2}
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+, votes are 1
+2025/02/18 01:44:55 toFollower() server: 0, currentTerm: 65, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:55 server: 1, currentTerm: 65, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 230
+ RequestVote(), args: &{Term:71 CandidateId:2}
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 65, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 1, passedMs: 1, timeoutNeedMs: 273
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-end server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 3, passedMs: 1, timeoutNeedMs: 273
+, votes are 3
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 0, currentTerm: 71, identity: follower, voteFor: 2, votes: 0, passedMs: 230, timeoutNeedMs: 230
+2025/02/18 01:44:55 toCandidate()1 server: 0, currentTerm: 71, identity: follower, voteFor: 2, votes: 0, passedMs: 230, timeoutNeedMs: 230
+2025/02/18 01:44:55 toCandidate()2 server: 0, currentTerm: 72, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:55 kickOffNewElection()-end server: 0, currentTerm: 72, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 207
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 0, currentTerm: 72, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:55 toCandidate()1 server: 0, currentTerm: 72, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:55 toCandidate()2 server: 0, currentTerm: 73, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:55 kickOffNewElection()-end server: 0, currentTerm: 73, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 0, currentTerm: 73, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:55 toCandidate()1 server: 0, currentTerm: 73, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:55 toCandidate()2 server: 0, currentTerm: 74, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 264
+2025/02/18 01:44:55 kickOffNewElection()-end server: 0, currentTerm: 74, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 264
+, votes are 1
+2025/02/18 01:44:55 server: 0, currentTerm: 74, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 264
+ sendRequestVote to server 2
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 0, currentTerm: 74, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 264
+2025/02/18 01:44:55 toCandidate()1 server: 0, currentTerm: 74, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 264
+2025/02/18 01:44:55 toCandidate()2 server: 0, currentTerm: 75, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 216
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 0, currentTerm: 75, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 216
+2025/02/18 01:44:55 toCandidate()1 server: 0, currentTerm: 75, identity: candidate, voteFor: 0, votes: 1, passedMs: 1, timeoutNeedMs: 216
+2025/02/18 01:44:55 toCandidate()2 server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:55 server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+ sendRequestVote to server 1
+2025/02/18 01:44:55 server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+ sendRequestVote to server 2
+2025/02/18 01:44:55 kickOffNewElection()-end server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-end server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+, votes are 1
+2025/02/18 01:44:55 server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 228
+ sendRequestVote to server 1
+2025/02/18 01:44:55 server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 3, passedMs: 233, timeoutNeedMs: 273
+ RequestVote(), args: &{Term:74 CandidateId:0}
+2025/02/18 01:44:55 toFollower() server: 2, currentTerm: 71, identity: candidate, voteFor: 2, votes: 3, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:55 server: 1, currentTerm: 71, identity: follower, voteFor: 2, votes: 0, passedMs: 234, timeoutNeedMs: 278
+ RequestVote(), args: &{Term:72 CandidateId:0}
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 71, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 275
+2025/02/18 01:44:55 server: 2, currentTerm: 74, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 294
+ RequestVote(), args: &{Term:76 CandidateId:0}
+2025/02/18 01:44:55 toFollower() server: 2, currentTerm: 74, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 272
+2025/02/18 01:44:55 server: 1, currentTerm: 72, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 275
+ RequestVote(), args: &{Term:76 CandidateId:0}
+2025/02/18 01:44:55 toFollower() server: 1, currentTerm: 72, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 202
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 1, currentTerm: 76, identity: follower, voteFor: 0, votes: 0, passedMs: 202, timeoutNeedMs: 202
+2025/02/18 01:44:55 toCandidate()1 server: 1, currentTerm: 76, identity: follower, voteFor: 0, votes: 0, passedMs: 202, timeoutNeedMs: 202
+2025/02/18 01:44:55 toCandidate()2 server: 1, currentTerm: 77, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:55 kickOffNewElection()-end server: 1, currentTerm: 77, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 1, currentTerm: 77, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 244
+2025/02/18 01:44:55 toCandidate()1 server: 1, currentTerm: 77, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 244
+2025/02/18 01:44:55 toCandidate()2 server: 1, currentTerm: 78, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:55 kickOffNewElection()-end server: 1, currentTerm: 78, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+, votes are 1
+2025/02/18 01:44:55 server: 1, currentTerm: 78, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+ sendRequestVote to server 0
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 1, currentTerm: 78, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:55 toCandidate()1 server: 1, currentTerm: 78, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:55 toCandidate()2 server: 1, currentTerm: 79, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:55 kickOffNewElection()-end server: 1, currentTerm: 79, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+, votes are 1
+2025/02/18 01:44:55 kickOffNewElection()-begin server: 1, currentTerm: 79, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:55 toCandidate()1 server: 1, currentTerm: 79, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:55 server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 3, passedMs: 204, timeoutNeedMs: 228
+ RequestVote(), args: &{Term:78 CandidateId:1}
+2025/02/18 01:44:55 toCandidate()2 server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 213
+2025/02/18 01:44:55 toFollower() server: 0, currentTerm: 76, identity: candidate, voteFor: 0, votes: 3, passedMs: 0, timeoutNeedMs: 221
+2025/02/18 01:44:55 kickOffNewElection()-end server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 213
+, votes are 1
+2025/02/18 01:44:55 server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 213
+ sendRequestVote to server 2
+2025/02/18 01:44:55 server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 213
+ sendRequestVote to server 2
+2025/02/18 01:44:55 server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 213
+ sendRequestVote to server 0
+2025/02/18 01:44:55 server: 2, currentTerm: 76, identity: follower, voteFor: 0, votes: 0, passedMs: 206, timeoutNeedMs: 272
+ RequestVote(), args: &{Term:80 CandidateId:1}
+2025/02/18 01:44:55 toFollower() server: 2, currentTerm: 76, identity: follower, voteFor: 0, votes: 0, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:55 server: 2, currentTerm: 80, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 228
+ RequestVote(), args: &{Term:77 CandidateId:1}
+2025/02/18 01:44:55 server: 0, currentTerm: 78, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 221
+ RequestVote(), args: &{Term:80 CandidateId:1}
+2025/02/18 01:44:55 toFollower() server: 0, currentTerm: 78, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 3, passedMs: 213, timeoutNeedMs: 213
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 80, identity: candidate, voteFor: 1, votes: 3, passedMs: 213, timeoutNeedMs: 213
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 81, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 81, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 81, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 82, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 82, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 82, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 83, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 83, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 83, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 83, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 84, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 284
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 84, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 284
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 84, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 284
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 85, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 85, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 85, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+ sendRequestVote to server 0
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 85, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 85, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 86, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 86, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 86, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 237
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 87, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 87, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 87, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 87, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 87, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 88, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 88, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+, votes are 1
+2025/02/18 01:44:56 server: 0, currentTerm: 80, identity: follower, voteFor: 1, votes: 0, passedMs: 211, timeoutNeedMs: 227
+ RequestVote(), args: &{Term:85 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 88, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 80, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 88, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 server: 2, currentTerm: 80, identity: follower, voteFor: 1, votes: 0, passedMs: 213, timeoutNeedMs: 228
+ RequestVote(), args: &{Term:87 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+, votes are 1
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 80, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 270
+2025/02/18 01:44:56 server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+ sendRequestVote to server 0
+2025/02/18 01:44:56 server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 89, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 server: 0, currentTerm: 85, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 217
+ RequestVote(), args: &{Term:89 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 85, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 246
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 90, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 208
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 90, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 208
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 90, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 208
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 90, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 208
+2025/02/18 01:44:56 server: 2, currentTerm: 87, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 270
+ RequestVote(), args: &{Term:89 CandidateId:1}
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 90, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 208
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 87, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+, votes are 1
+2025/02/18 01:44:56 server: 2, currentTerm: 89, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 200
+ RequestVote(), args: &{Term:90 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+, votes are 1
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 89, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:56 server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 91, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 254
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 server: 2, currentTerm: 90, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 296
+ RequestVote(), args: &{Term:91 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+, votes are 1
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 90, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 290
+2025/02/18 01:44:56 server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+ sendRequestVote to server 0
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 92, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 93, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 server: 2, currentTerm: 91, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 290
+ RequestVote(), args: &{Term:92 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 93, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 91, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 93, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 94, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 94, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 94, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 95, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 server: 0, currentTerm: 89, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 246
+ RequestVote(), args: &{Term:92 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 95, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 95, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 89, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 272
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 96, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 286
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 96, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 286
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 96, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 286
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 97, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 97, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 97, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 98, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 265
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 98, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 265
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 98, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 265
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 99, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 99, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 99, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 100, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 100, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 100, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 229
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 101, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 270
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 101, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 270
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 101, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 270
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 102, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 102, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 102, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 103, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 103, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 103, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 104, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 104, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 104, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 105, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 105, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 105, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 106, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 106, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 106, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 107, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 107, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 107, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 108, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 108, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 108, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 278
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 109, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 109, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 109, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 110, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 110, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 110, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 241
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 111, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 111, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 111, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 112, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 112, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 112, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 113, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 113, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 113, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 235
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 114, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 114, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 114, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 115, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 115, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 115, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 300
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 116, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 116, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 116, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 217
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 117, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 117, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 117, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 281
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 118, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 118, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 118, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 230
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 119, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 119, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 119, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 120, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 120, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 120, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 121, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 121, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 121, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 122, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 122, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 122, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 257
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 123, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 123, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 123, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 124, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 124, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 124, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 223
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 125, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 240
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 125, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 240
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 125, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 240
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 126, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 242
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 126, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 242
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 126, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 242
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 127, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 127, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 127, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 128, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 128, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 128, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 206
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 129, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 129, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 129, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 202
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 130, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 130, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 130, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 249
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 131, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 131, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 131, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 132, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 132, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 132, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 247
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 133, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 290
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 133, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 290
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 133, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 290
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 134, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 245
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 134, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 245
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 134, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 245
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 135, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 135, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 135, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 136, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 136, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 136, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 256
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 137, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 137, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 137, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 210
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 138, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 138, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 138, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 139, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 283
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 139, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 283
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 139, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 283
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 140, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 140, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 140, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 141, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 141, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 141, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 294
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 142, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 142, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 142, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 255
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 143, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 143, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 143, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 296
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 144, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 144, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 144, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 145, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 145, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 145, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 146, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 146, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 146, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 147, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 147, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 147, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 148, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 148, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 148, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 204
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 149, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 149, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 149, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 150, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 150, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 150, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 151, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 151, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 151, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 152, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 152, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 152, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 203
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 153, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 153, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 153, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 154, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 154, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 154, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 250
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 155, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 155, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 155, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 227
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 156, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 156, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 156, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 157, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 157, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 157, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 259
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 158, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 289
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 158, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 289
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 158, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 289
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 159, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 159, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 159, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 251
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 160, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 160, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 160, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 285
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 161, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 161, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 161, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 162, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 162, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 162, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 228
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 163, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 163, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 163, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 267
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 164, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 164, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 164, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 293
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 165, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 226
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 165, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 226
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 165, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 226
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 166, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 166, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 166, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 207
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 167, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 275
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 167, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 275
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 167, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 275
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 168, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 168, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 168, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 211
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 169, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 169, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 169, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 253
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 170, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 170, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 170, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 171, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 236
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 171, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 236
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 171, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 236
+ sendRequestVote to server 0
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 171, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 236
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 171, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 236
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+ sendRequestVote to server 2
+2025/02/18 01:44:56 server: 0, currentTerm: 92, identity: follower, voteFor: 1, votes: 0, passedMs: 8, timeoutNeedMs: 272
+ RequestVote(), args: &{Term:171 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 92, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 200
+2025/02/18 01:44:56 server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+ sendRequestVote to server 0
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 server: 0, currentTerm: 171, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 200
+ RequestVote(), args: &{Term:172 CandidateId:1}
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 172, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 205
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 171, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 173, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 173, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+, votes are 1
+2025/02/18 01:44:56 server: 2, currentTerm: 92, identity: follower, voteFor: 1, votes: 0, passedMs: 9, timeoutNeedMs: 251
+ RequestVote(), args: &{Term:172 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 92, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 server: 1, currentTerm: 173, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+ sendRequestVote to server 0
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 173, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 173, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 277
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 174, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 298
+2025/02/18 01:44:56 server: 0, currentTerm: 172, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 201
+ RequestVote(), args: &{Term:173 CandidateId:1}
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 174, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 298
+, votes are 1
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 172, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 server: 1, currentTerm: 174, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 298
+ sendRequestVote to server 2
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 174, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 298
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 174, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 298
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 175, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 175, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 175, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 176, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 176, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 176, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 273
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 177, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 177, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 177, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 238
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 178, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 178, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 178, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 212
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 179, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 266
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 179, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 266
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 179, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 266
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 180, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 180, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 180, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 181, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 181, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 181, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 274
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 182, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 server: 2, currentTerm: 172, identity: follower, voteFor: 1, votes: 0, passedMs: 1, timeoutNeedMs: 219
+ RequestVote(), args: &{Term:174 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 172, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 225
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 182, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 182, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 222
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 183, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 183, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 183, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 184, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 184, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 184, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 297
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 185, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 185, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 185, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 219
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 186, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 186, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 186, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 201
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 187, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 187, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 187, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 295
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 188, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 188, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 188, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 248
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 189, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 189, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 189, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 262
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 190, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 190, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 190, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 291
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 191, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 220
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 191, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 220
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 191, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 220
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 192, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 192, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 192, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 282
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 193, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 193, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 193, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 234
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 194, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 299
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 194, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 299
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 194, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 299
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 195, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 233
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 196, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 196, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 196, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 252
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 197, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:56 kickOffNewElection()-begin server: 1, currentTerm: 197, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:56 toCandidate()1 server: 1, currentTerm: 197, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 263
+2025/02/18 01:44:56 toCandidate()2 server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 kickOffNewElection()-end server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 239
+, votes are 1
+2025/02/18 01:44:56 server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 239
+ sendRequestVote to server 0
+2025/02/18 01:44:56 server: 1, currentTerm: 198, identity: candidate, voteFor: 1, votes: 1, passedMs: 1, timeoutNeedMs: 239
+ sendRequestVote to server 2
+2025/02/18 01:44:56 server: 0, currentTerm: 173, identity: follower, voteFor: 1, votes: 0, passedMs: 9, timeoutNeedMs: 219
+ RequestVote(), args: &{Term:198 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 0, currentTerm: 173, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 292
+2025/02/18 01:44:56 server: 2, currentTerm: 174, identity: follower, voteFor: 1, votes: 0, passedMs: 7, timeoutNeedMs: 225
+ RequestVote(), args: &{Term:198 CandidateId:1}
+2025/02/18 01:44:56 toFollower() server: 2, currentTerm: 174, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 218
+    config.go:454: expected one leader, got none
+--- FAIL: TestInitialElection3A (5.15s)
+FAIL
+exit status 1
+FAIL	6.5840/raft	5.164s
