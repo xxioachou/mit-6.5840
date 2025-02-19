@@ -95,7 +95,7 @@ func TestReElection3A(t *testing.T) {
 }
 
 func TestManyElections3A(t *testing.T) {
-	servers := 4
+	servers := 7
 	cfg := make_config(t, servers, false, false)
 	defer cfg.cleanup()
 

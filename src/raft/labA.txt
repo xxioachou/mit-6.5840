@@ -3,15 +3,17 @@
     初始化：无
     1.1 超时：
             发起选举（成为 Candidate）
-        
+    1.2 状态改变：    
+
+
 2. Candidate
     初始化：term ++ | 给自己投票 | 重置计时器 | 发送拉票 RPC
     2.1 超时：
             重新发起选举
-    2.2 状态改变（受到 Leader 的心跳 -> Follower、受到选举的结果 -> Leader）：
-            重置计时器
+    2.2 状态改变（收到 Leader 的心跳 -> Follower、收到选举的结果 -> Leader）：
+
 
 3. Leader
     初始动作：发送心跳 RPC
-    2.1 状态改变：
-        
+    2.1 状态改变（收到更新的 Candidate -> Follower）
+    2.2 心跳间隔

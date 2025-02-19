@@ -1,60 +1,6 @@
-=== RUN   TestReElection3A
-2025/02/19 00:39:41 Make() server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 263
-2025/02/19 00:39:41 Make() server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 300
-2025/02/19 00:39:41 Make() server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 223
-Test (3A): election after network failure ...
-2025/02/19 00:39:41 kickOffNewElection()-begin server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 223, timeoutNeedMs: 223
-2025/02/19 00:39:41 toCandidate()1 server: 2, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 223, timeoutNeedMs: 223
-2025/02/19 00:39:41 toCandidate()2 server: 2, currentTerm: 1, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
-2025/02/19 00:39:41 server: 2, currentTerm: 1, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
- sendRequestVote to server 0
-2025/02/19 00:39:41 server: 2, currentTerm: 1, identity: candidate, voteFor: 2, votes: 1, passedMs: 0, timeoutNeedMs: 248
- sendRequestVote to server 1
-2025/02/19 00:39:41 server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 226, timeoutNeedMs: 263
- RequestVote(), args: &{Term:1 CandidateId:2}
-2025/02/19 00:39:41 toFollower() server: 0, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 261
-2025/02/19 00:39:41 server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 226, timeoutNeedMs: 300
- RequestVote(), args: &{Term:1 CandidateId:2}
-2025/02/19 00:39:41 toFollower() server: 1, currentTerm: 0, identity: follower, voteFor: -1, votes: 0, passedMs: 0, timeoutNeedMs: 296
-2025/02/19 00:39:41 toLeader()1 server: 2, currentTerm: 1, identity: candidate, voteFor: 2, votes: 3, passedMs: 0, timeoutNeedMs: 248
-2025/02/19 00:39:41 toLeader()2 server: 2, currentTerm: 1, identity: leader, voteFor: 2, votes: 3, passedMs: 0, timeoutNeedMs: 248
-2025/02/19 00:39:41 kickOffNewElection()-end server: 2, currentTerm: 1, identity: leader, voteFor: 2, votes: 3, passedMs: 0, timeoutNeedMs: 248
-, votes are 3
-2025/02/19 00:39:42 leader1: 2
-2025/02/19 00:39:42 kickOffNewElection()-begin server: 0, currentTerm: 1, identity: follower, voteFor: 2, votes: 0, passedMs: 201, timeoutNeedMs: 201
-2025/02/19 00:39:42 toCandidate()1 server: 0, currentTerm: 1, identity: follower, voteFor: 2, votes: 0, passedMs: 201, timeoutNeedMs: 201
-2025/02/19 00:39:42 toCandidate()2 server: 0, currentTerm: 2, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 263
-2025/02/19 00:39:42 server: 0, currentTerm: 2, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 263
- sendRequestVote to server 2
-2025/02/19 00:39:42 server: 0, currentTerm: 2, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 263
- sendRequestVote to server 1
-2025/02/19 00:39:42 server: 1, currentTerm: 1, identity: follower, voteFor: 2, votes: 0, passedMs: 203, timeoutNeedMs: 259
- RequestVote(), args: &{Term:2 CandidateId:0}
-2025/02/19 00:39:42 toFollower() server: 1, currentTerm: 1, identity: follower, voteFor: 2, votes: 0, passedMs: 0, timeoutNeedMs: 297
-2025/02/19 00:39:42 kickOffNewElection()-begin server: 1, currentTerm: 2, identity: follower, voteFor: 0, votes: 0, passedMs: 298, timeoutNeedMs: 298
-2025/02/19 00:39:42 toCandidate()1 server: 1, currentTerm: 2, identity: follower, voteFor: 0, votes: 0, passedMs: 298, timeoutNeedMs: 298
-2025/02/19 00:39:42 toCandidate()2 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
-2025/02/19 00:39:42 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
- sendRequestVote to server 0
-2025/02/19 00:39:42 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 1, passedMs: 0, timeoutNeedMs: 244
- sendRequestVote to server 2
-2025/02/19 00:39:42 server: 0, currentTerm: 2, identity: candidate, voteFor: 0, votes: 2, passedMs: 0, timeoutNeedMs: 263
- RequestVote(), args: &{Term:3 CandidateId:1}
-2025/02/19 00:39:42 toFollower() server: 0, currentTerm: 2, identity: candidate, voteFor: 0, votes: 2, passedMs: 0, timeoutNeedMs: 285
-2025/02/19 00:39:43 kickOffNewElection()-end server: 0, currentTerm: 3, identity: follower, voteFor: 1, votes: 0, passedMs: 0, timeoutNeedMs: 209
-, votes are 0
-2025/02/19 00:39:43 kickOffNewElection()-begin server: 0, currentTerm: 3, identity: follower, voteFor: 1, votes: 0, passedMs: 209, timeoutNeedMs: 209
-2025/02/19 00:39:43 toCandidate()1 server: 0, currentTerm: 3, identity: follower, voteFor: 1, votes: 0, passedMs: 209, timeoutNeedMs: 209
-2025/02/19 00:39:43 toCandidate()2 server: 0, currentTerm: 4, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 269
-2025/02/19 00:39:43 server: 0, currentTerm: 4, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 269
- sendRequestVote to server 2
-2025/02/19 00:39:43 server: 0, currentTerm: 4, identity: candidate, voteFor: 0, votes: 1, passedMs: 0, timeoutNeedMs: 269
- sendRequestVote to server 1
-2025/02/19 00:39:43 server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 2, passedMs: 0, timeoutNeedMs: 244
- RequestVote(), args: &{Term:4 CandidateId:0}
-2025/02/19 00:39:43 toFollower() server: 1, currentTerm: 3, identity: candidate, voteFor: 1, votes: 2, passedMs: 0, timeoutNeedMs: 215
-    config.go:454: expected one leader, got none
---- FAIL: TestReElection3A (5.53s)
-FAIL
-exit status 1
-FAIL	6.5840/raft	5.554s
+=== RUN   TestManyElections3A
+Test (3A): multiple elections ...
+  ... Passed --   5.5  7  702   55662    0
+--- PASS: TestManyElections3A (5.53s)
+PASS
+ok  	6.5840/raft	6.578s

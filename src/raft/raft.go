@@ -64,8 +64,8 @@ const (
 )
 
 const UNVOTE = -1
-const MINTIMEOUT = 200
-const MAXTIMEOUT = 300
+const MINTIMEOUT = 300
+const MAXTIMEOUT = 500
 const HEARTBEATTIMEOUT = 100
 const CHANSIZE = 30
 
@@ -84,8 +84,7 @@ type Raft struct {
 	currentTerm			int			// 当前服务器的 term
 	identity 			int			// 当前服务器的身份 (follower,candidate,leader)
 	voteFor				int			// 当前服务器给哪个候选人投票
-	votes				int			// 当前服务器得到的票数
-	changeStatus		chan int	// 状态改变时用于通知 ticker
+	changeChan			chan int	// 清空计时器时用于通知 ticker
 
 	// // 当前服务器维护的 logs
 	// logs			[]LogEntry
@@ -111,17 +110,8 @@ func (rf *Raft) String() string {
 		identity = "follower"
 	}
 	str.Write([]byte(fmt.Sprintf(", identity: %s", identity)))
-	str.Write([]byte(fmt.Sprintf(", voteFor: %d", rf.voteFor)))
-	str.Write([]byte(fmt.Sprintf(", votes: %d", rf.votes)))
-	str.Write([]byte(fmt.Sprintf(", passedMs: %d", rf.passedMs)))
-	str.Write([]byte(fmt.Sprintf(", timeoutNeedMs: %d\n", rf.timeoutNeedMs)))
+	str.Write([]byte(fmt.Sprintf(", voteFor: %d\n", rf.voteFor)))
 	return str.String()
-}
-
-// 辅助函数(调用者加锁):重置随机时间
-func (rf *Raft) resetTimer() {
-	rf.passedMs = 0
-	rf.timeoutNeedMs = getRand(MINTIMEOUT, MAXTIMEOUT)
 }
 
 // return currentTerm and whether this server
@@ -231,7 +221,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (3A, 3B).
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	DPrintf("%s RequestVote(), args: %+v", rf.String(), args)
+	// DPrintf("%s RequestVote(), args: %+v", rf.String(), args)
 
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
@@ -239,22 +229,26 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	rf.resetTimer()
-
 	// 当前服务器需要变成 follower
 	if args.Term > rf.currentTerm {
-		rf.toFollower(args.Term)
+		rf.changeChan <- 1 
+		rf.currentTerm = args.Term
+		rf.identity = FOLLOWER
+		rf.voteFor = args.CandidateId
+		reply.Term = rf.currentTerm
+		reply.VoteGranted = true
+		return
 	}
 
 	if rf.voteFor == UNVOTE || rf.voteFor == args.CandidateId {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
 		rf.voteFor = args.CandidateId
-		return
+	} else {
+		reply.Term = rf.currentTerm
+		reply.VoteGranted = false
 	}
 
-	reply.Term = rf.currentTerm
-	reply.VoteGranted = false
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -285,9 +279,9 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // that the caller passes the address of the reply struct with &, not
 // the struct itself.
 func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
-	rf.mu.Lock()
-	DPrintf("%s sendRequestVote to server %d", rf.String(), server)
-	rf.mu.Unlock()
+	// rf.mu.Lock()
+	// DPrintf("%s sendRequestVote to server %d", rf.String(), server)
+	// rf.mu.Unlock()
 	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
 	return ok
 }
@@ -295,7 +289,6 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	// DPrintf("%s ApplyEntries(), args: %+v", rf.String(), args)
 
 	// 情况一：leader 的 term < currentTerm
 	if rf.currentTerm > args.Term {
@@ -304,14 +297,17 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 		return
 	}
 
-	rf.resetTimer()
-	// 检查更新当前服务器的 term
-	if rf.currentTerm < args.Term {
-		rf.toFollower(args.Term)
-	}
-
 	reply.Term = rf.currentTerm
 	reply.Success = true
+	
+	rf.changeChan <- 1 
+	rf.identity = FOLLOWER
+
+	// 检查更新当前服务器的 term
+	if rf.currentTerm < args.Term {
+		rf.currentTerm = args.Term
+		rf.voteFor = UNVOTE
+	}
 }
 
 func (rf *Raft) sendApplyEntries(server int, args *ApplyEntriesArgs, reply *ApplyEntriesReply) bool {
@@ -362,173 +358,77 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
-// 辅助函数（调用者加锁）：从 candidate/leader 变成 follower
-func (rf *Raft) toFollower(term int) {
-	DPrintf("toFollower() %s", rf.String())
-	rf.currentTerm = term
-	rf.identity = FOLLOWER
-	rf.voteFor = UNVOTE
-	rf.votes = 0
-	rf.passedMs = 0
-	rf.timeoutNeedMs = getRand(MINTIMEOUT, MAXTIMEOUT)
-}
-
-// 辅助函数（调用者加锁）：从 follower 变成 candidate
-func (rf *Raft) toCandidate() {
-	DPrintf("toCandidate()1 %s", rf.String())
-	if rf.identity == LEADER {
-		panic("a leader to a candidate!")
-	}
-
-	rf.currentTerm ++
-	rf.identity = CANDIDATE
-	rf.voteFor = rf.me
-	rf.votes = 1
-	rf.passedMs = 0
-	rf.timeoutNeedMs = getRand(MINTIMEOUT, MAXTIMEOUT)
-
-	DPrintf("toCandidate()2 %s", rf.String())
-}
-
-// 辅助函数（调用者加锁）：从 candidate 变成 leader
-func (rf *Raft) toLeader() {
-	DPrintf("toLeader()1 %s", rf.String())
-	if rf.identity != CANDIDATE {
-		panic("illegal transition to a leader.")
-	}
-
-	rf.identity = LEADER
-	DPrintf("toLeader()2 %s", rf.String())
-	// 开始发送心跳
-	go rf.sendHeartBeat()
-}
-
 func (rf *Raft) sendHeartBeat() {
-	for !rf.killed() {
-		startTerm, isLeader := rf.GetState()
-		if !isLeader {
-			break
+	rf.mu.Lock()
+	// 调用 ApplyEntries
+	args := ApplyEntriesArgs{Term: rf.currentTerm, LeaderId: rf.me}
+	rf.mu.Unlock()
+
+	// 同时向其他服务器发送心跳
+	for i := range rf.peers {
+		if i == rf.me {
+			continue
 		}
-
-		for server := range rf.peers {
-			if server == rf.me {
-				continue
-			}
-			currentTerm, cIsLeader := rf.GetState()
-			if currentTerm != startTerm || !cIsLeader {
-				return
-			}
-			
-			// 调用 ApplyEntries
-			args := ApplyEntriesArgs{Term: currentTerm, LeaderId: rf.me}
+		go func(server int, args ApplyEntriesArgs) {
 			reply := ApplyEntriesReply{}
-
 			ok := rf.sendApplyEntries(server, &args, &reply)
 			if ok {
-				currentTerm, cIsLeader := rf.GetState()
-
-				if currentTerm != startTerm || !cIsLeader{
-					return
-				}
-				if reply.Term > currentTerm {
-					rf.mu.Lock()
-					rf.toFollower(reply.Term)
+				rf.mu.Lock()	
+				if reply.Term > rf.currentTerm {
+					rf.changeChan <- 1
+					rf.currentTerm = reply.Term
+					rf.identity = FOLLOWER
+					rf.voteFor = UNVOTE
 					rf.mu.Unlock()
 					return
 				}
+				rf.mu.Unlock()
 			}
-		}
-
-		time.Sleep(time.Duration(HEARTBEATTIMEOUT) * time.Microsecond)
+		}(i, args)
 	}
+
 }
 
-// // 检查是否需要发起选举
-// func (rf *Raft) needNewElection() bool {
-// 	// 两种情况：
-// 	// 1. follower 如果一段时间没有收到心跳且没有在给 candidate 投票，就发起选举
-// 	// 2. candidate 发起选举一段时间后，没有成为 leader，重新发起选举
-
-	
-// 	rf.mu.Lock()
-// 	defer rf.mu.Unlock()
-// 	// DPrintf("needNewElection() %s", rf.String())
-
-// 	if rf.identity == CANDIDATE {
-// 		return true
-// 	}
-// 	return rf.identity == FOLLOWER && 
-// 	(!rf.receivedMsg)
-
-// }
 
 // 发起选举
 func (rf *Raft) kickOffNewElection() {
+	var votes int32
+	atomic.StoreInt32(&votes, 1)
+
 	rf.mu.Lock()
-
-		DPrintf("kickOffNewElection()-begin %s", rf.String())
-		// 1. 成为候选人
-		rf.toCandidate()
-		startTerm := rf.currentTerm
-		
+	args := RequestVoteArgs{Term: rf.currentTerm, CandidateId: rf.me}
 	rf.mu.Unlock()
-	
-	// 2. 开启多个线程，同时向其他 server 拉票
 
+	// 1. 开启多个线程，同时向其他 server 拉票
 	for i := range rf.peers {
 		if i == rf.me {
 			continue
 		}
 		
-		go func(server int) {
-			// 2.1 拉票之前检查时期有没有发生改变
-			rf.mu.Lock()
-			currentTerm := rf.currentTerm
-			rf.mu.Unlock()
-			if currentTerm != startTerm {
-				return
-			}
-	
-			// 2.2 调用 server 的 rpc
-			args := RequestVoteArgs{Term: currentTerm, CandidateId: rf.me}
+		go func(server int, args RequestVoteArgs) {	
 			reply := RequestVoteReply{}
 			ok := rf.sendRequestVote(server, &args, &reply)
 	
-			// 2.3 调用成功
 			if ok {
 				rf.mu.Lock()
-				currentTerm = rf.currentTerm
+				if reply.Term > rf.currentTerm {
+					rf.changeChan <- 1
+					rf.currentTerm = reply.Term
+					rf.identity = FOLLOWER
+					rf.voteFor = UNVOTE
+				} else if reply.VoteGranted {
+					atomic.AddInt32(&votes, 1)
+					if int(atomic.LoadInt32(&votes)) * 2 > len(rf.peers) &&
+						reply.Term == rf.currentTerm &&
+						rf.identity == CANDIDATE {
+						rf.changeChan <- 1
+						rf.identity = LEADER
+					}
+				}
 				rf.mu.Unlock()
-				// 2.3.1 等待投票后时期发生改变
-				if currentTerm != startTerm {
-					return
-				}
-	
-				// 2.3.2 选举失败
-				if reply.Term > currentTerm {
-					rf.mu.Lock()
-					rf.toFollower(reply.Term)
-					rf.mu.Unlock()
-					return
-				} 
-				// 2.3.3 得到投票
-				if reply.VoteGranted {
-					rf.mu.Lock()
-					rf.votes ++
-					rf.mu.Unlock()
-				}
 			}
-		}(i)
+		}(i, args)
 	}
-	
-	// 3. 检查是否赢得选举
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	if rf.currentTerm == startTerm && rf.votes > len(rf.peers) - rf.votes {
-		// 3.1 成为 leader
-		rf.toLeader()
-	}
-	DPrintf("kickOffNewElection()-end %s, votes are %d", rf.String(), rf.votes)
 }
 
 func (rf *Raft) ticker() {
@@ -536,35 +436,57 @@ func (rf *Raft) ticker() {
 
 		// Your code here (3A)
 		// Check if a leader election should be started.
+		rf.mu.Lock()
+		identity := rf.identity
+		rf.mu.Unlock()
 
-		switch rf.identity {
-		case FOLLOWER:
+		switch identity {
+		case FOLLOWER: {
 			select {
-			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
-				// ...
+			case <-rf.changeChan:
+				// rf.mu.Lock()
+				// DPrintf("server %d,changeChan: follower to %d\n", rf.me, rf.identity)
+				// rf.mu.Unlock()
+			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT)) * time.Millisecond):
+				rf.mu.Lock()
+				rf.identity = CANDIDATE
+				DPrintf("server %d,timeout...: follower to %d\n", rf.me, rf.identity)
+				rf.mu.Unlock()
 			}
-			break
-		case CANDIDATE:
+		}
+		case CANDIDATE: {
 			rf.mu.Lock()
 			rf.currentTerm ++
 			rf.voteFor = rf.me
-			rf.votes = 1
+			// DPrintf("server %d,kickOffNewElection...", rf.me)
 			rf.mu.Unlock()
 			go rf.kickOffNewElection()
 			select {
-			case <-rf.changeStatus:
-			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
+			case <-rf.changeChan:
+				// rf.mu.Lock()
+				// DPrintf("server %d,changeChan: candidate to %d\n", rf.me, rf.identity)
+				// rf.mu.Unlock()
+			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT)) * time.Millisecond):
+				// rf.mu.Lock()
+				// DPrintf("server %d,timeout...: candidate to %d\n", rf.me, rf.identity)
+				// rf.mu.Unlock()
 			}
-			break
-		case LEADER:
+		}
+		case LEADER: {
+			// DPrintf("server %d,sendHeartBeat...", rf.me)
 			go rf.sendHeartBeat()
 			select {
-			case <-time.After(time.Duration(getRand(MINTIMEOUT, MAXTIMEOUT))):
-				// ...
+			case <-rf.changeChan:
+				// rf.mu.Lock()
+				// DPrintf("server %d,changeChan: leader to %d\n", rf.me, rf.identity)
+				// rf.mu.Unlock()
+			case <-time.After(time.Duration(HEARTBEATTIMEOUT) * time.Millisecond):
+				// rf.mu.Lock()
+				// DPrintf("server %d,timeout...: leader to %d\n", rf.me, rf.identity)
+				// rf.mu.Unlock()
 			}
-			break
 		}
-
+		}
 
 		// // pause for a random amount of time between 50 and 350
 		// // milliseconds.
@@ -595,9 +517,8 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.currentTerm = 0
 	rf.identity = FOLLOWER
 	rf.voteFor = UNVOTE
-	rf.votes = 0
-	rf.changeStatus = make(chan int, CHANSIZE)
-	DPrintf("Make() %s", rf.String())
+	rf.changeChan = make(chan int, CHANSIZE)
+	// DPrintf("Make() %s", rf.String())
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
