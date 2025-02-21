@@ -1,6 +1,67 @@
-=== RUN   TestManyElections3A
-Test (3A): multiple elections ...
-  ... Passed --   5.5  7  702   55662    0
---- PASS: TestManyElections3A (5.53s)
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  34.2  5 5448 1185072  106
+--- PASS: TestMyBackup3B (34.19s)
 PASS
-ok  	6.5840/raft	6.578s
+ok  	6.5840/raft	35.207s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  35.1  5 5624 1227116  106
+--- PASS: TestMyBackup3B (35.12s)
+PASS
+ok  	6.5840/raft	36.141s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  37.7  5 6336 1370032  106
+--- PASS: TestMyBackup3B (37.73s)
+PASS
+ok  	6.5840/raft	38.754s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  29.9  5 5196 1105565  105
+--- PASS: TestMyBackup3B (29.90s)
+PASS
+ok  	6.5840/raft	30.952s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  37.4  5 6252 1351336  106
+--- PASS: TestMyBackup3B (37.37s)
+PASS
+ok  	6.5840/raft	38.390s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  28.3  5 4372  963639  107
+--- PASS: TestMyBackup3B (28.32s)
+PASS
+ok  	6.5840/raft	29.343s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  35.4  5 5728 1244673  106
+--- PASS: TestMyBackup3B (35.44s)
+PASS
+ok  	6.5840/raft	36.465s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  34.1  5 5412 1162727  107
+--- PASS: TestMyBackup3B (34.10s)
+PASS
+ok  	6.5840/raft	35.117s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  35.2  5 5832 1243309  106
+--- PASS: TestMyBackup3B (35.23s)
+PASS
+ok  	6.5840/raft	36.243s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+    config.go:606: one(151) failed to reach agreement
+--- FAIL: TestMyBackup3B (18.10s)
+FAIL
+exit status 1
+FAIL	6.5840/raft	18.152s
+=== RUN   TestMyBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  38.1  5 6376 1370163  106
+--- PASS: TestMyBackup3B (38.06s)
+PASS
+ok  	6.5840/raft	39.073s

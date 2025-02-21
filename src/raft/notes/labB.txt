@@ -1,0 +1,41 @@
+日志复制流程:
+-> 客户端发起请求 
+-> Leader 将指令作为新条目添加 
+-> Leader 并行发起 ApplyEntries RPC 让其他服务器复制
+    如果有 Follower 没有返回 ok,说明调用失败,需要不断重复调用直至成功
+
+Leader 刚获得权力的时候要做的事情:
+1. 开始并行发送心跳(lab3A)
+2. 初始化 nextIndex 数组为自己最后一个日志条目的 index + 1，matchIndex 数组为 0
+
+Leader 日志复制的逻辑:
+调用 ApplyEntries RPC
+    如果返回参数 success 为 false:
+        则 nextIndex[Follower] --,重新调用
+    否则
+        Leader 发送 >= nextIndex[Follower] 后的日志,等待返回，更新 nextIndex 和 matchIndex
+
+Follower 日志复制的逻辑:
+处理 ApplyEntries RPC
+    Leader 的 Term < Follower 的 Term,拒绝复制(lab3A)
+    新增:
+        如果找不到 prevLogIndex 和 prevLogTerm 都一样的条目,就拒绝复制
+        如果复制过程中一个已经存在的条目和即刚刚接收到的日志条目发生了冲突（因为索引相同，任期不同）
+            那么就删除这个已经存在的条目以及它之后的所有条目 
+        追加不存在的新条目
+        如果 leaderCommit > commitIndex
+            则重置 commitIndex 为 min(leaderCommit, 最后一个添加的新条目的索引)
+        
+处理 RequestVote RPC
+    新增检查: 只有候选人的日志至少和 Follower 的日志一样新才同意投票,否则直接拒绝
+        (比较日志哪个新:如果 term 不同,term 大的更新;否则日志长的更新)
+    
+
+所有服务器的逻辑：
+如果 commitIndex > lastApplied，就 lastApplied ++，并将 log[lastApplied] 发送到 applyChan
+
+Leader 的逻辑
+如果最后一个 log 的 index >= nextIndex
+    调用 ApplyEntries RPC 发送从 nextIndex 开始的日志
+
+假设存在 N 满足N > commitIndex，使得大多数的 matchIndex[i] ≥ N以及log[N].term == currentTerm 成立，则令 commitIndex = N
