@@ -495,78 +495,78 @@ func TestRejoin3B(t *testing.T) {
 	cfg.end()
 }
 
-// func TestMyBackup3B(t *testing.T) {
-// 	servers := 5
-// 	cfg := make_config(t, servers, false, false)
-// 	defer cfg.cleanup()
+func TestMyBackup3B(t *testing.T) {
+	servers := 5
+	cfg := make_config(t, servers, false, false)
+	defer cfg.cleanup()
 
-// 	cfg.begin("Test (3B): leader backs up quickly over incorrect follower logs")
+	cfg.begin("Test (3B): leader backs up quickly over incorrect follower logs")
 
-// 	const iter = 50
-// 	cfg.one(0, servers, true)
+	const iter = 50
+	cfg.one(0, servers, true)
 
-// 	// put leader and one follower in a partition
-// 	leader1 := cfg.checkOneLeader()
-// 	cfg.disconnect((leader1 + 2) % servers)
-// 	cfg.disconnect((leader1 + 3) % servers)
-// 	cfg.disconnect((leader1 + 4) % servers)
+	// put leader and one follower in a partition
+	leader1 := cfg.checkOneLeader()
+	cfg.disconnect((leader1 + 2) % servers)
+	cfg.disconnect((leader1 + 3) % servers)
+	cfg.disconnect((leader1 + 4) % servers)
 
-// 	// submit lots of commands that won't commit
-// 	for i := 0; i < iter; i++ {
-// 		cfg.rafts[leader1].Start(i + 1)
-// 	}
+	// submit lots of commands that won't commit
+	for i := 0; i < iter; i++ {
+		cfg.rafts[leader1].Start(i + 1)
+	}
 
-// 	time.Sleep(RaftElectionTimeout / 2)
+	time.Sleep(RaftElectionTimeout / 2)
 
-// 	cfg.disconnect((leader1 + 0) % servers)
-// 	cfg.disconnect((leader1 + 1) % servers)
+	cfg.disconnect((leader1 + 0) % servers)
+	cfg.disconnect((leader1 + 1) % servers)
 
-// 	// allow other partition to recover
-// 	cfg.connect((leader1 + 2) % servers)
-// 	cfg.connect((leader1 + 3) % servers)
-// 	cfg.connect((leader1 + 4) % servers)
+	// allow other partition to recover
+	cfg.connect((leader1 + 2) % servers)
+	cfg.connect((leader1 + 3) % servers)
+	cfg.connect((leader1 + 4) % servers)
 
-// 	// lots of successful commands to new group.
-// 	for i := 0; i < iter; i++ {
-// 		cfg.one(i + 1 + iter, 3, true)
-// 	}
+	// lots of successful commands to new group.
+	for i := 0; i < iter; i++ {
+		cfg.one(i + 1 + iter, 3, true)
+	}
 
-// 	// now another partitioned leader and one follower
-// 	leader2 := cfg.checkOneLeader()
-// 	other := (leader1 + 2) % servers
-// 	if leader2 == other {
-// 		other = (leader2 + 1) % servers
-// 	}
-// 	cfg.disconnect(other)
+	// now another partitioned leader and one follower
+	leader2 := cfg.checkOneLeader()
+	other := (leader1 + 2) % servers
+	if leader2 == other {
+		other = (leader2 + 1) % servers
+	}
+	cfg.disconnect(other)
 
-// 	// lots more commands that won't commit
-// 	for i := 0; i < iter; i++ {
-// 		cfg.rafts[leader2].Start(i + iter * 2 + 1)
-// 	}
+	// lots more commands that won't commit
+	for i := 0; i < iter; i++ {
+		cfg.rafts[leader2].Start(i + iter * 2 + 1)
+	}
 
-// 	time.Sleep(RaftElectionTimeout / 2)
+	time.Sleep(RaftElectionTimeout / 2)
 
-// 	// bring original leader back to life,
-// 	for i := 0; i < servers; i++ {
-// 		cfg.disconnect(i)
-// 	}
-// 	cfg.connect((leader1 + 0) % servers)
-// 	cfg.connect((leader1 + 1) % servers)
-// 	cfg.connect(other)
+	// bring original leader back to life,
+	for i := 0; i < servers; i++ {
+		cfg.disconnect(i)
+	}
+	cfg.connect((leader1 + 0) % servers)
+	cfg.connect((leader1 + 1) % servers)
+	cfg.connect(other)
 
-// 	// lots of successful commands to new group.
-// 	for i := 0; i < iter; i++ {
-// 		cfg.one(i + iter * 3 + 1, 3, true)
-// 	}
+	// lots of successful commands to new group.
+	for i := 0; i < iter; i++ {
+		cfg.one(i + iter * 3 + 1, 3, true)
+	}
 
-// 	// now everyone
-// 	for i := 0; i < servers; i++ {
-// 		cfg.connect(i)
-// 	}
-// 	cfg.one(666, servers, true)
+	// now everyone
+	for i := 0; i < servers; i++ {
+		cfg.connect(i)
+	}
+	cfg.one(666, servers, true)
 
-// 	cfg.end()
-// }
+	cfg.end()
+}
 
 func TestBackup3B(t *testing.T) {
 	servers := 5
@@ -954,6 +954,18 @@ func TestUnreliableAgree3C(t *testing.T) {
 		}
 		cfg.one(iters, 1, true)
 	}
+	const x = 3
+	const y = 4
+	// for iters := 1; iters < x; iters++ {
+	// 	for j := 0; j < y; j++ {
+	// 		wg.Add(1)
+	// 		go func(iters, j int) {
+	// 			defer wg.Done()
+	// 			cfg.one((100*iters)+j, 1, true)
+	// 		}(iters, j)
+	// 	}
+	// 	cfg.one(iters, 1, true)
+	// }
 
 	cfg.setunreliable(false)
 

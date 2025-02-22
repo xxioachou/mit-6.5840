@@ -23,15 +23,20 @@ out=./tmp/out.txt
 # go test -run=TestRejoin3B -race -v > $out
 # go test -run=TestMyBackup3B -race -v > $out
 # go test -run 3B -race -v
-time go test -run 3B -v
+# time go test -run 3B -v
 
-# i=0
-# while (( $i < 10 )) 
-# do
-# go test -run=TestMyBackup3B -race -v >> $out
 
-# i=`expr $i + 1`
-# done
+
+# go test -run=TestPersist13C -race -v > $out
+# go test -run=TestUnreliableAgree3C -race -v > $out
+# go test -run=TestFigure8Unreliable3C -race -v > $out
+# go test -run 3C -race -v
+
+for i in {0..2}
+do
+go test -run=TestMyBackup3B -race -v >> $out
+# echo "hello, linux!"
+done
 
 
 
