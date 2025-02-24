@@ -1,21 +1,111 @@
-=== RUN   TestMyBackup3B
-Test (3B): leader backs up quickly over incorrect follower logs ...
-    config.go:606: one(151) failed to reach agreement
---- FAIL: TestMyBackup3B (29.88s)
+=== RUN   TestFigure83C
+Test (3C): Figure 8 ...
+  ... Passed --  41.7  5  684  122944   10
+--- PASS: TestFigure83C (41.67s)
+PASS
+ok  	6.5840/raft	42.678s
+=== RUN   TestPersist13C
+Test (3C): basic persistence ...
+  ... Passed --   4.8  3   92   23169    6
+--- PASS: TestPersist13C (4.81s)
+=== RUN   TestPersist23C
+Test (3C): more persistence ...
+  ... Passed --  33.0  5 1700  334390   18
+--- PASS: TestPersist23C (33.03s)
+=== RUN   TestPersist33C
+Test (3C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   2.9  3   42   10112    4
+--- PASS: TestPersist33C (2.95s)
+=== RUN   TestFigure83C
+Test (3C): Figure 8 ...
+  ... Passed --  38.0  5  620  111536   11
+--- PASS: TestFigure83C (38.00s)
+=== RUN   TestUnreliableAgree3C
+Test (3C): unreliable agreement ...
+  ... Passed --  31.3  5 1236  341548  246
+--- PASS: TestUnreliableAgree3C (31.32s)
+=== RUN   TestFigure8Unreliable3C
+Test (3C): Figure 8 (unreliable) ...
+    config.go:606: one(9636) failed to reach agreement
+--- FAIL: TestFigure8Unreliable3C (44.48s)
+=== RUN   TestReliableChurn3C
+Test (3C): churn ...
+  ... Passed --  26.6  5 1260  299736  118
+--- PASS: TestReliableChurn3C (26.61s)
+=== RUN   TestUnreliableChurn3C
+Test (3C): unreliable churn ...
+    config.go:606: one(8308593575879418831) failed to reach agreement
+--- FAIL: TestUnreliableChurn3C (26.42s)
 FAIL
 exit status 1
-FAIL	6.5840/raft	29.923s
-=== RUN   TestMyBackup3B
-Test (3B): leader backs up quickly over incorrect follower logs ...
-    config.go:606: one(151) failed to reach agreement
---- FAIL: TestMyBackup3B (29.25s)
+FAIL	6.5840/raft	207.635s
+=== RUN   TestPersist13C
+Test (3C): basic persistence ...
+  ... Passed --   4.8  3   92   23363    6
+--- PASS: TestPersist13C (4.81s)
+=== RUN   TestPersist23C
+Test (3C): more persistence ...
+  ... Passed --  26.2  5 1424  303738   17
+--- PASS: TestPersist23C (26.22s)
+=== RUN   TestPersist33C
+Test (3C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   2.7  3   40    9846    4
+--- PASS: TestPersist33C (2.66s)
+=== RUN   TestFigure83C
+Test (3C): Figure 8 ...
+  ... Passed --  33.1  5  568  106539    9
+--- PASS: TestFigure83C (33.09s)
+=== RUN   TestUnreliableAgree3C
+Test (3C): unreliable agreement ...
+  ... Passed --  32.9  5 1300  360642  246
+--- PASS: TestUnreliableAgree3C (32.90s)
+=== RUN   TestFigure8Unreliable3C
+Test (3C): Figure 8 (unreliable) ...
+  ... Passed --  35.4  5 3048  602353    9
+--- PASS: TestFigure8Unreliable3C (35.39s)
+=== RUN   TestReliableChurn3C
+Test (3C): churn ...
+  ... Passed --  18.5  5  784  192250   77
+--- PASS: TestReliableChurn3C (18.48s)
+=== RUN   TestUnreliableChurn3C
+Test (3C): unreliable churn ...
+    config.go:606: one(2891271674008939403) failed to reach agreement
+--- FAIL: TestUnreliableChurn3C (26.28s)
 FAIL
 exit status 1
-FAIL	6.5840/raft	29.286s
-=== RUN   TestMyBackup3B
-Test (3B): leader backs up quickly over incorrect follower logs ...
-    config.go:606: one(151) failed to reach agreement
---- FAIL: TestMyBackup3B (28.48s)
+FAIL	6.5840/raft	179.835s
+=== RUN   TestPersist13C
+Test (3C): basic persistence ...
+  ... Passed --   5.0  3   92   23177    6
+--- PASS: TestPersist13C (5.04s)
+=== RUN   TestPersist23C
+Test (3C): more persistence ...
+  ... Passed --  25.0  5 1380  287984   18
+--- PASS: TestPersist23C (25.02s)
+=== RUN   TestPersist33C
+Test (3C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   2.6  3   40    9850    4
+--- PASS: TestPersist33C (2.56s)
+=== RUN   TestFigure83C
+Test (3C): Figure 8 ...
+  ... Passed --  39.3  5  680  127275   11
+--- PASS: TestFigure83C (39.33s)
+=== RUN   TestUnreliableAgree3C
+Test (3C): unreliable agreement ...
+  ... Passed --  31.9  5 1260  351775  246
+--- PASS: TestUnreliableAgree3C (31.91s)
+=== RUN   TestFigure8Unreliable3C
+Test (3C): Figure 8 (unreliable) ...
+    config.go:606: one(3720) failed to reach agreement
+--- FAIL: TestFigure8Unreliable3C (50.00s)
+=== RUN   TestReliableChurn3C
+Test (3C): churn ...
+  ... Passed --  21.9  5  856  232340  134
+--- PASS: TestReliableChurn3C (21.88s)
+=== RUN   TestUnreliableChurn3C
+Test (3C): unreliable churn ...
+  ... Passed --  18.0  5  492  104863   37
+--- PASS: TestUnreliableChurn3C (18.04s)
 FAIL
 exit status 1
-FAIL	6.5840/raft	28.488s
+FAIL	6.5840/raft	193.801s

@@ -495,78 +495,78 @@ func TestRejoin3B(t *testing.T) {
 	cfg.end()
 }
 
-func TestMyBackup3B(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
+// func TestMyBackup3B(t *testing.T) {
+// 	servers := 5
+// 	cfg := make_config(t, servers, false, false)
+// 	defer cfg.cleanup()
 
-	cfg.begin("Test (3B): leader backs up quickly over incorrect follower logs")
+// 	cfg.begin("Test (3B): leader backs up quickly over incorrect follower logs")
 
-	const iter = 50
-	cfg.one(0, servers, true)
+// 	const iter = 50
+// 	cfg.one(0, servers, true)
 
-	// put leader and one follower in a partition
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect((leader1 + 2) % servers)
-	cfg.disconnect((leader1 + 3) % servers)
-	cfg.disconnect((leader1 + 4) % servers)
+// 	// put leader and one follower in a partition
+// 	leader1 := cfg.checkOneLeader()
+// 	cfg.disconnect((leader1 + 2) % servers)
+// 	cfg.disconnect((leader1 + 3) % servers)
+// 	cfg.disconnect((leader1 + 4) % servers)
 
-	// submit lots of commands that won't commit
-	for i := 0; i < iter; i++ {
-		cfg.rafts[leader1].Start(i + 1)
-	}
+// 	// submit lots of commands that won't commit
+// 	for i := 0; i < iter; i++ {
+// 		cfg.rafts[leader1].Start(i + 1)
+// 	}
 
-	time.Sleep(RaftElectionTimeout / 2)
+// 	time.Sleep(RaftElectionTimeout / 2)
 
-	cfg.disconnect((leader1 + 0) % servers)
-	cfg.disconnect((leader1 + 1) % servers)
+// 	cfg.disconnect((leader1 + 0) % servers)
+// 	cfg.disconnect((leader1 + 1) % servers)
 
-	// allow other partition to recover
-	cfg.connect((leader1 + 2) % servers)
-	cfg.connect((leader1 + 3) % servers)
-	cfg.connect((leader1 + 4) % servers)
+// 	// allow other partition to recover
+// 	cfg.connect((leader1 + 2) % servers)
+// 	cfg.connect((leader1 + 3) % servers)
+// 	cfg.connect((leader1 + 4) % servers)
 
-	// lots of successful commands to new group.
-	for i := 0; i < iter; i++ {
-		cfg.one(i + 1 + iter, 3, true)
-	}
+// 	// lots of successful commands to new group.
+// 	for i := 0; i < iter; i++ {
+// 		cfg.one(i + 1 + iter, 3, true)
+// 	}
 
-	// now another partitioned leader and one follower
-	leader2 := cfg.checkOneLeader()
-	other := (leader1 + 2) % servers
-	if leader2 == other {
-		other = (leader2 + 1) % servers
-	}
-	cfg.disconnect(other)
+// 	// now another partitioned leader and one follower
+// 	leader2 := cfg.checkOneLeader()
+// 	other := (leader1 + 2) % servers
+// 	if leader2 == other {
+// 		other = (leader2 + 1) % servers
+// 	}
+// 	cfg.disconnect(other)
 
-	// lots more commands that won't commit
-	for i := 0; i < iter; i++ {
-		cfg.rafts[leader2].Start(i + iter * 2 + 1)
-	}
+// 	// lots more commands that won't commit
+// 	for i := 0; i < iter; i++ {
+// 		cfg.rafts[leader2].Start(i + iter * 2 + 1)
+// 	}
 
-	time.Sleep(RaftElectionTimeout / 2)
+// 	time.Sleep(RaftElectionTimeout / 2)
 
-	// bring original leader back to life,
-	for i := 0; i < servers; i++ {
-		cfg.disconnect(i)
-	}
-	cfg.connect((leader1 + 0) % servers)
-	cfg.connect((leader1 + 1) % servers)
-	cfg.connect(other)
+// 	// bring original leader back to life,
+// 	for i := 0; i < servers; i++ {
+// 		cfg.disconnect(i)
+// 	}
+// 	cfg.connect((leader1 + 0) % servers)
+// 	cfg.connect((leader1 + 1) % servers)
+// 	cfg.connect(other)
 
-	// lots of successful commands to new group.
-	for i := 0; i < iter; i++ {
-		cfg.one(i + iter * 3 + 1, 3, true)
-	}
+// 	// lots of successful commands to new group.
+// 	for i := 0; i < iter; i++ {
+// 		cfg.one(i + iter * 3 + 1, 3, true)
+// 	}
 
-	// now everyone
-	for i := 0; i < servers; i++ {
-		cfg.connect(i)
-	}
-	cfg.one(666, servers, true)
+// 	// now everyone
+// 	for i := 0; i < servers; i++ {
+// 		cfg.connect(i)
+// 	}
+// 	cfg.one(666, servers, true)
 
-	cfg.end()
-}
+// 	cfg.end()
+// }
 
 func TestBackup3B(t *testing.T) {
 	servers := 5
@@ -871,6 +871,62 @@ func TestPersist33C(t *testing.T) {
 	cfg.end()
 }
 
+// func TestMyFigure83C(t *testing.T) {
+// 	servers := 5
+// 	cfg := make_config(t, servers, false, false)
+// 	defer cfg.cleanup()
+
+// 	cfg.begin("Test (3C): Figure 8")
+
+// 	cfg.one(0, 1, true)
+
+// 	const CNT = 1000
+// 	nup := servers
+// 	for iters := 0; iters < CNT; iters++ {
+// 		leader := -1
+// 		for i := 0; i < servers; i++ {
+// 			if cfg.rafts[i] != nil {
+// 				_, _, ok := cfg.rafts[i].Start(iters + 1)
+// 				if ok {
+// 					leader = i
+// 				}
+// 			}
+// 		}
+
+// 		if (rand.Int() % 1000) < 100 {
+// 			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
+// 			time.Sleep(time.Duration(ms) * time.Millisecond)
+// 		} else {
+// 			ms := (rand.Int63() % 13)
+// 			time.Sleep(time.Duration(ms) * time.Millisecond)
+// 		}
+
+// 		if leader != -1 {
+// 			cfg.crash1(leader)
+// 			nup -= 1
+// 		}
+
+// 		if nup < 3 {
+// 			s := rand.Int() % servers
+// 			if cfg.rafts[s] == nil {
+// 				cfg.start1(s, cfg.applier)
+// 				cfg.connect(s)
+// 				nup += 1
+// 			}
+// 		}
+// 	}
+
+// 	for i := 0; i < servers; i++ {
+// 		if cfg.rafts[i] == nil {
+// 			cfg.start1(i, cfg.applier)
+// 			cfg.connect(i)
+// 		}
+// 	}
+
+// 	cfg.one(rand.Int(), servers, true)
+
+// 	cfg.end()
+// }
 // Test the scenarios described in Figure 8 of the extended Raft paper. Each
 // iteration asks a leader, if there is one, to insert a command in the Raft
 // log.  If there is a leader, that leader will fail quickly with a high
@@ -954,8 +1010,8 @@ func TestUnreliableAgree3C(t *testing.T) {
 		}
 		cfg.one(iters, 1, true)
 	}
-	const x = 3
-	const y = 4
+	// const x = 3
+	// const y = 4
 	// for iters := 1; iters < x; iters++ {
 	// 	for j := 0; j < y; j++ {
 	// 		wg.Add(1)
@@ -975,6 +1031,63 @@ func TestUnreliableAgree3C(t *testing.T) {
 
 	cfg.end()
 }
+
+// func TestMyFigure8Unreliable3C(t *testing.T) {
+// 	servers := 5
+// 	cfg := make_config(t, servers, true, false)
+// 	defer cfg.cleanup()
+
+// 	cfg.begin("Test (3C): Figure 8 (unreliable)")
+
+// 	cfg.one(-1, 1, true)
+
+// 	nup := servers
+// 	const TIMES = 3
+
+// 	for iters := 0; iters < TIMES; iters++ {
+// 		if iters == TIMES / 2 {
+// 			cfg.setlongreordering(true)
+// 		}
+// 		leader := -1
+// 		for i := 0; i < servers; i++ {
+// 			_, _, ok := cfg.rafts[i].Start(iters)
+// 			if ok && cfg.connected[i] {
+// 				leader = i
+// 			}
+// 		}
+
+// 		if (rand.Int() % 1000) < 100 {
+// 			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
+// 			time.Sleep(time.Duration(ms) * time.Millisecond)
+// 		} else {
+// 			ms := (rand.Int63() % 13)
+// 			time.Sleep(time.Duration(ms) * time.Millisecond)
+// 		}
+
+// 		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
+// 			cfg.disconnect(leader)
+// 			nup -= 1
+// 		}
+
+// 		if nup < 3 {
+// 			s := rand.Int() % servers
+// 			if cfg.connected[s] == false {
+// 				cfg.connect(s)
+// 				nup += 1
+// 			}
+// 		}
+// 	}
+
+// 	for i := 0; i < servers; i++ {
+// 		if cfg.connected[i] == false {
+// 			cfg.connect(i)
+// 		}
+// 	}
+
+// 	cfg.one(6666, servers, true)
+
+// 	cfg.end()
+// }
 
 func TestFigure8Unreliable3C(t *testing.T) {
 	servers := 5
