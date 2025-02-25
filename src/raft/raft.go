@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -69,10 +68,9 @@ const (
 const Unvote = -1
 const InvalidIndex = -1
 const MinTimeout = 300
-const MaxTimeout = 600
+const MaxTimeout = 550
 const HeartbeatTimeout = 100
-const CheckTimeout = 50
-const ChanSize = 30
+const ChanSize = 50
 
 // A Go object implementing a single Raft peer.
 type Raft struct {
@@ -90,6 +88,7 @@ type Raft struct {
 	identity 			int				// 当前服务器的身份 (follower,candidate,leader)
 	VoteFor				int				// 当前服务器给哪个候选人投票
 	changeChan			chan int		// 状态改变时用于通知 ticker
+	applyLogCond		sync.Cond		// committedIndex 改变时通知协程 apply 一个 log
 
 	applyChan			chan ApplyMsg	
 	Logs				[]LogEntry		// 当前服务器维护的 logs(下标从 1 开始)
@@ -104,23 +103,6 @@ type Raft struct {
 func getRand(l, r int) int {
 	len := int64(r - l + 1)
 	return l + int(rand.Int63() % len)
-}
-
-func (rf *Raft) String() string {
-	var str strings.Builder
-	str.Write([]byte(fmt.Sprintf("server: %d", rf.me)))
-	str.Write([]byte(fmt.Sprintf(", currentTerm: %d", rf.CurrentTerm)))
-	var identity string
-	if rf.identity == LEADER {
-		identity = "leader"
-	} else if rf.identity == CANDIDATE {
-		identity = "candidate"
-	} else if rf.identity == FOLLOWER {
-		identity = "follower"
-	}
-	str.Write([]byte(fmt.Sprintf(", identity: %s", identity)))
-	str.Write([]byte(fmt.Sprintf(", voteFor: %d\n", rf.VoteFor)))
-	return str.String()
 }
 
 // return currentTerm and whether this server
@@ -271,7 +253,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (3A, 3B).
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	// DPrintf("%s RequestVote(), args: %+v", rf.String(), args)
+	defer DPrintf("[server %d] RequestVote(), args: %+v, reply %+v", rf.me, args, reply)
 
 	if args.Term < rf.CurrentTerm {
 		reply.Term = rf.CurrentTerm
@@ -344,9 +326,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // that the caller passes the address of the reply struct with &, not
 // the struct itself.
 func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
-	// rf.mu.Lock()
-	// DPrintf("%s sendRequestVote to server %d", rf.String(), server)
-	// rf.mu.Unlock()
 	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
 	return ok
 }
@@ -354,6 +333,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+	defer DPrintf("[server %d] ApplyEntries(), args: %+v, reply %+v", rf.me, args, reply)
 
 	// 情况一：leader 的 term < currentTerm
 	if rf.CurrentTerm > args.Term {
@@ -397,24 +377,34 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 		if len(args.Entries) > 0 {
 			// 当前复制条目的索引
 			index := args.PrevLogIndex + 1
-			log := args.Entries[0]
-			if index >= len(rf.Logs) {
-				// 追加条目
-				rf.Logs = append(rf.Logs, log)
-			} else {
-				if rf.Logs[index].Term != log.Term {
-					// 发生冲突时需要把 >= index 的条目都删除
-					for len(rf.Logs) - 1 >= index {
-						rf.Logs = rf.Logs[:len(rf.Logs) - 1]
-					}
-					rf.Logs = append(rf.Logs, log)
+			logs := args.Entries
+			// 检查是否有冲突
+			for i := 0; i < len(logs) && index + i < len(rf.Logs); i ++ {
+				if rf.Logs[index + i].Term != logs[i].Term {
+					// 发生冲突时需要把 >= index + i 的条目都删除
+					rf.Logs = rf.Logs[:index + i]
+					break
 				}
 			}
+			// 复制日志
+			for i := 0; i < len(logs); i ++ {
+				if index + i >= len(rf.Logs) {
+					rf.Logs = append(rf.Logs, logs[i])
+				} else {
+					rf.Logs[index + i] = logs[i]
+				}
+			} 
+
 			if args.LeaderCommit > rf.committedIndex {
+				t := rf.committedIndex
 				if args.LeaderCommit > index {
 					rf.committedIndex = index
 				} else {
 					rf.committedIndex = args.LeaderCommit
+				}
+				if t != rf.committedIndex {
+					DPrintf("[server %d] ApplyEntries1: change committedIndex %d to %d", rf.me, t, rf.committedIndex)
+					rf.applyLogCond.Signal()
 				}
 			}
 
@@ -423,10 +413,15 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 		} else {
 			// 心跳 RPC
 			if args.LeaderCommit > rf.committedIndex {
+				t := rf.committedIndex
 				if args.LeaderCommit >= len(rf.Logs) - 1 {
 					rf.committedIndex = len(rf.Logs) - 1
 				} else {
 					rf.committedIndex = args.LeaderCommit
+				}
+				if t != rf.committedIndex {
+					DPrintf("[server %d] ApplyEntries2: change committedIndex %d to %d", rf.me, t, rf.committedIndex)
+					rf.applyLogCond.Signal()
 				}
 			}
 		}
@@ -547,15 +542,15 @@ func (rf *Raft) sendHeartBeat() {
 
 			args.PrevLogIndex = index - 1
 			args.PrevLogTerm = logs[index - 1].Term
-			args.Entries = []LogEntry{logs[index]}
+			args.Entries = make([]LogEntry, len(logs) - index)
+			copy(args.Entries, logs[index:])
 		} else {
 			args.PrevLogIndex = lastLogIndex
 			args.PrevLogTerm = logs[lastLogIndex].Term
-			args.Entries = []LogEntry{}
+			args.Entries = make([]LogEntry, 0)
 		}
 
 		go func(server int, args ApplyEntriesArgs) {
-			DPrintf("[Leader %d] send heartbeat to server %d, args %+v", rf.me, server, args)
 			reply := ApplyEntriesReply{}
 			ok := rf.sendApplyEntries(server, &args, &reply)
 			if !ok {
@@ -570,17 +565,19 @@ func (rf *Raft) sendHeartBeat() {
 			}
 
 			if !reply.Success {
-				if reply.Term > rf.CurrentTerm {
-					// 因 leader 的任期过时被拒绝，变成 follower
-					rf.changeChan <- 1
-					rf.CurrentTerm = reply.Term
-					rf.identity = FOLLOWER
-					rf.VoteFor = Unvote
-	
-					// 3C
-					rf.persist()
+				if reply.Term > args.Term {
+					// 因 leader 的任期过时被拒绝，检查是否需要变成 follower
+					if reply.Term > rf.CurrentTerm {
+						rf.changeChan <- 1
+						rf.CurrentTerm = reply.Term
+						rf.identity = FOLLOWER
+						rf.VoteFor = Unvote
+		
+						// 3C
+						rf.persist()
+					}
 				} else {
-					if len(args.Entries) > 0 {
+					// if len(args.Entries) > 0 {
 						// 因为没有通过一致性检查被拒绝，更新 nextIndex 重试
 
 						if reply.XIndex == InvalidIndex {
@@ -600,16 +597,17 @@ func (rf *Raft) sendHeartBeat() {
 								rf.nextIndex[server] = index2 - 1
 							}
 						}
-					}
+					// }
 				}
 			} else {
 				// 成功调用，更新 nextIndex
 				if len(args.Entries) > 0 {
 					index := args.PrevLogIndex + 1
 					if index == rf.nextIndex[server] {
-						rf.matchIndex[server] = index
-						rf.nextIndex[server]  = index + 1
-						DPrintf("[Leader %d] succeeded to copyEntries to server %d, args %+v", rf.me, server, args)
+						rf.matchIndex[server] = index + len(args.Entries) - 1
+						rf.nextIndex[server]  = rf.matchIndex[server] + 1
+
+						rf.updateCommittedIndex()
 					}
 				}
 			}
@@ -643,7 +641,6 @@ func (rf *Raft) kickOffNewElection() {
 		
 		go func(server int, args RequestVoteArgs) {	
 			reply := RequestVoteReply{}
-			DPrintf("[server %d] sendRequestVote to %d", rf.me, server)
 			ok := rf.sendRequestVote(server, &args, &reply)
 	
 			if !ok {
@@ -756,82 +753,75 @@ func (rf *Raft) ticker() {
 	}
 }
 
-// 定时检查是否需要应用 log entry
+// 检查是否需要应用 log entry
 func (rf *Raft) applyLog() {
-	for !rf.killed() {
+	for {
 		rf.mu.Lock()
-		// DPrintf("[server %d] logs are %+v", rf.me, rf.logs)
-		if rf.committedIndex > rf.lastApplied {
-			DPrintf("[server %d] rf.committedIndex is %d, rf.lastApplied is %d", rf.me, rf.committedIndex, rf.lastApplied)
+		for !rf.killed() && rf.committedIndex <= rf.lastApplied {
+			rf.applyLogCond.Wait()
+		}
+		committedIndex := rf.committedIndex
+		rf.mu.Unlock()
+
+		if rf.killed() {
+			break
+		}
+
+		for rf.lastApplied < committedIndex {
+			DPrintf("[server %d] rf.committedIndex is %d, rf.lastApplied is %d", rf.me, committedIndex, rf.lastApplied)
+			DPrintf("[server %d] logs are %+v", rf.me, rf.Logs)
+	
 			rf.lastApplied ++
 			msg := ApplyMsg{
 				CommandValid: true,
 				Command: rf.Logs[rf.lastApplied].Command,
 				CommandIndex: rf.lastApplied,
 			}
-			rf.mu.Unlock()
 			rf.applyChan <- msg
-		} else {
-			rf.mu.Unlock()
 		}
-		time.Sleep(time.Duration(CheckTimeout) * time.Millisecond)
-		// time.Sleep(time.Duration(HEARTBEATTIMEOUT) * time.Millisecond)
 	}
 }
 
-// Leader 不断检查是否需要更新 committedIndex
+// Leader 检查是否需要更新 committedIndex (调用者需要加锁)
 func (rf *Raft) updateCommittedIndex() {
-	for !rf.killed() {
-		_, isLeader := rf.GetState()
-		if isLeader {
-			rf.mu.Lock()
-			i := rf.committedIndex + 1
-			n := len(rf.Logs) - 1
-			res := rf.committedIndex
-			rf.mu.Unlock()
 
-			for i <= n {
-				rf.mu.Lock()
-				if rf.Logs[i].Term != rf.CurrentTerm {
-					rf.mu.Unlock()
-					i ++
-					continue
-				}	
-				rf.mu.Unlock()
+	low := rf.findFirstIndex(rf.CurrentTerm)
+	if low == len(rf.Logs) || rf.Logs[low].Term != rf.CurrentTerm {
+		return
+	}
+	high := rf.findFirstIndex(rf.CurrentTerm + 1)
+	if low >= high || rf.Logs[high - 1].Term != rf.CurrentTerm {
+		panic(fmt.Sprintf("updateCommittedIndex(): low %d, high %d", low, high))
+	}
+	N := high - 1
+	res := rf.committedIndex
 
-				cnt := 1
-				ok := false
-				for j := range rf.peers {
-					if j == rf.me {
-						continue
-					}
-
-					rf.mu.Lock()
-					matchIndex := rf.matchIndex[j]
-					rf.mu.Unlock()
-					if matchIndex >= i {
-						cnt ++
-						if cnt > len(rf.peers) - cnt {
-							ok = true
-							break
-						}
-					}
-				}
-				if ok {
-					res = i
-				}
-				i ++
+	for ; N >= low && N > rf.committedIndex; N -- {
+		cnt := 1
+		ok := false
+		for j := range rf.peers {
+			if j == rf.me {
+				continue
 			}
 
-			rf.mu.Lock()
-			if rf.committedIndex != res && rf.identity == LEADER {
-				DPrintf("[Leader %d] change committedIndex %d to %d", rf.me, rf.committedIndex, res)
-				rf.committedIndex = res
+			if rf.matchIndex[j] >= N {
+				cnt ++
+				if cnt > len(rf.peers) - cnt {
+					ok = true
+					break
+				}
 			}
-			rf.mu.Unlock()
 		}
+		if ok {
+			res = N
+			break
+		}
+	}
 
-		time.Sleep(time.Millisecond * time.Duration(CheckTimeout))
+	if rf.committedIndex != res {
+		DPrintf("[Leader %d] change committedIndex %d to %d", rf.me, rf.committedIndex, N)
+		rf.committedIndex = N
+		rf.applyLogCond.Signal()
 	}
 }
 
@@ -864,6 +854,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.lastApplied = 0
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
+	rf.applyLogCond = *sync.NewCond(&rf.mu)
 
 	// DPrintf("Make() %s", rf.String())
 
@@ -874,7 +865,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	go rf.ticker()
 	// 3B
 	go rf.applyLog()
-	go rf.updateCommittedIndex()
 
 	return rf
 }

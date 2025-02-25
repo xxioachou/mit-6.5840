@@ -871,6 +871,36 @@ func TestPersist33C(t *testing.T) {
 	cfg.end()
 }
 
+func TestQA1(t *testing.T) {
+	servers := 3
+	cfg := make_config(t, servers, false, false)
+	defer cfg.cleanup()
+	
+	cfg.begin("Test (QA1): ")
+	leader1 := cfg.checkOneLeader()
+
+	cfg.disconnect(leader1)
+	cfg.rafts[leader1].Start(100)
+	cfg.rafts[leader1].Start(101)
+	cfg.rafts[leader1].Start(102)
+
+	time.Sleep(RaftElectionTimeout / 2)
+	leader2 := cfg.checkOneLeader()
+	cfg.one(103, servers - 1, false)
+	cfg.one(104, servers - 1, false)
+
+	// 等待复制
+	time.Sleep(RaftElectionTimeout / 2)
+
+	cfg.disconnect(leader2)
+	cfg.connect(leader1)
+	time.Sleep(RaftElectionTimeout)
+
+	
+	// cfg.one(105, servers - 1, false)
+	cfg.end()
+}
+
 // func TestMyFigure83C(t *testing.T) {
 // 	servers := 5
 // 	cfg := make_config(t, servers, false, false)
@@ -1032,62 +1062,62 @@ func TestUnreliableAgree3C(t *testing.T) {
 	cfg.end()
 }
 
-// func TestMyFigure8Unreliable3C(t *testing.T) {
-// 	servers := 5
-// 	cfg := make_config(t, servers, true, false)
-// 	defer cfg.cleanup()
+func TestMyFigure8Unreliable3C(t *testing.T) {
+	servers := 5
+	cfg := make_config(t, servers, true, false)
+	defer cfg.cleanup()
 
-// 	cfg.begin("Test (3C): Figure 8 (unreliable)")
+	cfg.begin("Test (3C): Figure 8 (unreliable)")
 
-// 	cfg.one(-1, 1, true)
+	cfg.one(0, 1, true)
 
-// 	nup := servers
-// 	const TIMES = 3
+	nup := servers
+	const TIMES = 500
 
-// 	for iters := 0; iters < TIMES; iters++ {
-// 		if iters == TIMES / 2 {
-// 			cfg.setlongreordering(true)
-// 		}
-// 		leader := -1
-// 		for i := 0; i < servers; i++ {
-// 			_, _, ok := cfg.rafts[i].Start(iters)
-// 			if ok && cfg.connected[i] {
-// 				leader = i
-// 			}
-// 		}
+	for iters := 0; iters < TIMES; iters++ {
+		if iters == TIMES / 2 {
+			cfg.setlongreordering(true)
+		}
+		leader := -1
+		for i := 0; i < servers; i++ {
+			_, _, ok := cfg.rafts[i].Start(iters + 1)
+			if ok && cfg.connected[i] {
+				leader = i
+			}
+		}
 
-// 		if (rand.Int() % 1000) < 100 {
-// 			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
-// 			time.Sleep(time.Duration(ms) * time.Millisecond)
-// 		} else {
-// 			ms := (rand.Int63() % 13)
-// 			time.Sleep(time.Duration(ms) * time.Millisecond)
-// 		}
+		if (rand.Int() % 1000) < 100 {
+			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
+			time.Sleep(time.Duration(ms) * time.Millisecond)
+		} else {
+			ms := (rand.Int63() % 13)
+			time.Sleep(time.Duration(ms) * time.Millisecond)
+		}
 
-// 		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
-// 			cfg.disconnect(leader)
-// 			nup -= 1
-// 		}
+		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
+			cfg.disconnect(leader)
+			nup -= 1
+		}
 
-// 		if nup < 3 {
-// 			s := rand.Int() % servers
-// 			if cfg.connected[s] == false {
-// 				cfg.connect(s)
-// 				nup += 1
-// 			}
-// 		}
-// 	}
+		if nup < 3 {
+			s := rand.Int() % servers
+			if cfg.connected[s] == false {
+				cfg.connect(s)
+				nup += 1
+			}
+		}
+	}
 
-// 	for i := 0; i < servers; i++ {
-// 		if cfg.connected[i] == false {
-// 			cfg.connect(i)
-// 		}
-// 	}
+	for i := 0; i < servers; i++ {
+		if cfg.connected[i] == false {
+			cfg.connect(i)
+		}
+	}
 
-// 	cfg.one(6666, servers, true)
+	cfg.one(6666, servers, true)
 
-// 	cfg.end()
-// }
+	cfg.end()
+}
 
 func TestFigure8Unreliable3C(t *testing.T) {
 	servers := 5
