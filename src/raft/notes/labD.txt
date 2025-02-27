@@ -1,0 +1,12 @@
+tester 周期性地调用 Snapshot(index int, snapshot []byte) 存储快照，快照中包含 <= index 的所有已提交日志
+server 一旦完成快照，就应该丢弃快照中存在(<=index)的日志条目
+
+InstallSnapshot RPC
+    作用：leader 告诉一个滞后的 follower，让其用携带的快照替换自己的状态
+    follower 收到快照，应该用 applyCh 把快照发送出去
+
+
+新增：
+    server persist 时还要保存快照，重启时重新读取快照。
+    Leader 发送复制日志 RPC 时，如果需要复制的日志不存在自己的日志中，就发送快照给 follower
+    
