@@ -47,18 +47,17 @@ echo "" > $out
 # timeout -k 2s 20s go test -run=TestSnapshotBasic3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstall3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
+# timeout -k 2s 20s go test -run=TestSnapshotAllCrash3D -race -v >> $out
+# timeout -k 2s 20s go test -run=TestSnapshotInit3D -race -v >> $out
 
-timeout -k 2s 600s go test -run 3D -race -v >> $out
+# timeout -k 2s 600s go test -run 3D -race -v >> $out
 
-# for i in {0..2}
-# do
-# go test -run 3B -race -v >> $out
+for i in {0..0}
+do
 
+time go test >> $out
 
-# go test -run 3C -race -v >> $out
-
-# # echo "hello, linux!"
-# done
+done
 
 
 # go test -run=TestQA1 -race -v > $out

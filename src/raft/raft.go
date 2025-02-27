@@ -101,7 +101,6 @@ type Raft struct {
 	DiscardCount		int				// 快照中存在的日志条目数量
 	snapshot			[]byte			// 快照内容
 	lastIncludedIndex	int				// 快照中最后一条日志条目的索引
-	lastIncludedTerm	int				// 快照中最后一条日志条目的任期
 	applySnappending	bool			// 是否需要应用快照
 }
 
@@ -208,6 +207,29 @@ func (rf *Raft) readPersist(data []byte) {
 	rf.Logs = logs
 }
 
+func (rf *Raft) readSnapShot(data []byte) {
+	if data == nil || len(data) < 1 {
+		return
+	}
+
+	// data 里包含 lastIncludedIndex 和 []Command
+	w := bytes.NewBuffer(data)
+	e := labgob.NewDecoder(w)
+	var lastIncludedIndex int
+	if err := e.Decode(&lastIncludedIndex); err != nil {
+		log.Fatal(err)
+	}
+
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	rf.committedIndex = lastIncludedIndex
+	rf.lastApplied = lastIncludedIndex
+
+	rf.DiscardCount = lastIncludedIndex
+	rf.snapshot = data
+	rf.lastIncludedIndex = lastIncludedIndex
+}
+
 // 收到快照后做的事（调用者持有锁）
 // lastIncludedIndex 已经更新，但是 DiscardCnt 没有更新
 func (rf *Raft) doSnapshot(trimLog bool) {
@@ -223,7 +245,7 @@ func (rf *Raft) doSnapshot(trimLog bool) {
 			panic("doSnapshot(): len(rf.Logs) < cnt")
 		}
 
-		for i := 1; i + cnt < len(rf.Logs); i ++ {
+		for i := 0; i + cnt < len(rf.Logs); i ++ {
 			rf.Logs[i] = rf.Logs[i + cnt]
 		}
 		rf.Logs = rf.Logs[:len(rf.Logs) - cnt]
@@ -254,7 +276,6 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	}
 
 	rf.lastIncludedIndex = index
-	rf.lastIncludedTerm = rf.Logs[rf.RealIndex(index)].Term
 	rf.snapshot = make([]byte, len(snapshot))
 	copy(rf.snapshot, snapshot)
 
@@ -346,13 +367,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	realIndex := len(rf.Logs) - 1
 	lastLogIndex := rf.RaftIndex(realIndex)
-	var lastLogTerm int
-	// 刚裁减掉快照就收到投票信息
-	if realIndex == 0 {
-		lastLogTerm = rf.lastIncludedTerm		
-	} else {
-		lastLogTerm = rf.Logs[realIndex].Term
-	}
+	lastLogTerm := rf.Logs[realIndex].Term
 	// 候选人的日志至少和当前服务器的日志一样新(3B)
 	ok := args.LastLogTerm > lastLogTerm || (args.LastLogTerm == lastLogTerm && args.LastLogIndex >= lastLogIndex)
 	if !ok {
@@ -414,7 +429,7 @@ func (rf *Raft) ReplicateCheck(args *ApplyEntriesArgs) bool {
 	prevIndex := rf.RealIndex(args.PrevLogIndex)
 	if prevIndex == 0 {
 		return rf.lastIncludedIndex == args.PrevLogIndex && 
-		rf.lastIncludedTerm == args.PrevLogTerm
+		rf.Logs[prevIndex].Term == args.PrevLogTerm
 	}
 
 	return prevIndex < len(rf.Logs) && rf.Logs[prevIndex].Term == args.PrevLogTerm
@@ -631,7 +646,6 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	}
 
 	rf.lastIncludedIndex = args.LastIncludedIndex
-	rf.lastIncludedTerm	 = args.LastIncludedTerm
 	rf.snapshot = make([]byte, len(args.Data))
 	copy(rf.snapshot, args.Data)
 	
@@ -642,6 +656,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	} else {
 		// 丢弃整个日志
 		rf.Logs = make([]LogEntry, 1)
+		rf.Logs[0].Term = args.LastIncludedTerm
 	} 
 
 	rf.doSnapshot(false)
@@ -751,7 +766,7 @@ func (rf *Raft) sendHeartBeat() {
 	CurrentTerm := rf.CurrentTerm
 	LeaderCommit := rf.committedIndex
 	LastIncludedIndex := rf.lastIncludedIndex
-	LastIncludedTerm := rf.lastIncludedTerm
+	LastIncludedTerm := rf.Logs[0].Term
 	Data := make([]byte, len(rf.snapshot))
 	DiscardCount := rf.DiscardCount
 	copy(Data, rf.snapshot)
@@ -802,25 +817,14 @@ func (rf *Raft) sendHeartBeat() {
 					panic("realPrevIndex < 0")
 				}
 
-				if realPrevIndex == 0 {
-					if raftIndex - 1 != rf.lastIncludedIndex {
-						panic(fmt.Sprintf("raftIndex - 1 %d != rf.lastIncludedIndex %d", raftIndex - 1, rf.lastIncludedIndex))
-					}
-					args.PrevLogTerm = rf.lastIncludedTerm
-				} else {
-					args.PrevLogTerm = logs[realPrevIndex].Term
-				}
-				
+
 				args.PrevLogIndex = raftIndex - 1
+				args.PrevLogTerm = logs[realPrevIndex].Term
 				args.Entries = make([]LogEntry, len(logs) - RealIndex(raftIndex))
 				copy(args.Entries, logs[RealIndex(raftIndex):])
 			} else {
 				args.PrevLogIndex = lastLogIndex
-				if RealIndex(lastLogIndex) == 0 {
-					args.PrevLogTerm = rf.lastIncludedTerm
-				} else {
-					args.PrevLogTerm = logs[RealIndex(lastLogIndex)].Term
-				}
+				args.PrevLogTerm = logs[RealIndex(lastLogIndex)].Term
 				args.Entries = make([]LogEntry, 0)
 			}
 			go rf.sendApplyEntriesTo(i, args)
@@ -839,12 +843,7 @@ func (rf *Raft) kickOffNewElection() {
 		Term: rf.CurrentTerm, 
 		CandidateId: rf.me,
 		LastLogIndex: rf.RaftIndex(len(rf.Logs) - 1),
-	}
-	// 刚截断快照就发起投票
-	if len(rf.Logs) - 1 == 0 {
-		args.LastLogTerm = rf.lastIncludedTerm
-	} else {
-		args.LastLogTerm = rf.Logs[len(rf.Logs) - 1].Term
+		LastLogTerm: rf.Logs[len(rf.Logs) - 1].Term,
 	}
 	rf.mu.Unlock()
 	DPrintf("[server %d] kickOffNewElection, args is %+v", rf.me, args)
@@ -988,7 +987,7 @@ func (rf *Raft) applyLog() {
 			msg := ApplyMsg {
 				SnapshotValid: true,
 				SnapshotIndex: rf.lastIncludedIndex,
-				SnapshotTerm: rf.lastIncludedTerm,
+				SnapshotTerm: rf.Logs[0].Term,
 			}
 			msg.Snapshot = make([]byte, len(rf.snapshot))
 			copy(msg.Snapshot, rf.snapshot)
@@ -1097,12 +1096,13 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// 3D
 	rf.DiscardCount = 0
 	rf.lastIncludedIndex = 0
-	rf.lastIncludedTerm = 0
 	rf.snapshot = make([]byte, 0)
 	// DPrintf("Make() %s", rf.String())
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
+
+	rf.readSnapShot(persister.ReadSnapshot())
 
 	// start ticker goroutine to start elections(3A)
 	go rf.ticker()

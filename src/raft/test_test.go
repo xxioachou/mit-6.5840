@@ -495,78 +495,6 @@ func TestRejoin3B(t *testing.T) {
 	cfg.end()
 }
 
-// func TestMyBackup3B(t *testing.T) {
-// 	servers := 5
-// 	cfg := make_config(t, servers, false, false)
-// 	defer cfg.cleanup()
-
-// 	cfg.begin("Test (3B): leader backs up quickly over incorrect follower logs")
-
-// 	const iter = 50
-// 	cfg.one(0, servers, true)
-
-// 	// put leader and one follower in a partition
-// 	leader1 := cfg.checkOneLeader()
-// 	cfg.disconnect((leader1 + 2) % servers)
-// 	cfg.disconnect((leader1 + 3) % servers)
-// 	cfg.disconnect((leader1 + 4) % servers)
-
-// 	// submit lots of commands that won't commit
-// 	for i := 0; i < iter; i++ {
-// 		cfg.rafts[leader1].Start(i + 1)
-// 	}
-
-// 	time.Sleep(RaftElectionTimeout / 2)
-
-// 	cfg.disconnect((leader1 + 0) % servers)
-// 	cfg.disconnect((leader1 + 1) % servers)
-
-// 	// allow other partition to recover
-// 	cfg.connect((leader1 + 2) % servers)
-// 	cfg.connect((leader1 + 3) % servers)
-// 	cfg.connect((leader1 + 4) % servers)
-
-// 	// lots of successful commands to new group.
-// 	for i := 0; i < iter; i++ {
-// 		cfg.one(i + 1 + iter, 3, true)
-// 	}
-
-// 	// now another partitioned leader and one follower
-// 	leader2 := cfg.checkOneLeader()
-// 	other := (leader1 + 2) % servers
-// 	if leader2 == other {
-// 		other = (leader2 + 1) % servers
-// 	}
-// 	cfg.disconnect(other)
-
-// 	// lots more commands that won't commit
-// 	for i := 0; i < iter; i++ {
-// 		cfg.rafts[leader2].Start(i + iter * 2 + 1)
-// 	}
-
-// 	time.Sleep(RaftElectionTimeout / 2)
-
-// 	// bring original leader back to life,
-// 	for i := 0; i < servers; i++ {
-// 		cfg.disconnect(i)
-// 	}
-// 	cfg.connect((leader1 + 0) % servers)
-// 	cfg.connect((leader1 + 1) % servers)
-// 	cfg.connect(other)
-
-// 	// lots of successful commands to new group.
-// 	for i := 0; i < iter; i++ {
-// 		cfg.one(i + iter * 3 + 1, 3, true)
-// 	}
-
-// 	// now everyone
-// 	for i := 0; i < servers; i++ {
-// 		cfg.connect(i)
-// 	}
-// 	cfg.one(666, servers, true)
-
-// 	cfg.end()
-// }
 
 func TestBackup3B(t *testing.T) {
 	servers := 5
@@ -871,92 +799,6 @@ func TestPersist33C(t *testing.T) {
 	cfg.end()
 }
 
-func TestQA1(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-	
-	cfg.begin("Test (QA1): ")
-	leader1 := cfg.checkOneLeader()
-
-	cfg.disconnect(leader1)
-	cfg.rafts[leader1].Start(100)
-	cfg.rafts[leader1].Start(101)
-	cfg.rafts[leader1].Start(102)
-
-	time.Sleep(RaftElectionTimeout / 2)
-	leader2 := cfg.checkOneLeader()
-	cfg.one(103, servers - 1, false)
-	cfg.one(104, servers - 1, false)
-
-	// 等待复制
-	time.Sleep(RaftElectionTimeout / 2)
-
-	cfg.disconnect(leader2)
-	cfg.connect(leader1)
-	time.Sleep(RaftElectionTimeout)
-
-	
-	// cfg.one(105, servers - 1, false)
-	cfg.end()
-}
-
-// func TestMyFigure83C(t *testing.T) {
-// 	servers := 5
-// 	cfg := make_config(t, servers, false, false)
-// 	defer cfg.cleanup()
-
-// 	cfg.begin("Test (3C): Figure 8")
-
-// 	cfg.one(0, 1, true)
-
-// 	const CNT = 1000
-// 	nup := servers
-// 	for iters := 0; iters < CNT; iters++ {
-// 		leader := -1
-// 		for i := 0; i < servers; i++ {
-// 			if cfg.rafts[i] != nil {
-// 				_, _, ok := cfg.rafts[i].Start(iters + 1)
-// 				if ok {
-// 					leader = i
-// 				}
-// 			}
-// 		}
-
-// 		if (rand.Int() % 1000) < 100 {
-// 			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
-// 			time.Sleep(time.Duration(ms) * time.Millisecond)
-// 		} else {
-// 			ms := (rand.Int63() % 13)
-// 			time.Sleep(time.Duration(ms) * time.Millisecond)
-// 		}
-
-// 		if leader != -1 {
-// 			cfg.crash1(leader)
-// 			nup -= 1
-// 		}
-
-// 		if nup < 3 {
-// 			s := rand.Int() % servers
-// 			if cfg.rafts[s] == nil {
-// 				cfg.start1(s, cfg.applier)
-// 				cfg.connect(s)
-// 				nup += 1
-// 			}
-// 		}
-// 	}
-
-// 	for i := 0; i < servers; i++ {
-// 		if cfg.rafts[i] == nil {
-// 			cfg.start1(i, cfg.applier)
-// 			cfg.connect(i)
-// 		}
-// 	}
-
-// 	cfg.one(rand.Int(), servers, true)
-
-// 	cfg.end()
-// }
 // Test the scenarios described in Figure 8 of the extended Raft paper. Each
 // iteration asks a leader, if there is one, to insert a command in the Raft
 // log.  If there is a leader, that leader will fail quickly with a high
@@ -1337,10 +1179,10 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 
 	cfg.begin(name)
 
-	// cfg.one(rand.Int(), servers, true)
-	idx := 1
-	cfg.one(idx, servers, true)
-	idx ++
+	cfg.one(rand.Int(), servers, true)
+	// idx := 1
+	// cfg.one(idx, servers, true)
+	// idx ++
 
 	leader1 := cfg.checkOneLeader()
 
@@ -1354,23 +1196,23 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 
 		if disconnect {
 			cfg.disconnect(victim)
-			// cfg.one(rand.Int(), servers-1, true)
-			cfg.one(idx, servers-1, true)
-			idx ++
+			cfg.one(rand.Int(), servers-1, true)
+			// cfg.one(idx, servers-1, true)
+			// idx ++
 		}
 		if crash {
 			cfg.crash1(victim)
-			// cfg.one(rand.Int(), servers-1, true)
-			cfg.one(idx, servers-1, true)
-			idx ++
+			cfg.one(rand.Int(), servers-1, true)
+			// cfg.one(idx, servers-1, true)
+			// idx ++
 		}
 
 		// perhaps send enough to get a snapshot
 		nn := (SnapShotInterval / 2) + (rand.Int() % SnapShotInterval)
 		for i := 0; i < nn; i++ {
-			// cfg.rafts[sender].Start(rand.Int())
-			cfg.rafts[sender].Start(idx)
-			idx ++
+			cfg.rafts[sender].Start(rand.Int())
+			// cfg.rafts[sender].Start(idx)
+			// idx ++
 		}
 
 		// let applier threads catch up with the Start()'s
@@ -1378,13 +1220,13 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			// make sure all followers have caught up, so that
 			// an InstallSnapshot RPC isn't required for
 			// TestSnapshotBasic3D().
-			// cfg.one(rand.Int(), servers, true)
-			cfg.one(idx, servers, true)
-			idx ++
+			cfg.one(rand.Int(), servers, true)
+			// cfg.one(idx, servers, true)
+			// idx ++
 		} else {
-			// cfg.one(rand.Int(), servers-1, true)
-			cfg.one(idx, servers-1, true)
-			idx ++
+			cfg.one(rand.Int(), servers-1, true)
+			// cfg.one(idx, servers-1, true)
+			// idx ++
 		}
 
 		if cfg.LogSize() >= MAXLOGSIZE {
@@ -1394,17 +1236,17 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			// reconnect a follower, who maybe behind and
 			// needs to rceive a snapshot to catch up.
 			cfg.connect(victim)
-			// cfg.one(rand.Int(), servers, true)
-			cfg.one(idx, servers, true)
-			idx ++
+			cfg.one(rand.Int(), servers, true)
+			// cfg.one(idx, servers, true)
+			// idx ++
 			leader1 = cfg.checkOneLeader()
 		}
 		if crash {
 			cfg.start1(victim, cfg.applierSnap)
 			cfg.connect(victim)
-			// cfg.one(rand.Int(), servers, true)
-			cfg.one(idx, servers, true)
-			idx ++
+			cfg.one(rand.Int(), servers, true)
+			// cfg.one(idx, servers, true)
+			// idx ++
 			leader1 = cfg.checkOneLeader()
 		}
 	}
