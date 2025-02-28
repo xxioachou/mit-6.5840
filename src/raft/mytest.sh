@@ -1,10 +1,15 @@
 out=./tmp/out.txt
 echo "" > $out
 
-# times=10
-# ./go-test-many.sh $times 8 TestSnapshotBasic3D >> $out
+# times=1
+# ./go-test-many.sh $times 8 >> $out
 
-# go test -run=TestInitialElection3A -race -v
+# mkdir test_errs
+# mkdir test_logs
+# mv *.err ./test_errs/
+# mv *.log ./test_logs/
+
+# go test -run=TestInitialElection3A -race -v >> $out
 # timeout -k 2s 16s go test -run=TestInitialElection3A -race -v > $out
 # timeout -k 2s 16s go test -run=TestInitialElection3A -race -v 
 
@@ -44,7 +49,7 @@ echo "" > $out
 # time go test -run 3C -v
 
 
-# timeout -k 2s 20s go test -run=TestSnapshotBasic3D -race -v >> $out
+# timeout -k 2s 20s go test -rtime go test >> $outun=TestSnapshotBasic3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstall3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
 # timeout -k 2s 20s go test -run=TestSnapshotAllCrash3D -race -v >> $out
@@ -52,13 +57,16 @@ echo "" > $out
 
 # timeout -k 2s 600s go test -run 3D -race -v >> $out
 
-for i in {0..0}
-do
+# for i in {0..4}
+# do
 
-time go test >> $out
+# go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
 
-done
+# done
 
 
 # go test -run=TestQA1 -race -v > $out
 
+rm ./tmp/*.log
+# ./dstest -n 200 -p 5 -o ./tmp/ TestMyFigure8Unreliable3C
+./dstest -n 200 -p 10 -o ./tmp/ 3A 3B 3C 3D

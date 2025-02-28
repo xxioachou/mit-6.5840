@@ -60,7 +60,6 @@ func TestReElection3A(t *testing.T) {
 	cfg.begin("Test (3A): election after network failure")
 
 	leader1 := cfg.checkOneLeader()
-	DPrintf("leader1: %d", leader1)
 
 	// if the leader disconnects, a new one should be elected.
 	cfg.disconnect(leader1)
@@ -71,7 +70,6 @@ func TestReElection3A(t *testing.T) {
 	// should switch to follower.
 	cfg.connect(leader1)
 	leader2 := cfg.checkOneLeader()
-	DPrintf("leader2: %d", leader2)
 	
 	// if there's no quorum, no new leader should
 	// be elected.
@@ -109,7 +107,6 @@ func TestManyElections3A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
-		DPrintf("iteration %d, servers ares %d, %d, %d", ii, i1, i2, i3)
 		cfg.disconnect(i1)
 		cfg.disconnect(i2)
 		cfg.disconnect(i3)
@@ -914,7 +911,7 @@ func TestMyFigure8Unreliable3C(t *testing.T) {
 	cfg.one(0, 1, true)
 
 	nup := servers
-	const TIMES = 500
+	const TIMES = 1000
 
 	for iters := 0; iters < TIMES; iters++ {
 		if iters == TIMES / 2 {
@@ -1250,6 +1247,7 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			leader1 = cfg.checkOneLeader()
 		}
 	}
+	// DPrintf(4, dInfo, "Final idx is %d", idx)
 	cfg.end()
 }
 
