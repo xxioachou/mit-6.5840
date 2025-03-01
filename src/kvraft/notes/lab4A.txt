@@ -1,0 +1,10 @@
+1. Clerk 发送 RPC（Put(),Append(),Get()）给 leader(其中一个kvserver)
+2. leader 把 Op(代表某次操作的结构体) 给 Raft（通过 rf.Start()）
+3. Raft 提交了某个 log
+4. leader 回应 Clerk
+
+Clerk:
+    如果第 3 步 log 提交失败，Clerk 应该重新尝试别的 server
+
+server:
+    只通过 Raft 通信

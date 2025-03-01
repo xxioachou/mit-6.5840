@@ -67,7 +67,7 @@ const (
 
 const Unvote = -1
 const InvalidIndex = -1
-const MinTimeout = 400
+const MinTimeout = 300
 const MaxTimeout = 800
 const HeartbeatTimeout = 50
 
@@ -107,8 +107,8 @@ type Raft struct {
 // 返回 [l, r] 之间的随机数
 func getRandomTime() time.Duration {
 	l, r := MinTimeout, MaxTimeout
-	len := int64(r - l + 1)
-	return time.Duration(l + int(rand.Int63() % len)) * time.Millisecond
+	len := r - l + 1
+	return time.Duration(l + rand.Intn(len)) * time.Millisecond
 }
 
 // 调用者加锁
@@ -353,10 +353,13 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// 当前服务器需要变成 follower
 	if args.Term > rf.CurrentTerm {
+		// 只有非 follower 变成 follower 才应该重置计时器
+		if rf.identity != FOLLOWER {
+			rf.electionTimer.Reset(getRandomTime())
+		}
 		rf.CurrentTerm = args.Term
 		rf.identity = FOLLOWER
 		rf.VoteFor = Unvote
-		rf.electionTimer.Reset(getRandomTime())
 	}
 
 	realIndex := len(rf.Logs) - 1
@@ -377,7 +380,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.identity = FOLLOWER
 	rf.VoteFor = args.CandidateId
 	rf.electionTimer.Reset(getRandomTime())
-
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -613,6 +615,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 		reply.Term = rf.CurrentTerm
 		return
 	}
+
 
 	rf.electionTimer.Reset(getRandomTime())
 	rf.identity = FOLLOWER
