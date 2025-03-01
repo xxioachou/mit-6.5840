@@ -67,7 +67,7 @@ const (
 
 const Unvote = -1
 const InvalidIndex = -1
-const MinTimeout = 300
+const MinTimeout = 400
 const MaxTimeout = 800
 const HeartbeatTimeout = 50
 
@@ -868,7 +868,7 @@ func (rf *Raft) kickOffNewElection() {
 						reply.Term == rf.CurrentTerm &&
 						rf.identity == CANDIDATE {
 
-						rf.heartbeatTimer.Reset(HeartbeatTimeout * time.Millisecond)
+						rf.heartbeatTimer.Reset(0)
 						rf.identity = LEADER
 
 						// 初始化 nextIndex、matchIndex (3B)
