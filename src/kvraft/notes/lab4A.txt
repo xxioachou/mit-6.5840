@@ -1,10 +1,13 @@
-1. Clerk 发送 RPC（Put(),Append(),Get()）给 leader(其中一个kvserver)
+1. Clerk 发送 RPC（Put(),Append(),Get()）给 leader(其中一个kvserver，通过遍历查找出来)
 2. leader 把 Op(代表某次操作的结构体) 给 Raft（通过 rf.Start()）
 3. Raft 提交了某个 log
 4. leader 回应 Clerk
 
 Clerk:
-    如果第 3 步 log 提交失败，Clerk 应该重新尝试别的 server
+    如果第 3 步 log 提交失败（leader 在提交 Op 之前就不再是 leader），Clerk 应该重新尝试别的 server
 
 server:
     只通过 Raft 通信
+    收到 RPC 检查有没有执行过这个命令：没有执行过  --> 检查自己是不是 leader：是 --> 调用 rf.Start()，等待任期改变或者命令被执行：任期没有改变 --> 返回执行的结果
+                    执行过，返回保存的结果                    否，返回                  任期改变，返回 error
+    

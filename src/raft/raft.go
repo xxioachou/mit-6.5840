@@ -69,7 +69,7 @@ const Unvote = -1
 const InvalidIndex = -1
 const MinTimeout = 300
 const MaxTimeout = 800
-const HeartbeatTimeout = 50
+const HeartbeatTimeout = 30
 
 // A Go object implementing a single Raft peer.
 type Raft struct {

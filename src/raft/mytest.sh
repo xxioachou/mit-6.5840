@@ -67,8 +67,8 @@ echo "" > $out
 
 # go test -run=TestQA1 -race -v > $out
 
-rm ./tmp/*.log
-# ./dstest -n 200 -p 10 -o ./tmp/ TestMyFigure8Unreliable3C TestFigure8Unreliable3C TestPersist23C
-./dstest -n 600 -p 10 -o ./tmp/ 3A 3B 3C 3D
+# rm ./tmp/*.log
+# ./dstest -n 800 -p 10 -o ./tmp/ TestMyFigure8Unreliable3C TestFigure8Unreliable3C TestPersist23C
+# ./dstest -n 600 -p 10 -o ./tmp/ 3A 3B 3C 3D
 # ./dstest -n 200 -p 10 -o ./tmp/ TestPersist23C
-# ./dstest -n 20 -p 10 -o ./tmp/ 3A
+# ./dstest -n 100 -p 10 -o ./tmp/ 3C
