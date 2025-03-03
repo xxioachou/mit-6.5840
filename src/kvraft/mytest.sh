@@ -23,4 +23,9 @@ echo "" > $out
 # go test -run=TestSpeed4A -race -v >> $out
 # go test -run=TestConcurrent4A -race -v >> $out
 
-~/dstest -n 20 -p 10 -o ./out/ 4A 4B
+# ~/dstest -n 20 -p 10 -o ./out/ 4A 4B
+
+# go test -run=TestSpeed4A -race -v >> $out
+# go test -run=TestSpeed4B -race -v >> $out
+
+# go test -race -v >> $out

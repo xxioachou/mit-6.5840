@@ -9,6 +9,7 @@ import (
 )
 
 const RPCTimeout	= 1000
+const SleepDuration = 20
 const InvalidServer = -1
 
 type Clerk struct {
@@ -94,7 +95,8 @@ func (ck *Clerk) Get(key string) string {
 				return reply.Value
 			}
 		}
-		// log.Printf("call to KVServer.Get failed. client id %d, call id %d\n", args.ClientID, args.CallID)
+
+		time.Sleep(SleepDuration * time.Millisecond)
 	}
 
 }
@@ -152,6 +154,8 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 				return
 			}
 		}
+
+		time.Sleep(SleepDuration * time.Millisecond)
 	}
 
 }
@@ -161,13 +165,4 @@ func (ck *Clerk) Put(key string, value string) {
 }
 func (ck *Clerk) Append(key string, value string) {
 	ck.PutAppend(key, value, "Append")
-}
-
-func (ck *Clerk) CallSucceed(server int, args *SucceedArgs, reply *SucceedReply) {
-	for {
-		ok := ck.servers[server].Call("KVServer.Succeed", args, reply)
-		if ok {
-			break
-		}
-	}
 }

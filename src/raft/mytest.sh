@@ -9,6 +9,8 @@ echo "" > $out
 # mv *.err ./test_errs/
 # mv *.log ./test_logs/
 
+# go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
+# TestSnapshotInstallUnreliable3D
 # go test -run=TestInitialElection3A -race -v >> $out
 # timeout -k 2s 16s go test -run=TestInitialElection3A -race -v > $out
 # timeout -k 2s 16s go test -run=TestInitialElection3A -race -v 
@@ -58,7 +60,7 @@ echo "" > $out
 
 # go test -run 3D -race -v >> $out
 
-# for i in {0..4}
+# for i in {0..2}
 # do
 
 # go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out

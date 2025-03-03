@@ -1,189 +1,99 @@
 
+=== RUN   TestBasic4A
+Test: one client (4A) ...
+  ... Passed --  15.1  5  7806 1315
+--- PASS: TestBasic4A (15.10s)
+=== RUN   TestSpeed4A
+Test: ops complete fast enough (4A) ...
+  ... Passed --   7.5  3  3344    0
+--- PASS: TestSpeed4A (7.54s)
+=== RUN   TestConcurrent4A
+Test: many clients (4A) ...
+  ... Passed --  15.6  5  9090 1533
+--- PASS: TestConcurrent4A (15.59s)
+=== RUN   TestUnreliable4A
+Test: unreliable net, many clients (4A) ...
+  ... Passed --  16.0  5  8854 1294
+--- PASS: TestUnreliable4A (15.97s)
+=== RUN   TestUnreliableOneKey4A
+Test: concurrent append to same key, unreliable (4A) ...
+  ... Passed --   0.9  3   239   52
+--- PASS: TestUnreliableOneKey4A (0.91s)
+=== RUN   TestOnePartition4A
+Test: progress in majority (4A) ...
+  ... Passed --   0.3  5    62    2
+Test: no progress in minority (4A) ...
+  ... Passed --   1.0  5   187    3
+Test: completion after heal (4A) ...
+  ... Passed --   1.0  5   103    3
+--- PASS: TestOnePartition4A (2.69s)
+=== RUN   TestManyPartitionsOneClient4A
+Test: partitions, one client (4A) ...
+  ... Passed --  22.3  5  7375 1110
+--- PASS: TestManyPartitionsOneClient4A (22.33s)
+=== RUN   TestManyPartitionsManyClients4A
+Test: partitions, many clients (4A) ...
+  ... Passed --  22.7  5 10339 1516
+--- PASS: TestManyPartitionsManyClients4A (22.68s)
+=== RUN   TestPersistOneClient4A
+Test: restarts, one client (4A) ...
+  ... Passed --  19.5  5  8560 1385
+--- PASS: TestPersistOneClient4A (19.51s)
+=== RUN   TestPersistConcurrent4A
+Test: restarts, many clients (4A) ...
+  ... Passed --  19.9  5 10831 1554
+--- PASS: TestPersistConcurrent4A (19.94s)
+=== RUN   TestPersistConcurrentUnreliable4A
+Test: unreliable net, restarts, many clients (4A) ...
+  ... Passed --  20.6  5  9752 1331
+--- PASS: TestPersistConcurrentUnreliable4A (20.62s)
+=== RUN   TestPersistPartition4A
+Test: restarts, partitions, many clients (4A) ...
+  ... Passed --  27.2  5 10805 1535
+--- PASS: TestPersistPartition4A (27.15s)
+=== RUN   TestPersistPartitionUnreliable4A
+Test: unreliable net, restarts, partitions, many clients (4A) ...
+  ... Passed --  27.9  5  8646 1035
+--- PASS: TestPersistPartitionUnreliable4A (27.95s)
+=== RUN   TestPersistPartitionUnreliableLinearizable4A
+Test: unreliable net, restarts, partitions, random keys, many clients (4A) ...
+  ... Passed --  29.7  7 19397 1419
+--- PASS: TestPersistPartitionUnreliableLinearizable4A (29.68s)
 === RUN   TestSnapshotRPC4B
 Test: InstallSnapshot RPC (4B) ...
-  ... Passed --   4.4  3  2219   63
---- PASS: TestSnapshotRPC4B (4.43s)
+  ... Passed --   2.8  3   353   63
+--- PASS: TestSnapshotRPC4B (2.83s)
 === RUN   TestSnapshotSize4B
 Test: snapshot size is reasonable (4B) ...
-  ... Passed --  25.2  3  4754  800
---- PASS: TestSnapshotSize4B (25.16s)
+  ... Passed --   1.4  3  2500  800
+--- PASS: TestSnapshotSize4B (1.40s)
 === RUN   TestSpeed4B
 Test: ops complete fast enough (4B) ...
-  ... Passed --  31.1  3  4583    0
---- PASS: TestSpeed4B (31.15s)
+  ... Passed --   1.6  3  3113    0
+--- PASS: TestSpeed4B (1.63s)
 === RUN   TestSnapshotRecover4B
 Test: restarts, snapshots, one client (4B) ...
-  ... Passed --  19.3  5  8793  484
---- PASS: TestSnapshotRecover4B (19.33s)
+  ... Passed --  19.5  5 53805 10422
+--- PASS: TestSnapshotRecover4B (19.46s)
 === RUN   TestSnapshotRecoverManyClients4B
 Test: restarts, snapshots, many clients (4B) ...
-2025/03/03 22:54:16 [server 0] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:16 [server 1] Snapshot(): index 2960 <= rf.lastIncludedIndex 2960
-2025/03/03 22:54:16 [server 2] Snapshot(): index 3020 <= rf.lastIncludedIndex 3020
-2025/03/03 22:54:16 [server 3] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:16 [server 4] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:16 [server 0] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:16 [server 1] Snapshot(): index 2960 <= rf.lastIncludedIndex 2960
-2025/03/03 22:54:16 [server 3] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:16 [server 2] Snapshot(): index 3020 <= rf.lastIncludedIndex 3020
-2025/03/03 22:54:16 [server 4] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 0] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 1] Snapshot(): index 2960 <= rf.lastIncludedIndex 2960
-2025/03/03 22:54:17 [server 3] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 2] Snapshot(): index 3020 <= rf.lastIncludedIndex 3020
-2025/03/03 22:54:17 [server 4] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 0] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 1] Snapshot(): index 2960 <= rf.lastIncludedIndex 2960
-2025/03/03 22:54:17 [server 3] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 2] Snapshot(): index 3020 <= rf.lastIncludedIndex 3020
-2025/03/03 22:54:17 [server 4] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 0] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 1] Snapshot(): index 2960 <= rf.lastIncludedIndex 2960
-2025/03/03 22:54:17 [server 3] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:17 [server 2] Snapshot(): index 3020 <= rf.lastIncludedIndex 3020
-2025/03/03 22:54:17 [server 4] Snapshot(): index 2980 <= rf.lastIncludedIndex 2980
-2025/03/03 22:54:23 [server 0] Snapshot(): index 6260 <= rf.lastIncludedIndex 6260
-2025/03/03 22:54:23 [server 1] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:23 [server 2] Snapshot(): index 6320 <= rf.lastIncludedIndex 6320
-2025/03/03 22:54:23 [server 3] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:23 [server 4] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:23 [server 0] Snapshot(): index 6260 <= rf.lastIncludedIndex 6260
-2025/03/03 22:54:23 [server 1] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:23 [server 2] Snapshot(): index 6320 <= rf.lastIncludedIndex 6320
-2025/03/03 22:54:23 [server 3] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:23 [server 4] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 0] Snapshot(): index 6260 <= rf.lastIncludedIndex 6260
-2025/03/03 22:54:24 [server 1] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 2] Snapshot(): index 6320 <= rf.lastIncludedIndex 6320
-2025/03/03 22:54:24 [server 4] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 3] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 0] Snapshot(): index 6260 <= rf.lastIncludedIndex 6260
-2025/03/03 22:54:24 [server 2] Snapshot(): index 6320 <= rf.lastIncludedIndex 6320
-2025/03/03 22:54:24 [server 3] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 4] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:24 [server 1] Snapshot(): index 6280 <= rf.lastIncludedIndex 6280
-2025/03/03 22:54:30 [server 0] Snapshot(): index 9580 <= rf.lastIncludedIndex 9580
-2025/03/03 22:54:30 [server 1] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 2] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 4] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 3] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 1] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 0] Snapshot(): index 9580 <= rf.lastIncludedIndex 9580
-2025/03/03 22:54:30 [server 2] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 4] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:30 [server 3] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 0] Snapshot(): index 9580 <= rf.lastIncludedIndex 9580
-2025/03/03 22:54:31 [server 1] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 2] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 4] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 3] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 0] Snapshot(): index 9580 <= rf.lastIncludedIndex 9580
-2025/03/03 22:54:31 [server 1] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 2] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 4] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 3] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 1] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 4] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-2025/03/03 22:54:31 [server 3] Snapshot(): index 9600 <= rf.lastIncludedIndex 9600
-  ... Passed --  21.0  5 34667 9635
---- PASS: TestSnapshotRecoverManyClients4B (21.04s)
+  ... Passed --  19.3  5 72436 12734
+--- PASS: TestSnapshotRecoverManyClients4B (19.30s)
 === RUN   TestSnapshotUnreliable4B
 Test: unreliable net, snapshots, many clients (4B) ...
-  ... Passed --  15.8  5  4488 1354
---- PASS: TestSnapshotUnreliable4B (15.82s)
+  ... Passed --  15.6  5 12049 1852
+--- PASS: TestSnapshotUnreliable4B (15.61s)
 === RUN   TestSnapshotUnreliableRecover4B
 Test: unreliable net, restarts, snapshots, many clients (4B) ...
-2025/03/03 22:54:53 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:53 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 0] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 2] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 3] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:54:54 [server 4] Snapshot(): index 383 <= rf.lastIncludedIndex 383
-2025/03/03 22:55:00 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:00 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:00 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:00 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:00 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:00 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:00 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:01 [server 0] Snapshot(): index 849 <= rf.lastIncludedIndex 849
-2025/03/03 22:55:01 [server 4] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:01 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-2025/03/03 22:55:01 [server 2] Snapshot(): index 845 <= rf.lastIncludedIndex 845
-  ... Passed --  20.5  5  5470 1325
---- PASS: TestSnapshotUnreliableRecover4B (20.49s)
+  ... Passed --  20.7  5 13015 1885
+--- PASS: TestSnapshotUnreliableRecover4B (20.65s)
 === RUN   TestSnapshotUnreliableRecoverConcurrentPartition4B
 Test: unreliable net, restarts, partitions, snapshots, many clients (4B) ...
-  ... Passed --  28.0  5  5060 1063
---- PASS: TestSnapshotUnreliableRecoverConcurrentPartition4B (27.99s)
+  ... Passed --  27.4  5  9816 1227
+--- PASS: TestSnapshotUnreliableRecoverConcurrentPartition4B (27.36s)
 === RUN   TestSnapshotUnreliableRecoverConcurrentPartitionLinearizable4B
 Test: unreliable net, restarts, partitions, snapshots, random keys, many clients (4B) ...
-2025/03/03 22:55:40 [server 6] Snapshot(): index 375 <= rf.lastIncludedIndex 375
-2025/03/03 22:55:40 [server 3] Snapshot(): index 375 <= rf.lastIncludedIndex 375
-2025/03/03 22:55:40 [server 5] Snapshot(): index 375 <= rf.lastIncludedIndex 375
-2025/03/03 22:55:40 [server 0] Snapshot(): index 375 <= rf.lastIncludedIndex 375
-2025/03/03 22:55:41 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:41 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 1] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 6] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 4] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:55:42 [server 0] Snapshot(): index 425 <= rf.lastIncludedIndex 425
-2025/03/03 22:56:00 [server 6] Snapshot(): index 1408 <= rf.lastIncludedIndex 1408
-2025/03/03 22:56:00 [server 5] Snapshot(): index 1408 <= rf.lastIncludedIndex 1408
-  ... Passed --  30.0  7 13628 1622
---- PASS: TestSnapshotUnreliableRecoverConcurrentPartitionLinearizable4B (29.98s)
+  ... Passed --  29.5  7 39276 4309
+--- PASS: TestSnapshotUnreliableRecoverConcurrentPartitionLinearizable4B (29.54s)
 PASS
-ok  	6.5840/kvraft	196.420s
+ok  	6.5840/kvraft	386.494s

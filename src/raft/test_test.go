@@ -1176,10 +1176,10 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 
 	cfg.begin(name)
 
-	cfg.one(rand.Int(), servers, true)
-	// idx := 1
-	// cfg.one(idx, servers, true)
-	// idx ++
+	// cfg.one(rand.Int(), servers, true)
+	idx := 1
+	cfg.one(idx, servers, true)
+	idx ++
 
 	leader1 := cfg.checkOneLeader()
 
@@ -1193,23 +1193,23 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 
 		if disconnect {
 			cfg.disconnect(victim)
-			cfg.one(rand.Int(), servers-1, true)
-			// cfg.one(idx, servers-1, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers-1, true)
+			cfg.one(idx, servers-1, true)
+			idx ++
 		}
 		if crash {
 			cfg.crash1(victim)
-			cfg.one(rand.Int(), servers-1, true)
-			// cfg.one(idx, servers-1, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers-1, true)
+			cfg.one(idx, servers-1, true)
+			idx ++
 		}
 
 		// perhaps send enough to get a snapshot
 		nn := (SnapShotInterval / 2) + (rand.Int() % SnapShotInterval)
 		for i := 0; i < nn; i++ {
-			cfg.rafts[sender].Start(rand.Int())
-			// cfg.rafts[sender].Start(idx)
-			// idx ++
+			// cfg.rafts[sender].Start(rand.Int())
+			cfg.rafts[sender].Start(idx)
+			idx ++
 		}
 
 		// let applier threads catch up with the Start()'s
@@ -1217,13 +1217,13 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			// make sure all followers have caught up, so that
 			// an InstallSnapshot RPC isn't required for
 			// TestSnapshotBasic3D().
-			cfg.one(rand.Int(), servers, true)
-			// cfg.one(idx, servers, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers, true)
+			cfg.one(idx, servers, true)
+			idx ++
 		} else {
-			cfg.one(rand.Int(), servers-1, true)
-			// cfg.one(idx, servers-1, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers-1, true)
+			cfg.one(idx, servers-1, true)
+			idx ++
 		}
 
 		if cfg.LogSize() >= MAXLOGSIZE {
@@ -1233,21 +1233,21 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			// reconnect a follower, who maybe behind and
 			// needs to rceive a snapshot to catch up.
 			cfg.connect(victim)
-			cfg.one(rand.Int(), servers, true)
-			// cfg.one(idx, servers, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers, true)
+			cfg.one(idx, servers, true)
+			idx ++
 			leader1 = cfg.checkOneLeader()
 		}
 		if crash {
 			cfg.start1(victim, cfg.applierSnap)
 			cfg.connect(victim)
-			cfg.one(rand.Int(), servers, true)
-			// cfg.one(idx, servers, true)
-			// idx ++
+			// cfg.one(rand.Int(), servers, true)
+			cfg.one(idx, servers, true)
+			idx ++
 			leader1 = cfg.checkOneLeader()
 		}
 	}
-	// DPrintf(4, dInfo, "Final idx is %d", idx)
+	DPrintf(4, dInfo, "Final idx is %d", idx)
 	cfg.end()
 }
 

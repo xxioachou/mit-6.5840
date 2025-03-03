@@ -69,7 +69,7 @@ const Unvote = -1
 const InvalidIndex = -1
 const MinTimeout = 300
 const MaxTimeout = 800
-const HeartbeatTimeout = 30
+const HeartbeatTimeout = 50
 
 // A Go object implementing a single Raft peer.
 type Raft struct {
@@ -263,16 +263,23 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	defer DPrintf(rf.me, dSnap, "Snapshot(index %v)", index)
-	if index > rf.committedIndex {
-		log.Fatalf("[server %d] Snapshot(): index > rf.committedIndex", rf.me)
-		return
-	}
+	// if index > rf.committedIndex {
+	// 	log.Fatalf("[server %d] Snapshot(): index %v > rf.committedIndex %v", rf.me, index, rf.committedIndex)
+	// 	return
+	// }
 	if index <= rf.lastIncludedIndex {
 		DPrintf(rf.me, dSnap, "Snapshot(): index %v <= rf.lastIncludedIndex %v", index, rf.lastIncludedIndex)
 		return
 	}
 
+	if rf.committedIndex <= index {
+		rf.committedIndex = index
+	}
+	if rf.lastApplied <= index {
+		rf.lastApplied = index
+	}
 	rf.lastIncludedIndex = index
+
 	rf.snapshot = make([]byte, len(snapshot))
 	copy(rf.snapshot, snapshot)
 
@@ -418,7 +425,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 
 // 一致性检查(调用者需要加锁)
 func (rf *Raft) ReplicateCheck(args *ApplyEntriesArgs) bool {
-	DPrintf(rf.me, dEntry, "ReplicateCheck(args %+v)", args)
+	// DPrintf(rf.me, dEntry, "ReplicateCheck(args %+v)", args)
 	prevIndex := rf.RealIndex(args.PrevLogIndex)
 	if prevIndex < 0 {
 		// 日志被截断在快照中
@@ -463,9 +470,8 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 		reply.Success = false
 		
 		if prevIndex < 0 {
-			// 日志被截断在快照中，让 leader 不用更新 nextIndex，下次发送快照 RPC
-			reply.XIndex = InvalidIndex
-			reply.XLen = args.PrevLogIndex + 1
+			// 日志被截断在快照中，过时的 RPC，不必理会
+			reply.Success = true
 		} else if prevIndex >= len(rf.Logs) {
 			reply.XIndex = InvalidIndex
 			reply.XLen = rf.RaftIndex(len(rf.Logs))
@@ -587,6 +593,9 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 
 			// 3C
 			rf.persist()
+
+			// rf.heartbeatTimer.Reset(0)
+			rf.sendHeartBeat()
 		}
 		rf.mu.Unlock()
 	}
@@ -662,6 +671,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 }
 
 func (rf *Raft) sendInstallSnapshotTo(server int, args InstallSnapshotArgs) {
+	DPrintf(rf.me, dSnap, "sendInstallSnapshotTo(server %v, args %+v)", server, args)
 	reply := InstallSnapshotReply{}
 	ok := rf.peers[server].Call("Raft.InstallSnapshot", &args, &reply)
 	if !ok {
@@ -686,7 +696,7 @@ func (rf *Raft) sendInstallSnapshotTo(server int, args InstallSnapshotArgs) {
 	} else {
 		// 更新 nextIndex 和 matchIndex（TODO:需要考虑RPC乱序的问题）
 		index := args.LastIncludedIndex
-		if rf.matchIndex[server] < index {
+		if rf.matchIndex[server] <= index {
 			rf.matchIndex[server] = index
 			rf.nextIndex[server]  = rf.matchIndex[server] + 1
 		}
@@ -726,7 +736,6 @@ func (rf *Raft) sendApplyEntriesTo(server int, args ApplyEntriesArgs) {
 
 			if reply.XIndex == InvalidIndex {
 				// server 日志太短
-				// 或者 nextIndex[server] 已经被截断在快照中(3D)
 				rf.nextIndex[server] = reply.XLen
 			} else {
 				index := rf.findFirstIndex(reply.XTerm)
@@ -757,24 +766,12 @@ func (rf *Raft) sendApplyEntriesTo(server int, args ApplyEntriesArgs) {
 	}
 }
 
+// 已经持有锁
 func (rf *Raft) sendHeartBeat() {
-	rf.mu.Lock()
-	CurrentTerm := rf.CurrentTerm
 	LeaderCommit := rf.committedIndex
-	LastIncludedIndex := rf.lastIncludedIndex
-	LastIncludedTerm := rf.Logs[0].Term
 	Data := make([]byte, len(rf.snapshot))
-	DiscardCount := rf.DiscardCount
 	copy(Data, rf.snapshot)
-	logs := make([]LogEntry, len(rf.Logs))
-	nextIndex := make([]int, len(rf.nextIndex))
-	copy(logs, rf.Logs)
-	copy(nextIndex, rf.nextIndex)
-	rf.mu.Unlock()
-	DPrintf(rf.me, dLeader, "sendHeartBeat(): CurrentTerm is %+v", CurrentTerm)
-
-	RaftIndex := func(index int) int { return index + DiscardCount } 
-	RealIndex := func(index int) int { return index - DiscardCount } 
+	DPrintf(rf.me, dLeader, "sendHeartBeat(): CurrentTerm %+v, rf.nextIndex %v, rf.matchIndex %v", rf.CurrentTerm, rf.nextIndex, rf.matchIndex)
 
 	// 同时向其他服务器发送心跳
 	// 如果有日志需要发送，就添加到 args 上(3B)
@@ -784,44 +781,44 @@ func (rf *Raft) sendHeartBeat() {
 			continue
 		}
 
-		if nextIndex[i] <= LastIncludedIndex {
+		if rf.nextIndex[i] <= rf.lastIncludedIndex {
 			// 发送快照
 			args := InstallSnapshotArgs{
-				Term: CurrentTerm,
+				Term: rf.CurrentTerm,
 				LeaderId: rf.me,
-				LastIncludedIndex: LastIncludedIndex,
-				LastIncludedTerm: LastIncludedTerm,
+				LastIncludedIndex: rf.lastIncludedIndex,
+				LastIncludedTerm: rf.Logs[0].Term,
 				Data: Data,
 			}
 			go rf.sendInstallSnapshotTo(i, args)
 		} else {
 			// 发送 ApplyEntries
-			lastLogIndex := RaftIndex(len(logs) - 1)
+			lastLogIndex := rf.RaftIndex(len(rf.Logs) - 1)
 			args := ApplyEntriesArgs{
-				Term: CurrentTerm,
+				Term: rf.CurrentTerm,
 				LeaderId: rf.me,
 				LeaderCommit: LeaderCommit,
 			}
 
-			if lastLogIndex >= nextIndex[i] {
-				raftIndex := nextIndex[i]
+			if lastLogIndex >= rf.nextIndex[i] {
+				raftIndex := rf.nextIndex[i]
 				if raftIndex == 0 {
 					panic("nextIndex[i] == 0")
 				}
 
-				realPrevIndex := RealIndex(raftIndex - 1)
+				realPrevIndex := rf.RealIndex(raftIndex - 1)
 				if realPrevIndex < 0 {
 					panic("realPrevIndex < 0")
 				}
 
 
 				args.PrevLogIndex = raftIndex - 1
-				args.PrevLogTerm = logs[realPrevIndex].Term
-				args.Entries = make([]LogEntry, len(logs) - RealIndex(raftIndex))
-				copy(args.Entries, logs[RealIndex(raftIndex):])
+				args.PrevLogTerm = rf.Logs[realPrevIndex].Term
+				args.Entries = make([]LogEntry, len(rf.Logs) - rf.RealIndex(raftIndex))
+				copy(args.Entries, rf.Logs[rf.RealIndex(raftIndex):])
 			} else {
 				args.PrevLogIndex = lastLogIndex
-				args.PrevLogTerm = logs[RealIndex(lastLogIndex)].Term
+				args.PrevLogTerm = rf.Logs[rf.RealIndex(lastLogIndex)].Term
 				args.Entries = make([]LogEntry, 0)
 			}
 			go rf.sendApplyEntriesTo(i, args)
@@ -835,14 +832,12 @@ func (rf *Raft) kickOffNewElection() {
 	var votes int32
 	atomic.StoreInt32(&votes, 1)
 
-	rf.mu.Lock()
 	args := RequestVoteArgs{
 		Term: rf.CurrentTerm, 
 		CandidateId: rf.me,
 		LastLogIndex: rf.RaftIndex(len(rf.Logs) - 1),
 		LastLogTerm: rf.Logs[len(rf.Logs) - 1].Term,
 	}
-	rf.mu.Unlock()
 	DPrintf(rf.me, dInfo, "[server %d] kickOffNewElection, args is %+v", rf.me, args)
 
 	// 1. 开启多个线程，同时向其他 server 拉票
@@ -911,16 +906,16 @@ func (rf *Raft) ticker() {
 				rf.CurrentTerm ++
 				rf.identity = CANDIDATE
 				rf.VoteFor = rf.me
-				rf.electionTimer.Reset(getRandomTime())
 				rf.persist()
-				go rf.kickOffNewElection()
+				rf.electionTimer.Reset(getRandomTime())
+				rf.kickOffNewElection()
 			}
 			rf.mu.Unlock()
 
 		case <- rf.heartbeatTimer.C:
 			rf.mu.Lock()
 			if rf.identity == LEADER {
-				go rf.sendHeartBeat()
+				rf.sendHeartBeat()
 				rf.heartbeatTimer.Reset(HeartbeatTimeout * time.Millisecond)
 			}
 			rf.mu.Unlock()
