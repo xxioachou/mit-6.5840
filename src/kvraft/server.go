@@ -1,10 +1,12 @@
 package kvraft
 
 import (
+	"bytes"
+	"fmt"
 	"log"
-	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"6.5840/labgob"
 	"6.5840/labrpc"
@@ -12,6 +14,7 @@ import (
 )
 
 const Debug = false
+const SnapshotTimeout = 100
 
 func DPrintf(format string, a ...interface{}) (n int, err error) {
 	if Debug {
@@ -25,12 +28,18 @@ type Op struct {
 	// Your definitions here.
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
-	OpId			string			// 命令的唯一 id，避免重复执行某条命令
+	ClientId		int64			
+	CallId			int64
 	GetValid		bool			// Get() 操作
 	PutValid		bool			// Put() 操作
 	AppendValid		bool			// Append() 操作
 	Key				string	
 	Value			string	
+}
+
+type LastOperation struct {
+	CallId 			int64
+	Result 			string
 }
 
 type KVServer struct {
@@ -43,36 +52,45 @@ type KVServer struct {
 	maxraftstate int // snapshot if log grows this big
 
 	// Your definitions here.
-	data			map[string]string		// 存储的数据（k-v对）
-	results			map[string]string		// 保存已经操作的结果(OpId-value)
-	applyCond		*sync.Cond				// 执行某次操作之后唤醒 RPC 协程
+	Data				map[string]string		 // 存储的数据（k-v对）
+	LastOp				map[int64]*LastOperation // clientId-last operation
+	applyCond			*sync.Cond				 // 执行某次操作之后唤醒 RPC 协程
+
+	LastApplied			int						 // 状态机最后应用的日志索引	
+	persister 			*raft.Persister
 }
 
 // 检查 RPC handler 是否应该继续等待
 // 任期没有改变并且操作没有完成
-func (kv *KVServer) Check(opId string, startTerm int) bool {
+func (kv *KVServer) Check(clientId, callId int64, startTerm int) bool {
 	currentTerm, _ := kv.rf.GetState()
-	_, ok := kv.results[opId]
-	return currentTerm == startTerm && !ok
+	v, ok := kv.LastOp[clientId]
+	return currentTerm == startTerm && (!ok || v.CallId < callId)
 }
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	DPrintf("[server %d] Get(args %+v)", kv.me, args)
-	defer DPrintf("[server %d]Get(args %+v), reply %+v", kv.me, args, reply)
+	defer DPrintf("[server %d] Get(args %+v), reply %+v", kv.me, args, reply)
 
 	// Your code here.
-	opId := getKey(args.ClientID, args.CallID)
 	kv.mu.Lock()
-	v, ok := kv.results[opId]
+	v, ok := kv.LastOp[args.ClientID]
 	kv.mu.Unlock()
-	if ok {
-		reply.Err = OK
-		reply.Value = v
+
+	// 这是一条旧的 RPC 请求
+	if ok && args.CallID <= v.CallId {
+		if args.CallID == v.CallId {
+			reply.Err = OK
+			reply.Value = v.Result
+		} else {
+			reply.Err = ErrWrongLeader
+		}
 		return
 	}
 
 	op := Op{
-		OpId: opId,
+		ClientId: args.ClientID,
+		CallId: args.CallID,
 		GetValid: true,
 		Key: args.Key,
 	}
@@ -83,8 +101,9 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		return
 	}
 
+
 	kv.mu.Lock()
-	for kv.Check(opId, startTerm) {
+	for kv.Check(args.ClientID, args.CallID, startTerm) {
 		kv.applyCond.Wait()
 	}
 	defer kv.mu.Unlock()
@@ -93,27 +112,38 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	if currentTerm != startTerm {
 		reply.Err = ErrWrongLeader
 	} else {
-		reply.Err = OK
-		reply.Value = kv.results[opId]
+		v, ok := kv.LastOp[args.ClientID]
+		if !ok || v.CallId != args.CallID {
+			reply.Err = ErrWrongLeader
+		} else {
+			reply.Err = OK
+			reply.Value = v.Result
+		}
 	}
 }
 
 func (kv *KVServer) Put(args *PutAppendArgs, reply *PutAppendReply) {
 	DPrintf("[server %d] Put(args %+v)", kv.me, args)
-	defer DPrintf("[server %d]Put(args %+v), reply %+v", kv.me, args, reply)
+	defer DPrintf("[server %d] Put(args %+v), reply %+v", kv.me, args, reply)
 	// Your code here.
 
-	opId := getKey(args.ClientID, args.CallID)
 	kv.mu.Lock()
-	_, ok := kv.results[opId]
+	v, ok := kv.LastOp[args.ClientID]
 	kv.mu.Unlock()
-	if ok {
-		reply.Err = OK
+
+	// 这是一条旧的 RPC 请求
+	if ok && args.CallID <= v.CallId {
+		if args.CallID == v.CallId {
+			reply.Err = OK
+		} else {
+			reply.Err = ErrWrongLeader
+		}
 		return
 	}
 
 	op := Op{
-		OpId: opId,
+		ClientId: args.ClientID,
+		CallId: args.CallID,
 		PutValid: true,
 		Key: args.Key,
 		Value: args.Value,
@@ -126,7 +156,7 @@ func (kv *KVServer) Put(args *PutAppendArgs, reply *PutAppendReply) {
 	}
 
 	kv.mu.Lock()
-	for kv.Check(opId, startTerm) {
+	for kv.Check(args.ClientID, args.CallID, startTerm) {
 		kv.applyCond.Wait()
 	}
 	defer kv.mu.Unlock()
@@ -135,26 +165,37 @@ func (kv *KVServer) Put(args *PutAppendArgs, reply *PutAppendReply) {
 	if currentTerm != startTerm {
 		reply.Err = ErrWrongLeader
 	} else {
-		reply.Err = OK
+		v, ok := kv.LastOp[args.ClientID]
+		if !ok || v.CallId != args.CallID {
+			reply.Err = ErrWrongLeader
+		} else {
+			reply.Err = OK
+		}
 	}
 }
 
 func (kv *KVServer) Append(args *PutAppendArgs, reply *PutAppendReply) {
 	DPrintf("[server %d] Append(args %+v)", kv.me, args)
-	defer DPrintf("[server %d]Append(args %+v), reply %+v", kv.me, args, reply)
+	defer DPrintf("[server %d] Append(args %+v), reply %+v", kv.me, args, reply)
 	// Your code here.
 
-	opId := getKey(args.ClientID, args.CallID)
 	kv.mu.Lock()
-	_, ok := kv.results[opId]
+	v, ok := kv.LastOp[args.ClientID]
 	kv.mu.Unlock()
-	if ok {
-		reply.Err = OK
+
+	// 这是一条旧的 RPC 请求
+	if ok && args.CallID <= v.CallId {
+		if args.CallID == v.CallId {
+			reply.Err = OK
+		} else {
+			reply.Err = ErrWrongLeader
+		}
 		return
 	}
 
 	op := Op{
-		OpId: opId,
+		ClientId: args.ClientID,
+		CallId: args.CallID,
 		AppendValid: true,
 		Key: args.Key,
 		Value: args.Value,
@@ -168,7 +209,7 @@ func (kv *KVServer) Append(args *PutAppendArgs, reply *PutAppendReply) {
 		
 	// 等待
 	kv.mu.Lock()
-	for kv.Check(opId, startTerm) {
+	for kv.Check(args.ClientID, args.CallID, startTerm) {
 		DPrintf("[server %d] waitting...", kv.me)
 		kv.applyCond.Wait()
 	}
@@ -178,67 +219,149 @@ func (kv *KVServer) Append(args *PutAppendArgs, reply *PutAppendReply) {
 	if currentTerm != startTerm {
 		reply.Err = ErrWrongLeader
 	} else {
-		reply.Err = OK
+		v, ok := kv.LastOp[args.ClientID]
+		if !ok || v.CallId != args.CallID {
+			reply.Err = ErrWrongLeader
+		} else {
+			reply.Err = OK
+		}
 	}
 }
 
 // 从 applyCh 中读取已经提交的命令
 func (kv *KVServer) applier() {
 	for m := range kv.applyCh {
-		if m.CommandValid {
-			kv.mu.Lock()
+		if m.CommandValid {		
+			// 提交了命令
 			op := m.Command.(Op)
-			kv.mu.Unlock()
+			kv.execOp(op, m.CommandIndex)
 
-			kv.execOp(op)
+		} else if m.SnapshotValid {
+			// 提交了日志
+			kv.applySnapshot(m.SnapshotIndex, m.Snapshot)
 		}
 	}
 }
 
 // 执行操作，将结果存放到 results, 唤醒对应的 RPC handler
-func (kv *KVServer) execOp(op Op) {
-	DPrintf("[server %d] execOp(op %+v)", kv.me, op)
+func (kv *KVServer) execOp(op Op, index int) {
+	DPrintf("[server %d] execOp(op %+v, index %v)", kv.me, op, index)
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
+
+	if kv.LastApplied >= index {
+		panic(fmt.Sprintf("kv.lastApplied %v >= m.CommandIndex %v", kv.LastApplied, index))
+	}
+	if kv.LastApplied + 1 != index {
+		panic(fmt.Sprintf("kv.lastApplied %v + 1 != m.CommandIndex %v", kv.LastApplied, index))
+	}
+	kv.LastApplied ++
+
+	v, ok := kv.LastOp[op.ClientId]
 	// 这条命令已经执行过
-	_, ok := kv.results[op.OpId]
-	if ok {
+	if ok && v.CallId >= op.CallId {
 		return
 	}
-
+	
+	lop := LastOperation{CallId: op.CallId}
 	if op.GetValid {
-		v, ok := kv.data[op.Key]
+		v, ok := kv.Data[op.Key]
 		if ok {
-			kv.results[op.OpId] = v
+			lop.Result = v
 		} else {
-			kv.results[op.OpId] = ""
+			lop.Result = ""
 		}
 	} else if op.PutValid {
-		kv.data[op.Key] = op.Value
-		kv.results[op.OpId] = OK
+		kv.Data[op.Key] = op.Value
 	} else if op.AppendValid {
-		value, ok := kv.data[op.Key]
+		value, ok := kv.Data[op.Key]
 		if !ok {
 			value = ""
 		}
-		kv.data[op.Key] = value + op.Value
-		kv.results[op.OpId] = OK
+		kv.Data[op.Key] = value + op.Value
 	}
+	kv.LastOp[op.ClientId] = &lop
 
 	kv.applyCond.Broadcast()
 }
 
-func getKey(clientID, callID int64) string {
-	return strconv.FormatInt(clientID, 10) + "," + strconv.FormatInt(callID, 10)
+func (kv *KVServer) makeSnapshot() {
+	for !kv.killed() {
+		if kv.persister.RaftStateSize() >= kv.maxraftstate {
+			w := new(bytes.Buffer)
+			e := labgob.NewEncoder(w)
+			kv.mu.Lock()
+			LastApplied := kv.LastApplied
+			e.Encode(LastApplied)
+			e.Encode(kv.Data)
+			e.Encode(kv.LastOp)
+			kv.mu.Unlock()
+
+			DPrintf("[server %d] makeSnapshot(): LastApplied %v", kv.me, LastApplied)
+			kv.rf.Snapshot(LastApplied, w.Bytes())
+		}
+		time.Sleep(SnapshotTimeout * time.Millisecond)
+	}
 }
 
-func (kv *KVServer) Succeed(args *SucceedArgs, reply *SucceedReply) {
+func (kv *KVServer) applySnapshot(snapshotIndex int, snapshot []byte) {
+	DPrintf("[server %d] applySnapshot(snapshotIndex %v)", kv.me, snapshotIndex)
+
+	w := bytes.NewBuffer(snapshot)
+	e := labgob.NewDecoder(w)
+	var index int
+	data := make(map[string]string)
+	lastOp := make(map[int64]*LastOperation)
+
+	if err := e.Decode(&index); err != nil {
+		log.Printf("applySnapshot()" + err.Error())
+	}
+	if err := e.Decode(&data); err != nil {
+		log.Printf("applySnapshot()" + err.Error())
+	}
+	if err := e.Decode(&lastOp); err != nil {
+		log.Printf("applySnapshot()" + err.Error())
+	}
+
+	if index != snapshotIndex {
+		panic(fmt.Sprintf("applySnapshot():index %v != snapshotIndex %v", index, snapshotIndex))
+	}
+
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
+	// 过期的快照
+	if snapshotIndex < kv.LastApplied {
+		return
+	}
 
-	opId := getKey(args.ClientID, args.CallID)
-	delete(kv.results, opId)
-	*reply = true
+	kv.LastApplied = snapshotIndex
+	kv.Data = data
+	kv.LastOp = lastOp
+}
+
+func (kv *KVServer) restoreState(snapshot []byte) {
+	if snapshot == nil || len(snapshot) < 1 {
+		return
+	}
+
+	var lastApplied int
+	data := make(map[string]string)
+	lastOp := make(map[int64]*LastOperation)
+
+	w := bytes.NewBuffer(snapshot)
+	e := labgob.NewDecoder(w)
+	if e.Decode(&lastApplied) != nil ||
+		e.Decode(&data) != nil || 
+		e.Decode(&lastOp) != nil {
+		log.Printf("[server %d] restoreState error!", kv.me)
+		return
+	}
+
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+	kv.LastApplied = lastApplied
+	kv.Data = data
+	kv.LastOp = lastOp
 }
 
 // the tester calls Kill() when a KVServer instance won't
@@ -274,6 +397,7 @@ func (kv *KVServer) killed() bool {
 // StartKVServer() must return quickly, so it should start goroutines
 // for any long-running work.
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
+	DPrintf("[server %d] StartKVServer()", me)
 	// call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
 	labgob.Register(Op{})
@@ -288,10 +412,21 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
 
 	// You may need initialization code here.
-	kv.data = make(map[string]string)
-	kv.results = make(map[string]string)
+	kv.Data = make(map[string]string)
+	kv.LastOp = make(map[int64]*LastOperation)
 	kv.applyCond = sync.NewCond(&kv.mu)
+
+	kv.LastApplied = 0
+	kv.persister = persister
+
+	// 恢复到保存的快照状态
+	kv.restoreState(kv.persister.ReadSnapshot())
+
+
 	go kv.applier()
 
+	if maxraftstate != -1 {
+		go kv.makeSnapshot()
+	}
 	return kv
 }

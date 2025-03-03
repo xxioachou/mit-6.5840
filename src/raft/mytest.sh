@@ -46,16 +46,17 @@ echo "" > $out
 # go test -run=TestFigure8Unreliable3C -race -v > $out
 # go test -run=TestMyFigure8Unreliable3C -race -v > $out
 # go test -run 3C -race -v
+# go test -run 3D -race -v >> $out
 # time go test -run 3C -v
 
 
-# timeout -k 2s 20s go test -rtime go test >> $outun=TestSnapshotBasic3D -race -v >> $out
+# go test -run=TestSnapshotBasic3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstall3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
 # timeout -k 2s 20s go test -run=TestSnapshotAllCrash3D -race -v >> $out
 # timeout -k 2s 20s go test -run=TestSnapshotInit3D -race -v >> $out
 
-# timeout -k 2s 600s go test -run 3D -race -v >> $out
+# go test -run 3D -race -v >> $out
 
 # for i in {0..4}
 # do

@@ -1,1 +1,31 @@
 
+=== RUN   TestSnapshotBasic3D
+Test (3D): snapshots basic ...
+  ... Passed --   2.9  3  164   55414  240
+--- PASS: TestSnapshotBasic3D (2.88s)
+=== RUN   TestSnapshotInstall3D
+Test (3D): install snapshots (disconnect) ...
+  ... Passed --  37.0  3 2526  871931  334
+--- PASS: TestSnapshotInstall3D (37.05s)
+=== RUN   TestSnapshotInstallUnreliable3D
+Test (3D): install snapshots (disconnect+unreliable) ...
+  ... Passed --  39.9  3 2762  879955  314
+--- PASS: TestSnapshotInstallUnreliable3D (39.93s)
+=== RUN   TestSnapshotInstallCrash3D
+Test (3D): install snapshots (crash) ...
+  ... Passed --  26.9  3 1524  545663  318
+--- PASS: TestSnapshotInstallCrash3D (26.87s)
+=== RUN   TestSnapshotInstallUnCrash3D
+Test (3D): install snapshots (unreliable+crash) ...
+  ... Passed --  29.6  3 1640  606584  336
+--- PASS: TestSnapshotInstallUnCrash3D (29.61s)
+=== RUN   TestSnapshotAllCrash3D
+Test (3D): crash and restart all servers ...
+  ... Passed --   5.8  3  280   74614   57
+--- PASS: TestSnapshotAllCrash3D (5.83s)
+=== RUN   TestSnapshotInit3D
+Test (3D): snapshot initialization after crash ...
+  ... Passed --   2.3  3   82   20888   14
+--- PASS: TestSnapshotInit3D (2.28s)
+PASS
+ok  	6.5840/raft	145.462s

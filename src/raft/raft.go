@@ -211,8 +211,9 @@ func (rf *Raft) readSnapShot(data []byte) {
 	if data == nil || len(data) < 1 {
 		return
 	}
+	DPrintf(rf.me, dSnap, "readSnapshot()")
 
-	// data 里包含 lastIncludedIndex 和 []Command
+	// data 里包含 lastIncludedIndex 等
 	w := bytes.NewBuffer(data)
 	e := labgob.NewDecoder(w)
 	var lastIncludedIndex int
@@ -261,12 +262,13 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	// Your code here (3D).
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+	defer DPrintf(rf.me, dSnap, "Snapshot(index %v)", index)
 	if index > rf.committedIndex {
-		log.Printf("Snapshot(): index > rf.committedIndex")
+		log.Fatalf("[server %d] Snapshot(): index > rf.committedIndex", rf.me)
 		return
 	}
 	if index <= rf.lastIncludedIndex {
-		log.Printf("Snapshot(): index <= rf.lastIncludedIndex")
+		DPrintf(rf.me, dSnap, "Snapshot(): index %v <= rf.lastIncludedIndex %v", index, rf.lastIncludedIndex)
 		return
 	}
 
@@ -416,7 +418,12 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 
 // 一致性检查(调用者需要加锁)
 func (rf *Raft) ReplicateCheck(args *ApplyEntriesArgs) bool {
+	DPrintf(rf.me, dEntry, "ReplicateCheck(args %+v)", args)
 	prevIndex := rf.RealIndex(args.PrevLogIndex)
+	if prevIndex < 0 {
+		// 日志被截断在快照中
+		return false
+	}
 	if prevIndex == 0 {
 		return rf.lastIncludedIndex == args.PrevLogIndex && 
 		rf.Logs[prevIndex].Term == args.PrevLogTerm
@@ -456,10 +463,12 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 		reply.Success = false
 		
 		if prevIndex < 0 {
-			panic("ApplyEntries(): prevIndex < 0")
-		}
-		if prevIndex >= len(rf.Logs) {
+			// 日志被截断在快照中，让 leader 不用更新 nextIndex，下次发送快照 RPC
 			reply.XIndex = InvalidIndex
+			reply.XLen = args.PrevLogIndex + 1
+		} else if prevIndex >= len(rf.Logs) {
+			reply.XIndex = InvalidIndex
+			reply.XLen = rf.RaftIndex(len(rf.Logs))
 		} else {
 			reply.XTerm = rf.Logs[prevIndex].Term
 			index := rf.findFirstIndex(reply.XTerm)
@@ -467,8 +476,8 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 				panic("rf.findFirstIndex: error!")
 			}
 			reply.XIndex = rf.RaftIndex(index)
+			reply.XLen = rf.RaftIndex(len(rf.Logs))
 		}
-		reply.XLen = rf.RaftIndex(len(rf.Logs))
 	} else {
 		reply.Success = true
 		// 复制日志 RPC
@@ -526,7 +535,6 @@ func (rf *Raft) ApplyEntries(args *ApplyEntriesArgs, reply *ApplyEntriesReply) {
 }
 
 func (rf *Raft) sendApplyEntries(server int, args *ApplyEntriesArgs, reply *ApplyEntriesReply) bool {
-	// DPrintf("%s sendApplyEntries to server %d", rf.String(), server)
 	ok := rf.peers[server].Call("Raft.ApplyEntries", args, reply)
 	return ok
 }
@@ -686,10 +694,11 @@ func (rf *Raft) sendInstallSnapshotTo(server int, args InstallSnapshotArgs) {
 }
 
 func (rf *Raft) sendApplyEntriesTo(server int, args ApplyEntriesArgs) {
-
+	DPrintf(rf.me, dEntry, "sendApplyEntriesTo(server %v, args %+v)", server, args)
 	reply := ApplyEntriesReply{}
 	ok := rf.sendApplyEntries(server, &args, &reply)
 	if !ok {
+		DPrintf(rf.me, dEntry, "failed: sendApplyEntriesTo(server %v, args %+v)", server, args)
 		return
 	}
 	
@@ -717,6 +726,7 @@ func (rf *Raft) sendApplyEntriesTo(server int, args ApplyEntriesArgs) {
 
 			if reply.XIndex == InvalidIndex {
 				// server 日志太短
+				// 或者 nextIndex[server] 已经被截断在快照中(3D)
 				rf.nextIndex[server] = reply.XLen
 			} else {
 				index := rf.findFirstIndex(reply.XTerm)
@@ -928,7 +938,7 @@ func (rf *Raft) ticker() {
 func (rf *Raft) applyLog() {
 	for {
 		rf.mu.Lock()
-		for !rf.killed() && rf.committedIndex <= rf.lastApplied {
+		for !rf.killed() && rf.committedIndex <= rf.lastApplied && !rf.applySnappending {
 			rf.applyLogCond.Wait()
 		}
 		
@@ -949,7 +959,8 @@ func (rf *Raft) applyLog() {
 			copy(msg.Snapshot, rf.snapshot)
 			msgs = append(msgs, msg)
 			rf.applySnappending = false
-		} else {
+		} 
+		if rf.lastApplied < rf.committedIndex {
 			if rf.lastApplied < rf.lastIncludedIndex {
 				rf.lastApplied = rf.lastIncludedIndex
 			}

@@ -5,9 +5,11 @@
 
 Clerk:
     如果第 3 步 log 提交失败（leader 在提交 Op 之前就不再是 leader），Clerk 应该重新尝试别的 server
+    每条 RPC 请求包含 clientId 和 callId, 一次只调用一次 RPC (前一次 RPC 调用成功才会进行下一次调用)
 
 server:
     只通过 Raft 通信
     收到 RPC 检查有没有执行过这个命令：没有执行过  --> 检查自己是不是 leader：是 --> 调用 rf.Start()，等待任期改变或者命令被执行：任期没有改变 --> 返回执行的结果
                     执行过，返回保存的结果                    否，返回                  任期改变，返回 error
-    
+    操作去重：map[clientId]lastCallId
+        如果 RPC 调用的 callId <= lastCallId，说明是重复调用，返回操作的结果

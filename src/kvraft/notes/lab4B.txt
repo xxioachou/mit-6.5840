@@ -1,0 +1,9 @@
+如果 maxraftstate != -1， 
+    开一个新协程不断检测 persister.RaftStateSize() >= maxraftstate 是否满足
+        是，调用 rf.Snapshot()
+        否，睡眠
+
+快照中应该包含：最后应用的日志索引、操作去重的 map 和存储的数据(k-v对)
+
+状态机收到应用日志信息：
+    解码日志最后包含的日志索引和操作去重的 map 和存储的数据(k-v对)，替换状态机的数据
