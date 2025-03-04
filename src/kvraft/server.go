@@ -13,8 +13,8 @@ import (
 	"6.5840/raft"
 )
 
-const Debug = false
-const SnapshotTimeout = 100
+const Debug = true
+const SnapshotTimeout = 10
 
 func DPrintf(format string, a ...interface{}) (n int, err error) {
 	if Debug {

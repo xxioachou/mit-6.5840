@@ -31,39 +31,53 @@ type Config struct {
 const (
 	OK = "OK"
 )
+const InvalidServer = -1
+const InvalidGid = 0
+const ClerkRPCTimeout = 1000
+const ClerkCallDuration = 100
+const ServerCheckTermDuration = 100
 
 type Err string
 
+type Identifier struct {
+	ClientId		int64
+	CallId			int64
+}
+
 type JoinArgs struct {
-	Servers map[int][]string // new GID -> servers mappings
+	Identifier 		Identifier
+	Servers 		map[int][]string // new GID -> servers mappings
 }
 
 type JoinReply struct {
-	WrongLeader bool
-	Err         Err
+	WrongLeader 	bool
+	Err         	Err
 }
 
 type LeaveArgs struct {
-	GIDs []int
+	Identifier 		Identifier
+	GIDs			[]int
 }
 
 type LeaveReply struct {
-	WrongLeader bool
-	Err         Err
+	WrongLeader 	bool
+	Err         	Err
 }
 
 type MoveArgs struct {
-	Shard int
-	GID   int
+	Identifier 		Identifier
+	Shard 			int
+	GID   			int
 }
 
 type MoveReply struct {
-	WrongLeader bool
-	Err         Err
+	WrongLeader 	bool
+	Err         	Err
 }
 
 type QueryArgs struct {
-	Num int // desired config number
+	Identifier 		Identifier
+	Num 			int // desired config number
 }
 
 type QueryReply struct {

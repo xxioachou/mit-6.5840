@@ -1,0 +1,55 @@
+
+=== RUN   TestBasic
+=== RUN   TestBasic/LeaveJoin
+Test: Basic leave/join ...
+  ... Passed
+=== RUN   TestBasic/HistoricalQueries
+Test: Historical queries ...
+  ... Passed
+=== RUN   TestBasic/Move
+Test: Move ...
+  ... Passed
+=== RUN   TestBasic/ConcurrentLeaveJoin
+Test: Concurrent leave/join ...
+  ... Passed
+=== RUN   TestBasic/MinimalTransfer
+Test: Minimal transfers after joins ...
+  ... Passed
+=== RUN   TestBasic/MinimalTransferAfterLeave
+Test: Minimal transfers after leaves ...
+  ... Passed
+--- PASS: TestBasic (1.73s)
+    --- PASS: TestBasic/LeaveJoin (0.43s)
+    --- PASS: TestBasic/HistoricalQueries (1.12s)
+    --- PASS: TestBasic/Move (0.06s)
+    --- PASS: TestBasic/ConcurrentLeaveJoin (0.08s)
+    --- PASS: TestBasic/MinimalTransfer (0.02s)
+    --- PASS: TestBasic/MinimalTransferAfterLeave (0.02s)
+=== RUN   TestMinimalAgain
+Test: minimal movement again ...
+  ... Passed
+--- PASS: TestMinimalAgain (0.72s)
+=== RUN   TestMulti
+=== RUN   TestMulti/LeaveJoin
+Test: Multi-group join/leave ...
+  ... Passed
+=== RUN   TestMulti/ConcurrentLeaveJoin
+Test: Concurrent multi leave/join ...
+  ... Passed
+=== RUN   TestMulti/MinimalTransfer
+Test: Minimal transfers after multijoins ...
+  ... Passed
+=== RUN   TestMulti/MinimalTransferAfterLeave
+Test: Minimal transfers after multileaves ...
+  ... Passed
+=== RUN   TestMulti/AgreeConfig
+Test: Check Same config on servers ...
+  ... Passed
+--- PASS: TestMulti (1.16s)
+    --- PASS: TestMulti/LeaveJoin (0.55s)
+    --- PASS: TestMulti/ConcurrentLeaveJoin (0.05s)
+    --- PASS: TestMulti/MinimalTransfer (0.01s)
+    --- PASS: TestMulti/MinimalTransferAfterLeave (0.00s)
+    --- PASS: TestMulti/AgreeConfig (0.55s)
+PASS
+ok  	6.5840/shardctrler	4.656s

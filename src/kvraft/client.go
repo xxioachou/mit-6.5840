@@ -35,7 +35,7 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck.NextCallID = 0
 	ck.lastLeader = InvalidServer
 
-	DPrintf("[client %v] MakeClerk()", nrand())
+	DPrintf("[client %v] MakeClerk()", ck.ClientID)
 	return ck
 }
 

@@ -7,6 +7,7 @@ echo "" > $out
 # go test -run=TestSnapshotRecover4B -race -v >> $out
 # go test -run=TestSnapshotRecoverManyClients4B -race -v >> $out
 # go test -run=TestSnapshotUnreliable4B -race -v >> $out
+go test -run=TestSnapshotUnreliableRecoverConcurrentPartition4B -race -v >> $out
 
 # go test -run 4A -race -v >> $out
 # go test -run 4B -race -v >> $out
