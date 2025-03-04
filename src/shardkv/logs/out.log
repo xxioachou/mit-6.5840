@@ -1,0 +1,446 @@
+
+=== RUN   TestRejection5A
+Test (5A): rejection ...
+2025/03/05 05:09:17 [gid 100][server 0] StartKVServer()
+2025/03/05 05:09:17 [gid 100][server 1] StartKVServer()
+2025/03/05 05:09:17 [gid 100][server 2] StartKVServer()
+2025/03/05 05:09:17 [gid 101][server 0] StartKVServer()
+2025/03/05 05:09:17 [gid 101][server 1] StartKVServer()
+2025/03/05 05:09:17 [gid 101][server 2] StartKVServer()
+2025/03/05 05:09:17 [gid 102][server 0] StartKVServer()
+2025/03/05 05:09:17 [gid 102][server 1] StartKVServer()
+2025/03/05 05:09:17 [gid 102][server 2] StartKVServer()
+2025/03/05 05:09:17 [client 4493486102592214622] MakeClerk()
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}})
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}})
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:0 Key:0 Value:XdiGqMEugAUzOv5vd2ns}, index 1)
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:0 Value:XdiGqMEugAUzOv5vd2ns Op:Put Identifier:{ClientId:4493486102592214622 CallId:0}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}})
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:0 Key:0 Value:XdiGqMEugAUzOv5vd2ns}, index 1)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:1 Key:1 Value:qlLqbhynMDHIjLbFq7ml}, index 2)
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:0 Key:0 Value:XdiGqMEugAUzOv5vd2ns}, index 1)
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:1 Value:qlLqbhynMDHIjLbFq7ml Op:Put Identifier:{ClientId:4493486102592214622 CallId:1}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:2 Value:FyblntxeDw9FHQ0hmkzk Op:Put Identifier:{ClientId:4493486102592214622 CallId:2}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:2 Value:FyblntxeDw9FHQ0hmkzk Op:Put Identifier:{ClientId:4493486102592214622 CallId:2}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:2 Value:FyblntxeDw9FHQ0hmkzk Op:Put Identifier:{ClientId:4493486102592214622 CallId:2}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:2 Value:FyblntxeDw9FHQ0hmkzk Op:Put Identifier:{ClientId:4493486102592214622 CallId:2}})
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:2 Key:2 Value:FyblntxeDw9FHQ0hmkzk}, index 1)
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:2 Value:FyblntxeDw9FHQ0hmkzk Op:Put Identifier:{ClientId:4493486102592214622 CallId:2}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:3 Value:Xrr96jkdjb4Qd4cgAXv2 Op:Put Identifier:{ClientId:4493486102592214622 CallId:3}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:3 Value:Xrr96jkdjb4Qd4cgAXv2 Op:Put Identifier:{ClientId:4493486102592214622 CallId:3}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:3 Value:Xrr96jkdjb4Qd4cgAXv2 Op:Put Identifier:{ClientId:4493486102592214622 CallId:3}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:3 Value:Xrr96jkdjb4Qd4cgAXv2 Op:Put Identifier:{ClientId:4493486102592214622 CallId:3}})
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:2 Key:2 Value:FyblntxeDw9FHQ0hmkzk}, index 1)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:2 Key:2 Value:FyblntxeDw9FHQ0hmkzk}, index 1)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:3 Key:3 Value:Xrr96jkdjb4Qd4cgAXv2}, index 2)
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:3 Value:Xrr96jkdjb4Qd4cgAXv2 Op:Put Identifier:{ClientId:4493486102592214622 CallId:3}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:4 Value:UangGL3agORnEs0fp6OV Op:Put Identifier:{ClientId:4493486102592214622 CallId:4}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:4 Value:UangGL3agORnEs0fp6OV Op:Put Identifier:{ClientId:4493486102592214622 CallId:4}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:4 Value:UangGL3agORnEs0fp6OV Op:Put Identifier:{ClientId:4493486102592214622 CallId:4}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:4 Value:UangGL3agORnEs0fp6OV Op:Put Identifier:{ClientId:4493486102592214622 CallId:4}})
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:3 Key:3 Value:Xrr96jkdjb4Qd4cgAXv2}, index 2)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:3 Key:3 Value:Xrr96jkdjb4Qd4cgAXv2}, index 2)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:4 Key:4 Value:UangGL3agORnEs0fp6OV}, index 3)
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:4 Value:UangGL3agORnEs0fp6OV Op:Put Identifier:{ClientId:4493486102592214622 CallId:4}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:5 Value:Arb0yroLyodsMN5Ax0FE Op:Put Identifier:{ClientId:4493486102592214622 CallId:5}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:5 Value:Arb0yroLyodsMN5Ax0FE Op:Put Identifier:{ClientId:4493486102592214622 CallId:5}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:5 Value:Arb0yroLyodsMN5Ax0FE Op:Put Identifier:{ClientId:4493486102592214622 CallId:5}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:5 Value:Arb0yroLyodsMN5Ax0FE Op:Put Identifier:{ClientId:4493486102592214622 CallId:5}})
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:4 Key:4 Value:UangGL3agORnEs0fp6OV}, index 3)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:4 Key:4 Value:UangGL3agORnEs0fp6OV}, index 3)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:5 Key:5 Value:Arb0yroLyodsMN5Ax0FE}, index 4)
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:5 Value:Arb0yroLyodsMN5Ax0FE Op:Put Identifier:{ClientId:4493486102592214622 CallId:5}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:6 Value:48wAyPs3xAldOYPivi5j Op:Put Identifier:{ClientId:4493486102592214622 CallId:6}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:6 Value:48wAyPs3xAldOYPivi5j Op:Put Identifier:{ClientId:4493486102592214622 CallId:6}})
+2025/03/05 05:09:18 [gid 100][server 0] PutAppend(args &{Key:6 Value:48wAyPs3xAldOYPivi5j Op:Put Identifier:{ClientId:4493486102592214622 CallId:6}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:6 Value:48wAyPs3xAldOYPivi5j Op:Put Identifier:{ClientId:4493486102592214622 CallId:6}})
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:5 Key:5 Value:Arb0yroLyodsMN5Ax0FE}, index 4)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:5 Key:5 Value:Arb0yroLyodsMN5Ax0FE}, index 4)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:6 Key:6 Value:48wAyPs3xAldOYPivi5j}, index 5)
+2025/03/05 05:09:18 [gid 100][server 1] PutAppend(args &{Key:6 Value:48wAyPs3xAldOYPivi5j Op:Put Identifier:{ClientId:4493486102592214622 CallId:6}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}})
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}})
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:1 Key:1 Value:qlLqbhynMDHIjLbFq7ml}, index 2)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:7 Key:7 Value:Jb9evMZi9YdsIJJbJjd-}, index 3)
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:7 Value:Jb9evMZi9YdsIJJbJjd- Op:Put Identifier:{ClientId:4493486102592214622 CallId:7}}), reply &{Err:OK}
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:1 Key:1 Value:qlLqbhynMDHIjLbFq7ml}, index 2)
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}})
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:7 Key:7 Value:Jb9evMZi9YdsIJJbJjd-}, index 3)
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:7 Key:7 Value:Jb9evMZi9YdsIJJbJjd-}, index 3)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:8 Key:8 Value:53KZ8BY9XsbwFmFCGcIS}, index 4)
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:8 Value:53KZ8BY9XsbwFmFCGcIS Op:Put Identifier:{ClientId:4493486102592214622 CallId:8}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] PutAppend(args {Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}})
+2025/03/05 05:09:18 [gid 101][server 0] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}})
+2025/03/05 05:09:18 [gid 101][server 1] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}}), reply &{Err:ErrWrongLeader}
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:8 Key:8 Value:53KZ8BY9XsbwFmFCGcIS}, index 4)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:9 Key:9 Value:wDfgMe8XZG-g1eTupPFS}, index 5)
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:8 Key:8 Value:53KZ8BY9XsbwFmFCGcIS}, index 4)
+2025/03/05 05:09:18 [gid 101][server 2] PutAppend(args &{Key:9 Value:wDfgMe8XZG-g1eTupPFS Op:Put Identifier:{ClientId:4493486102592214622 CallId:9}}), reply &{Err:OK}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}})
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}})
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:9 Key:9 Value:wDfgMe8XZG-g1eTupPFS}, index 5)
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:9 Key:9 Value:wDfgMe8XZG-g1eTupPFS}, index 5)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:10 Key:0 Value:}, index 6)
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:0 Identifier:{ClientId:4493486102592214622 CallId:10}}), reply &{Err:OK Value:XdiGqMEugAUzOv5vd2ns}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}})
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:10 Key:0 Value:}, index 6)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:11 Key:1 Value:}, index 7)
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:1 Identifier:{ClientId:4493486102592214622 CallId:11}}), reply &{Err:OK Value:qlLqbhynMDHIjLbFq7ml}
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:10 Key:0 Value:}, index 6)
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:2 Identifier:{ClientId:4493486102592214622 CallId:12}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:2 Identifier:{ClientId:4493486102592214622 CallId:12}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:2 Identifier:{ClientId:4493486102592214622 CallId:12}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:2 Identifier:{ClientId:4493486102592214622 CallId:12}})
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:12 Key:2 Value:}, index 6)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:6 Key:6 Value:48wAyPs3xAldOYPivi5j}, index 5)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:2 Identifier:{ClientId:4493486102592214622 CallId:12}}), reply &{Err:OK Value:FyblntxeDw9FHQ0hmkzk}
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:1 ClientId:4493486102592214622 CallId:6 Key:6 Value:48wAyPs3xAldOYPivi5j}, index 5)
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:3 Identifier:{ClientId:4493486102592214622 CallId:13}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:3 Identifier:{ClientId:4493486102592214622 CallId:13}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:3 Identifier:{ClientId:4493486102592214622 CallId:13}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:3 Identifier:{ClientId:4493486102592214622 CallId:13}})
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:12 Key:2 Value:}, index 6)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:12 Key:2 Value:}, index 6)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:13 Key:3 Value:}, index 7)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:3 Identifier:{ClientId:4493486102592214622 CallId:13}}), reply &{Err:OK Value:Xrr96jkdjb4Qd4cgAXv2}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:4 Identifier:{ClientId:4493486102592214622 CallId:14}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:4 Identifier:{ClientId:4493486102592214622 CallId:14}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:4 Identifier:{ClientId:4493486102592214622 CallId:14}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:4 Identifier:{ClientId:4493486102592214622 CallId:14}})
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:11 Key:1 Value:}, index 7)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:13 Key:3 Value:}, index 7)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:14 Key:4 Value:}, index 8)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:4 Identifier:{ClientId:4493486102592214622 CallId:14}}), reply &{Err:OK Value:UangGL3agORnEs0fp6OV}
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:11 Key:1 Value:}, index 7)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:13 Key:3 Value:}, index 7)
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:5 Identifier:{ClientId:4493486102592214622 CallId:15}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:5 Identifier:{ClientId:4493486102592214622 CallId:15}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:5 Identifier:{ClientId:4493486102592214622 CallId:15}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:5 Identifier:{ClientId:4493486102592214622 CallId:15}})
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:14 Key:4 Value:}, index 8)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:15 Key:5 Value:}, index 9)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:14 Key:4 Value:}, index 8)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:5 Identifier:{ClientId:4493486102592214622 CallId:15}}), reply &{Err:OK Value:Arb0yroLyodsMN5Ax0FE}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:6 Identifier:{ClientId:4493486102592214622 CallId:16}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:6 Identifier:{ClientId:4493486102592214622 CallId:16}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:6 Identifier:{ClientId:4493486102592214622 CallId:16}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:6 Identifier:{ClientId:4493486102592214622 CallId:16}})
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:15 Key:5 Value:}, index 9)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:15 Key:5 Value:}, index 9)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:16 Key:6 Value:}, index 10)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:6 Identifier:{ClientId:4493486102592214622 CallId:16}}), reply &{Err:OK Value:48wAyPs3xAldOYPivi5j}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}})
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}})
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:17 Key:7 Value:}, index 8)
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:7 Identifier:{ClientId:4493486102592214622 CallId:17}}), reply &{Err:OK Value:Jb9evMZi9YdsIJJbJjd-}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}})
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:17 Key:7 Value:}, index 8)
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:17 Key:7 Value:}, index 8)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:18 Key:8 Value:}, index 9)
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:8 Identifier:{ClientId:4493486102592214622 CallId:18}}), reply &{Err:OK Value:53KZ8BY9XsbwFmFCGcIS}
+2025/03/05 05:09:18 [client 4493486102592214622] Get(args {Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}})
+2025/03/05 05:09:18 [gid 101][server 0] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}})
+2025/03/05 05:09:18 [gid 101][server 1] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}})
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:18 Key:8 Value:}, index 9)
+2025/03/05 05:09:18 [gid 101][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:19 Key:9 Value:}, index 10)
+2025/03/05 05:09:18 [gid 101][server 2] Get(args &{Key:9 Identifier:{ClientId:4493486102592214622 CallId:19}}), reply &{Err:OK Value:wDfgMe8XZG-g1eTupPFS}
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:18 Key:8 Value:}, index 9)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:16 Key:6 Value:}, index 10)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:16 Key:6 Value:}, index 10)
+2025/03/05 05:09:18 [gid 101][server 0] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:19 Key:9 Value:}, index 10)
+2025/03/05 05:09:18 [gid 101][server 1] execOp(op {OpType:0 ClientId:4493486102592214622 CallId:19 Key:9 Value:}, index 10)
+2025/03/05 05:09:18 [client 647880239314474705] MakeClerk()
+2025/03/05 05:09:18 [client 1508457393209281272] MakeClerk()
+2025/03/05 05:09:18 [client 1508457393209281272] Get(args {Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:18 [client 647880239314474705] Get(args {Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:18 [client 2767819937009753715] MakeClerk()
+2025/03/05 05:09:18 [client 1978315643569824537] MakeClerk()
+2025/03/05 05:09:18 [client 2346899478005976431] MakeClerk()
+2025/03/05 05:09:18 [client 1978315643569824537] Get(args {Key:3 Identifier:{ClientId:1978315643569824537 CallId:0}})
+2025/03/05 05:09:18 [client 2767819937009753715] Get(args {Key:2 Identifier:{ClientId:2767819937009753715 CallId:0}})
+2025/03/05 05:09:18 [client 4075720441511125791] MakeClerk()
+2025/03/05 05:09:18 [client 4082470964738591464] MakeClerk()
+2025/03/05 05:09:18 [client 511109204491586989] MakeClerk()
+2025/03/05 05:09:18 [client 4437974583288972875] MakeClerk()
+2025/03/05 05:09:18 [client 2346899478005976431] Get(args {Key:4 Identifier:{ClientId:2346899478005976431 CallId:0}})
+2025/03/05 05:09:18 [client 4075720441511125791] Get(args {Key:5 Identifier:{ClientId:4075720441511125791 CallId:0}})
+2025/03/05 05:09:18 [client 4437974583288972875] Get(args {Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:18 [client 511109204491586989] Get(args {Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:18 [client 790210298174637698] MakeClerk()
+2025/03/05 05:09:18 [client 4082470964738591464] Get(args {Key:6 Identifier:{ClientId:4082470964738591464 CallId:0}})
+2025/03/05 05:09:18 [client 790210298174637698] Get(args {Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:5 Identifier:{ClientId:4075720441511125791 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:5 Identifier:{ClientId:4075720441511125791 CallId:0}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:5 Identifier:{ClientId:4075720441511125791 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:4 Identifier:{ClientId:2346899478005976431 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:4 Identifier:{ClientId:2346899478005976431 CallId:0}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:2 Identifier:{ClientId:2767819937009753715 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:2 Identifier:{ClientId:2767819937009753715 CallId:0}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:4 Identifier:{ClientId:2346899478005976431 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:6 Identifier:{ClientId:4082470964738591464 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:6 Identifier:{ClientId:4082470964738591464 CallId:0}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:2 Identifier:{ClientId:2767819937009753715 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:3 Identifier:{ClientId:1978315643569824537 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:3 Identifier:{ClientId:1978315643569824537 CallId:0}}), reply &{Err:ErrWrongLeader Value:}
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4075720441511125791 CallId:0 Key:5 Value:}, index 11)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:5 Identifier:{ClientId:4075720441511125791 CallId:0}}), reply &{Err:OK Value:Arb0yroLyodsMN5Ax0FE}
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:2346899478005976431 CallId:0 Key:4 Value:}, index 12)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:4 Identifier:{ClientId:2346899478005976431 CallId:0}}), reply &{Err:OK Value:UangGL3agORnEs0fp6OV}
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:6 Identifier:{ClientId:4082470964738591464 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:3 Identifier:{ClientId:1978315643569824537 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4075720441511125791 CallId:0 Key:5 Value:}, index 11)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:2767819937009753715 CallId:0 Key:2 Value:}, index 13)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:2 Identifier:{ClientId:2767819937009753715 CallId:0}}), reply &{Err:OK Value:FyblntxeDw9FHQ0hmkzk}
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:4082470964738591464 CallId:0 Key:6 Value:}, index 14)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:2346899478005976431 CallId:0 Key:4 Value:}, index 12)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4075720441511125791 CallId:0 Key:5 Value:}, index 11)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:2346899478005976431 CallId:0 Key:4 Value:}, index 12)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:6 Identifier:{ClientId:4082470964738591464 CallId:0}}), reply &{Err:OK Value:48wAyPs3xAldOYPivi5j}
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:2767819937009753715 CallId:0 Key:2 Value:}, index 13)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:2767819937009753715 CallId:0 Key:2 Value:}, index 13)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:4082470964738591464 CallId:0 Key:6 Value:}, index 14)
+2025/03/05 05:09:18 [gid 100][server 1] execOp(op {OpType:0 ClientId:1978315643569824537 CallId:0 Key:3 Value:}, index 15)
+2025/03/05 05:09:18 [gid 100][server 1] Get(args &{Key:3 Identifier:{ClientId:1978315643569824537 CallId:0}}), reply &{Err:OK Value:Xrr96jkdjb4Qd4cgAXv2}
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:4082470964738591464 CallId:0 Key:6 Value:}, index 14)
+2025/03/05 05:09:18 [gid 100][server 0] execOp(op {OpType:0 ClientId:1978315643569824537 CallId:0 Key:3 Value:}, index 15)
+2025/03/05 05:09:18 [gid 100][server 2] execOp(op {OpType:0 ClientId:1978315643569824537 CallId:0 Key:3 Value:}, index 15)
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:18 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:19 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:8 Identifier:{ClientId:4437974583288972875 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:9 Identifier:{ClientId:790210298174637698 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:1 Identifier:{ClientId:1508457393209281272 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:7 Identifier:{ClientId:511109204491586989 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}})
+2025/03/05 05:09:20 [gid 100][server 0] Get(args &{Key:0 Identifier:{ClientId:647880239314474705 CallId:0}}), reply &{Err:ErrWrongGroup Value:}
+  ... Passed
+--- PASS: TestRejection5A (3.17s)
+PASS
+ok  	6.5840/shardkv	4.177s
