@@ -52,7 +52,10 @@ echo "" > $out
 # time go test -run 3C -v
 
 
-# go test -run=TestSnapshotBasic3D -race -v >> $out
+for i in {0..19}
+do
+go test -run=TestSnapshotBasic3D -race -v >> $out
+done
 # timeout -k 2s 120s go test -run=TestSnapshotInstall3D -race -v >> $out
 # timeout -k 2s 120s go test -run=TestSnapshotInstallUnreliable3D -race -v >> $out
 # timeout -k 2s 20s go test -run=TestSnapshotAllCrash3D -race -v >> $out

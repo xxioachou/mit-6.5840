@@ -209,7 +209,7 @@ func (sc *ShardCtrler) Query(args *QueryArgs, reply *QueryReply) {
 			reply.WrongLeader = true
 		} else {
 			reply.WrongLeader = false
-			reply.Config = v.Config
+			reply.Config = CloneConfig(v.Config)
 		}
 	}
 }
@@ -259,7 +259,7 @@ func (sc *ShardCtrler) checkExecuted(clientId, callId int64, reply interface{}, 
 	case Query:
 		if eq {
 			reply.(*QueryReply).WrongLeader = false
-			reply.(*QueryReply).Config = v.Config
+			reply.(*QueryReply).Config = CloneConfig(v.Config)
 		} else {
 			reply.(*QueryReply).WrongLeader = true
 		}
@@ -427,9 +427,9 @@ func (sc *ShardCtrler) execQuery(args QueryArgs) {
 	// 执行操作
 	sc.mu.Lock()
 	if args.Num == -1 || args.Num >= len(sc.configs) {
-		lop.Config = sc.configs[len(sc.configs) - 1]
+		lop.Config = CloneConfig(sc.configs[len(sc.configs) - 1])
 	} else {
-		lop.Config = sc.configs[args.Num]
+		lop.Config = CloneConfig(sc.configs[args.Num])
 	}
 	sc.mu.Unlock()
 
@@ -523,6 +523,14 @@ func cloneMap(a map[int][]string) map[int][]string {
 		b[k] = cloneStringSlice(v)
 	}
 	return b
+}
+
+func CloneConfig(a Config) Config {
+	return Config{
+		Num: a.Num,
+		Shards: a.Shards,
+		Groups: cloneMap(a.Groups),
+	}
 }
 
 // servers[] contains the ports of the set of
