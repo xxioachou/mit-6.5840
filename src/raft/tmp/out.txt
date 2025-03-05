@@ -1,121 +1,118 @@
-
+=== RUN   TestInitialElection3A
+Test (3A): initial election ...
+  ... Passed --   3.0  3  106   28396    0
+--- PASS: TestInitialElection3A (3.05s)
+=== RUN   TestReElection3A
+Test (3A): election after network failure ...
+  ... Passed --   5.0  3  216   43580    0
+--- PASS: TestReElection3A (4.97s)
+=== RUN   TestManyElections3A
+Test (3A): multiple elections ...
+  ... Passed --   5.5  7  852  171733    0
+--- PASS: TestManyElections3A (5.50s)
+=== RUN   TestBasicAgree3B
+Test (3B): basic agreement ...
+  ... Passed --   0.5  3   16    4250    3
+--- PASS: TestBasicAgree3B (0.53s)
+=== RUN   TestRPCBytes3B
+Test (3B): RPC byte count ...
+  ... Passed --   1.2  3   48  113574   11
+--- PASS: TestRPCBytes3B (1.18s)
+=== RUN   TestFollowerFailure3B
+Test (3B): test progressive failure of followers ...
+  ... Passed --   4.5  3  188   41875    3
+--- PASS: TestFollowerFailure3B (4.50s)
+=== RUN   TestLeaderFailure3B
+Test (3B): test failure of leaders ...
+  ... Passed --   5.0  3  350   73781    3
+--- PASS: TestLeaderFailure3B (4.96s)
+=== RUN   TestFailAgree3B
+Test (3B): agreement after follower reconnects ...
+  ... Passed --   3.7  3  140   36104    7
+--- PASS: TestFailAgree3B (3.69s)
+=== RUN   TestFailNoAgree3B
+Test (3B): no agreement if too many followers disconnect ...
+  ... Passed --   3.6  5  292   64398    3
+--- PASS: TestFailNoAgree3B (3.57s)
+=== RUN   TestConcurrentStarts3B
+Test (3B): concurrent Start()s ...
+  ... Passed --   0.7  3   24    6984    6
+--- PASS: TestConcurrentStarts3B (0.66s)
+=== RUN   TestRejoin3B
+Test (3B): rejoin of partitioned leader ...
+  ... Passed --   6.0  3  322   76094    4
+--- PASS: TestRejoin3B (6.03s)
+=== RUN   TestBackup3B
+Test (3B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --   9.9  5 2260 1768730  102
+--- PASS: TestBackup3B (9.91s)
+=== RUN   TestCount3B
+Test (3B): RPC counts aren't too high ...
+  ... Passed --   2.1  3   94   28436   12
+--- PASS: TestCount3B (2.12s)
+=== RUN   TestPersist13C
+Test (3C): basic persistence ...
+  ... Passed --   3.7  3  132   32261    6
+--- PASS: TestPersist13C (3.71s)
+=== RUN   TestPersist23C
+Test (3C): more persistence ...
+  ... Passed --  15.5  5 1528  329330   16
+--- PASS: TestPersist23C (15.50s)
+=== RUN   TestPersist33C
+Test (3C): partitioned leader and one follower crash, leader restarts ...
+  ... Passed --   1.5  3   48   12279    4
+--- PASS: TestPersist33C (1.55s)
+=== RUN   TestFigure83C
+Test (3C): Figure 8 ...
+  ... Passed --  33.9  5 1524  324210   51
+--- PASS: TestFigure83C (33.87s)
+=== RUN   TestUnreliableAgree3C
+Test (3C): unreliable agreement ...
+  ... Passed --   1.8  5 1088  361046  246
+--- PASS: TestUnreliableAgree3C (1.83s)
+=== RUN   TestMyFigure8Unreliable3C
+Test (3C): Figure 8 (unreliable) ...
+  ... Passed --  33.1  5 12840 18195569  155
+--- PASS: TestMyFigure8Unreliable3C (33.10s)
+=== RUN   TestFigure8Unreliable3C
+Test (3C): Figure 8 (unreliable) ...
+  ... Passed --  40.0  5 12096 20612620  380
+--- PASS: TestFigure8Unreliable3C (40.03s)
+=== RUN   TestReliableChurn3C
+Test (3C): churn ...
+  ... Passed --  16.5  5 8420 13199413 1797
+--- PASS: TestReliableChurn3C (16.49s)
+=== RUN   TestUnreliableChurn3C
+Test (3C): unreliable churn ...
+  ... Passed --  16.4  5 4960 5887480  863
+--- PASS: TestUnreliableChurn3C (16.45s)
 === RUN   TestSnapshotBasic3D
 Test (3D): snapshots basic ...
-  ... Passed --   3.7  3  512  173704  194
---- PASS: TestSnapshotBasic3D (3.67s)
-PASS
-ok  	6.5840/raft	4.685s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  536  185530  204
---- PASS: TestSnapshotBasic3D (3.49s)
-PASS
-ok  	6.5840/raft	4.536s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  552  193524  215
---- PASS: TestSnapshotBasic3D (3.50s)
-PASS
-ok  	6.5840/raft	4.516s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  610  221309  242
---- PASS: TestSnapshotBasic3D (3.48s)
-PASS
-ok  	6.5840/raft	4.494s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  560  197264  218
---- PASS: TestSnapshotBasic3D (3.49s)
-PASS
-ok  	6.5840/raft	4.506s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.7  3  600  214614  234
---- PASS: TestSnapshotBasic3D (3.68s)
-PASS
-ok  	6.5840/raft	4.692s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.8  3  560  197558  214
---- PASS: TestSnapshotBasic3D (3.78s)
-PASS
-ok  	6.5840/raft	4.788s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.7  3  554  192826  211
---- PASS: TestSnapshotBasic3D (3.68s)
-PASS
-ok  	6.5840/raft	4.714s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.4  3  560  195237  221
---- PASS: TestSnapshotBasic3D (3.37s)
-PASS
-ok  	6.5840/raft	4.378s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  514  174821  194
---- PASS: TestSnapshotBasic3D (3.48s)
-PASS
-ok  	6.5840/raft	4.490s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  544  194709  209
+  ... Passed --   3.5  3  572  201826  223
 --- PASS: TestSnapshotBasic3D (3.54s)
+=== RUN   TestSnapshotInstall3D
+Test (3D): install snapshots (disconnect) ...
+  ... Passed --  38.8  3 2318  781458  359
+--- PASS: TestSnapshotInstall3D (38.78s)
+=== RUN   TestSnapshotInstallUnreliable3D
+Test (3D): install snapshots (disconnect+unreliable) ...
+  ... Passed --  44.9  3 2566  841864  334
+--- PASS: TestSnapshotInstallUnreliable3D (44.94s)
+=== RUN   TestSnapshotInstallCrash3D
+Test (3D): install snapshots (crash) ...
+  ... Passed --  26.1  3 1606  550985  329
+--- PASS: TestSnapshotInstallCrash3D (26.10s)
+=== RUN   TestSnapshotInstallUnCrash3D
+Test (3D): install snapshots (unreliable+crash) ...
+  ... Passed --  33.1  3 1788  602551  344
+--- PASS: TestSnapshotInstallUnCrash3D (33.12s)
+=== RUN   TestSnapshotAllCrash3D
+Test (3D): crash and restart all servers ...
+  ... Passed --   5.6  3  284   75762   58
+--- PASS: TestSnapshotAllCrash3D (5.56s)
+=== RUN   TestSnapshotInit3D
+Test (3D): snapshot initialization after crash ...
+  ... Passed --   1.7  3   76   19928   14
+--- PASS: TestSnapshotInit3D (1.67s)
 PASS
-ok  	6.5840/raft	4.549s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  552  192683  213
---- PASS: TestSnapshotBasic3D (3.48s)
-PASS
-ok  	6.5840/raft	4.494s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  568  201586  221
---- PASS: TestSnapshotBasic3D (3.48s)
-PASS
-ok  	6.5840/raft	4.488s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.4  3  582  204984  228
---- PASS: TestSnapshotBasic3D (3.44s)
-PASS
-ok  	6.5840/raft	4.458s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.8  3  620  224817  242
---- PASS: TestSnapshotBasic3D (3.78s)
-PASS
-ok  	6.5840/raft	4.794s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  598  213220  236
---- PASS: TestSnapshotBasic3D (3.52s)
-PASS
-ok  	6.5840/raft	4.527s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.3  3  594  212083  240
---- PASS: TestSnapshotBasic3D (3.34s)
-PASS
-ok  	6.5840/raft	4.349s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  572  201446  224
---- PASS: TestSnapshotBasic3D (3.49s)
-PASS
-ok  	6.5840/raft	4.503s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.5  3  590  211185  234
---- PASS: TestSnapshotBasic3D (3.49s)
-PASS
-ok  	6.5840/raft	4.501s
-=== RUN   TestSnapshotBasic3D
-Test (3D): snapshots basic ...
-  ... Passed --   3.6  3  598  216569  234
---- PASS: TestSnapshotBasic3D (3.62s)
-PASS
-ok  	6.5840/raft	4.627s
+ok  	6.5840/raft	367.959s

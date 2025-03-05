@@ -20,7 +20,6 @@ const (
 	Get = iota
 	Put
 	Append
-	Reconfigure
 )
 
 type Op struct {
@@ -32,10 +31,6 @@ type Op struct {
 	CallId   int64
 	Key      string
 	Value    string
-
-	// Reconfigure 的参数
-	Servers	 []string				// 发送给哪个组
-	Data	 map[string]string		// 要发送的数据
 }
 
 type LastOperation struct {
@@ -62,7 +57,6 @@ type ShardKV struct {
 	LastApplied 		int                      // 最近收到的已经提交的日志索引
 	persister 			*raft.Persister
 	config				shardctrler.Config		 // 最近收到的 config
-	isReceivingFrom		[shardctrler.NShards]int // i -> gid，正在从 gid 接收 shard i 的数据(k-v对)
 }
 
 // 检查某次 RPC 调用对应的操作是否已经执行
@@ -99,20 +93,14 @@ func (kv *ShardKV) checkExecuted(clientId, callId int64, reply interface{}, opTy
 	return true
 }
 
-// 检查是否应该当前组来处理这个 RPC 请求（调用者加锁）
+// 检查是否应该当前组来处理这个 RPC 请求
 func (kv *ShardKV) checkRightGroup(key string) bool {
 	shard := key2shard(key)
 	gid := kv.config.Shards[shard]
 	return gid == kv.gid
 }
 
-// 正在接收 key 对应 shard 的数据（调用者加锁）
-func (kv *ShardKV) checkReceivingData(key string) bool {
-	shard := key2shard(key)
-	return kv.isReceivingFrom[shard] != InvalidGid
-}
-
-// 检查是否需要继续等待(任期改变或者 index 对应的操作被提交或者组改变，返回 false)（调用者加锁）
+// 检查是否需要继续等待(任期改变或者 index 对应的操作被提交或者组改变，返回 false)
 func (kv *ShardKV) check(startTerm int, index int, key string) bool {
 	currentTerm, _ := kv.rf.GetState()
 	return currentTerm == startTerm && kv.LastApplied < index && kv.checkRightGroup(key)
@@ -132,14 +120,6 @@ func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) {
 	rightGroup := kv.checkRightGroup(args.Key)
 	kv.mu.Unlock()
 	if !rightGroup {
-		reply.Err = ErrWrongGroup
-		return
-	}
-
-	kv.mu.Lock()
-	receiving := kv.checkReceivingData(args.Key)
-	kv.mu.Unlock()
-	if receiving {
 		reply.Err = ErrWrongGroup
 		return
 	}
@@ -206,11 +186,7 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		reply.Err = ErrWrongGroup
 		return
 	}
-
-	kv.mu.Lock()
-	receiving := kv.checkReceivingData(args.Key)
-	kv.mu.Unlock()
-	if receiving {
+	if !rightGroup {
 		reply.Err = ErrWrongGroup
 		return
 	}
@@ -252,88 +228,11 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	}
 }
 
-func (kv *ShardKV) ReceiveShardData(args *ReceiveShardDataArgs, reply *ReceiveShardDataReply) {
-	DPrintf("[gid %d][server %d] ReceiveShardData(args %+v)", kv.gid, kv.me, args)
-	defer func() { DPrintf("[gid %d][server %d] ReceiveShardData(args %+v, reply %+v)", kv.gid, kv.me, args, reply) }()
-
-	kv.mu.Lock()
-	defer kv.mu.Unlock()
-	
-	// 过滤需要的 k-v 对数据存放到本地
-	shards := make([]int, 0)
-	for shard, gid := range kv.isReceivingFrom {
-		if gid == args.Gid {
-			for k, v := range args.Data {
-				if key2shard(k) == shard {
-					kv.Data[k] = v
-				}
-			}
-			shards = append(shards, shard)
-		}
-	}
-	// 标记 gid 对应的数据接收完成
-	for _, shard := range shards {
-		kv.isReceivingFrom[shard] = InvalidGid
-	}
-	// 返回成功
-	reply.Ok = true
-}
-
-func (kv *ShardKV) startReconfiguration(config1 shardctrler.Config, config2 shardctrler.Config) {
-	DPrintf("[gid %d][server %d] startReconfiguration(Config Num %v -> Num %v)", kv.gid, kv.me, config1.Num, config2.Num)
-
-	isReceivingFrom := [shardctrler.NShards]int{}
-	sendDataTo := make([][]string, 0)
-	for i := 0; i < shardctrler.NShards; i ++ {
-		gid1 := config1.Shards[i]
-		gid2 := config2.Shards[i]
-		if gid1 != gid2 {
-			if kv.gid == gid1 {
-				// 当前服务器所在的组失去了 shard i，需要给 gid2 发送数据
-				sendDataTo = append(sendDataTo, cloneStringSlice(config2.Groups[gid2]))
-			} else if kv.gid == gid2 {
-				// 当前服务器所在的组得到了 shard i
-				isReceivingFrom[i] = gid1
-			} else {
-				continue
-			}
-		}
-	}
-
-	// TODO:(...)
-	kv.isReceivingFrom = isReceivingFrom
-
-	_, isLeader := kv.rf.GetState()
-	// leader 在组中同步
-	if isLeader {
-		data := cloneData(kv.Data)
-
-		for _, servers := range sendDataTo {
-			op := Op{
-				OpType: Reconfigure,
-				Servers: cloneStringSlice(servers),
-				Data: cloneData(data),	
-			}
-			kv.rf.Start(op)
-		}
-	}
-}
-
 func (kv *ShardKV) queryConfig() {
 	for !kv.killed() {
-		newConfig := kv.sc.Query(-1)
 		kv.mu.Lock()
-		config := kv.config
-		if config.Num != newConfig.Num {
-			// 配置发生改变
-			// 更新配置
-			// 如果改变了就会使得当前组立刻拒绝执行所有跟失去 shard 相关的请求
-			kv.config = newConfig
-			kv.startReconfiguration(config, newConfig)
-		}
+		kv.config = kv.sc.Query(-1)
 		kv.mu.Unlock()
-
-
 		time.Sleep(QueryConfigDuration * time.Millisecond)
 	}
 }
@@ -362,19 +261,9 @@ func (kv *ShardKV) execOp(op Op, index int) {
 	}
 	kv.LastApplied ++
 
-	if op.OpType == Reconfigure {
-		// 发送 RPC 时不应该阻塞当前协程
-		go kv.execReconfiguration(op)
-		return
-	}
-
 	v, ok := kv.LastOp[op.ClientId]
 	// 这条命令已经执行过
 	if ok && v.CallId >= op.CallId {
-		return
-	}
-	// 这个 key 不是当前组负责的，不要执行
-	if !kv.checkRightGroup(op.Key) {
 		return
 	}
 
@@ -404,21 +293,6 @@ func (kv *ShardKV) execOp(op Op, index int) {
 	kv.LastOp[op.ClientId] = &lop
 	// 通知 RPC 协程
 	kv.notifyCond.Broadcast()
-}
-
-// 给 op 对应的服务器集群发送数据
-func (kv *ShardKV) execReconfiguration(op Op) {
-	args := ReceiveShardDataArgs{Gid: kv.gid, Data: cloneData(op.Data)}
-	for _, server := range op.Servers {
-		for {
-			var reply ReceiveShardDataReply
-			ok := kv.makeCall(server, "ShardKV.ReceiveShardData", &args, &reply)
-			if ok && reply.Ok {
-				break
-			}
-			time.Sleep(ClerkCallDuration * time.Millisecond)
-		}
-	}
 }
 
 func (kv *ShardKV) makeSnapshot() {
@@ -500,34 +374,6 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 	kv.LastOp = lastOp
 }
 
-func (kv *ShardKV) makeCall(serverName string, methodName string, args interface{}, reply interface{}) bool {
-	ch := make(chan bool, 1)
-	srv := kv.make_end(serverName)
-	go func() {
-		ch <- srv.Call(methodName, args, reply)
-	}()
-	select {
-	case ok := <-ch:
-		return ok
-	case <-time.After(ClerkRPCTimeout * time.Millisecond):
-		return false
-	}
-}
-
-func cloneStringSlice(a []string) []string {
-	b := make([]string, len(a))
-	copy(b, a)
-	return b
-}
-
-func cloneData(a map[string]string) map[string]string {
-	b := make(map[string]string)
-	for k, v := range a {
-		b[k] = v
-	}
-	return b
-}
-
 // the tester calls Kill() when a ShardKV instance won't
 // be needed again. you are not required to do anything
 // in Kill(), but it might be convenient to (for example)
@@ -596,7 +442,6 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	kv.LastOp = make(map[int64]*LastOperation)
 	kv.LastApplied = 0
 	kv.persister = persister
-	kv.isReceivingFrom = [shardctrler.NShards]int{}
 
 	// 恢复到保存的快照状态
 	kv.restoreState(kv.persister.ReadSnapshot())

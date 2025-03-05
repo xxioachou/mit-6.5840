@@ -17,7 +17,6 @@ const (
 )
 
 const InvalidServer = -1
-const InvalidGid = 0
 const ClerkRPCTimeout = 1000
 const ClerkCallDuration = 100
 const QueryConfigDuration = 100
@@ -55,13 +54,4 @@ type GetReply struct {
 type Identifier struct {
 	ClientId		int64
 	CallId			int64
-}
-
-type ReceiveShardDataArgs struct {
-	Gid				int					// 来自哪个组
-	Data 			map[string]string
-}
-
-type ReceiveShardDataReply struct {
-	Ok 				bool 
 }
