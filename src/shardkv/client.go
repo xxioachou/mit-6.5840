@@ -143,6 +143,7 @@ func (ck *Clerk) makeIdentifier() Identifier {
 }
 
 func (ck *Clerk) makeCall(serverName string, methodName string, args interface{}, reply interface{}) bool {
+	// DPrintf("[client %d] makeCall(serverName %v, methodName %v, args %+v)", ck.ClientID, serverName, methodName, args)
 	ch := make(chan bool, 1)
 	srv := ck.make_end(serverName)
 	go func() {

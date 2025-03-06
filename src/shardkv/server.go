@@ -20,7 +20,7 @@ const (
 	Get = iota
 	Put
 	Append
-	Reconfigure
+	ErrChangeGroup
 )
 
 type Op struct {
@@ -32,15 +32,11 @@ type Op struct {
 	CallId   int64
 	Key      string
 	Value    string
-
-	// Reconfigure 的参数
-	Servers	 []string				// 发送给哪个组
-	Data	 map[string]string		// 要发送的数据
 }
 
 type LastOperation struct {
-	CallId int64
-	Result string
+	CallId 	int64
+	Result 	string
 }
 
 type ShardKV struct {
@@ -55,91 +51,67 @@ type ShardKV struct {
 
 	// Your definitions here.
 	dead				int32
-	Data				map[string]string		 // 存储的数据（k-v对）
-	sc          		*shardctrler.Clerk       // 分片控制器
-	notifyCond  		*sync.Cond               // 用于通知 RPC 协程操作完成
-	LastOp      		map[int64]*LastOperation // clientId -> *last operation，用来处理重复的 RPC 操作
-	LastApplied 		int                      // 最近收到的已经提交的日志索引
+	Data				map[string]string		 	// 存储的数据（k-v对）
+	sc          		*shardctrler.Clerk       	// 分片控制器
+	notifyChan  		map[int]chan interface{} 	// 用于通知 RPC 协程操作完成(index->chan)
+	LastOp      		map[int64]LastOperation 	// clientId -> last operation，用来处理重复的 RPC 操作，实现幂等性
+	LastApplied 		int                      	// 最近收到的已经提交的日志索引
 	persister 			*raft.Persister
-	config				shardctrler.Config		 // 最近收到的 config
-	isReceivingFrom		[shardctrler.NShards]int // i -> gid，正在从 gid 接收 shard i 的数据(k-v对)
+
+	Config				shardctrler.Config		 			// 最近收到的 config
+	MyShards			map[int]struct{}		 			// 维护当前服务器应该服务哪些 shard 的集合
+	DataForMigration  	map[int]map[int]map[string]string	// 需要迁移的数据(configNum, shard -> data)
+	ShardDataReqs       map[int]int       					// 后台协程会从中读取数据发送 RPC(shard->configNum)
 }
 
-// 检查某次 RPC 调用对应的操作是否已经执行
-func (kv *ShardKV) checkExecuted(clientId, callId int64, reply interface{}, opType OpType) bool {
-	kv.mu.Lock()
-	v, ok := kv.LastOp[clientId]
-	kv.mu.Unlock()
-	if !ok || v.CallId < callId {
-		// 没有执行	
-		return false
-	}
-
-
-	eq := v.CallId == callId
-
-	switch opType {
-	case Get:
-		if eq {
-			reply.(*GetReply).Err = OK
-			reply.(*GetReply).Value = v.Result
-		} else {
-			reply.(*GetReply).Err = ErrWrongLeader
-		}
-	case Put, Append:
-		if eq {
-			reply.(*PutAppendReply).Err = OK
-		} else {
-			reply.(*PutAppendReply).Err = ErrWrongLeader
-		}
-	default:
-		DPrintf("[gid %d][server %d] checkExecuted(opType %v)", kv.gid, kv.me, opType)
-	}
-
-	return true
-}
-
-// 检查是否应该当前组来处理这个 RPC 请求（调用者加锁）
 func (kv *ShardKV) checkRightGroup(key string) bool {
-	shard := key2shard(key)
-	gid := kv.config.Shards[shard]
-	return gid == kv.gid
+	_, ok := kv.MyShards[key2shard(key)]
+	return ok
 }
 
-// 正在接收 key 对应 shard 的数据（调用者加锁）
-func (kv *ShardKV) checkReceivingData(key string) bool {
-	shard := key2shard(key)
-	return kv.isReceivingFrom[shard] != InvalidGid
+// 原子地获取 index 对应的管道
+func (kv *ShardKV) index2notifyChan(index int) chan interface{} {
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+	if _, ok := kv.notifyChan[index]; !ok {
+		kv.notifyChan[index] = make(chan interface{}, 1)
+	}
+	return kv.notifyChan[index]
 }
 
-// 检查是否需要继续等待(任期改变或者 index 对应的操作被提交或者组改变，返回 false)（调用者加锁）
-func (kv *ShardKV) check(startTerm int, index int, key string) bool {
-	currentTerm, _ := kv.rf.GetState()
-	return currentTerm == startTerm && kv.LastApplied < index && kv.checkRightGroup(key)
+// 判断操作是否相同
+func equalOp(a, b interface{}) bool {
+	op1, ok1 := a.(Op)
+	op2, ok2 := b.(Op)
+	if ok1 && ok2 {
+		return op1.OpType == op2.OpType && op1.ClientId == op2.ClientId && op2.CallId == op2.CallId
+	}
+
+	cfg1, ok1 := a.(shardctrler.Config)
+	cfg2, ok2 := b.(shardctrler.Config)
+	if ok1 && ok2 {
+		return cfg1.Num == cfg2.Num
+	}
+
+	msr1, ok1 := a.(MigrateShardReply)
+	msr2, ok2 := b.(MigrateShardReply)
+	if ok1 && ok2 {
+		return msr1.ConfigNum == msr2.ConfigNum && msr1.Shard == msr2.Shard
+	}
+
+	return false
 }
 
 func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) {
 	// Your code here.
-	DPrintf("[gid %d][server %d] Get(args %+v)", kv.gid, kv.me, args)
-	defer func() { DPrintf("[gid %d][server %d] Get(args %+v), reply %+v", kv.gid, kv.me, args, reply) }()
+	DPrintf("[%d:%d] Get(args %+v)", kv.gid, kv.me, args)
+	defer func() { DPrintf("[%d:%d] Get(args %+v), reply %+v", kv.gid, kv.me, args, reply) }()
 	// Your code here.
-	// 检查是否已经执行，如果已经执行填入 reply
-	if kv.checkExecuted(args.Identifier.ClientId, args.Identifier.CallId, reply, Get) {
-		return
-	}
 
 	kv.mu.Lock()
 	rightGroup := kv.checkRightGroup(args.Key)
 	kv.mu.Unlock()
 	if !rightGroup {
-		reply.Err = ErrWrongGroup
-		return
-	}
-
-	kv.mu.Lock()
-	receiving := kv.checkReceivingData(args.Key)
-	kv.mu.Unlock()
-	if receiving {
 		reply.Err = ErrWrongGroup
 		return
 	}
@@ -150,24 +122,24 @@ func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) {
 		CallId: args.Identifier.CallId,
 		Key: args.Key,
 	}
-	index, startTerm, isLeader := kv.rf.Start(op)
+	index, _, isLeader := kv.rf.Start(op)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
 
+	currOp := <-kv.index2notifyChan(index)
 
 	kv.mu.Lock()
-	for kv.check(startTerm, index, args.Key) {
-		kv.notifyCond.Wait()
-	}
 	defer kv.mu.Unlock()
-
-	currentTerm, _ := kv.rf.GetState()
-	if !kv.checkRightGroup(args.Key) {
-		reply.Err = ErrWrongGroup
-	} else if currentTerm != startTerm {
-		reply.Err = ErrWrongLeader
+	if !equalOp(op, currOp) {
+		if c, ok := currOp.(Op); ok && c.OpType == ErrChangeGroup {
+			// 可能得到请求的时候还在这一组，但是数据从 Raft 层返回的时候不在了
+			reply.Err = ErrWrongGroup
+		} else {
+			// 同一个下标不同的命令，拒绝请求
+			reply.Err = ErrWrongLeader
+		}
 	} else {
 		v, ok := kv.LastOp[args.Identifier.ClientId]
 		if !ok || v.CallId != args.Identifier.CallId {
@@ -181,8 +153,8 @@ func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) {
 
 func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	// Your code here.
-	DPrintf("[gid %d][server %d] PutAppend(args %+v)", kv.gid, kv.me, args)
-	defer func() { DPrintf("[gid %d][server %d] PutAppend(args %+v), reply %+v", kv.gid, kv.me, args, reply) }()
+	DPrintf("[%d:%d] PutAppend(args %+v)", kv.gid, kv.me, args)
+	defer func() { DPrintf("[%d:%d] PutAppend(args %+v), reply %+v", kv.gid, kv.me, args, reply) }()
 	// Your code here.
 	var opType OpType
 	if args.Op == "Put" {
@@ -190,12 +162,7 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	} else if args.Op == "Append" {
 		opType = Append
 	} else {
-		DPrintf("[gid %d][server %d] Unknow op %v", kv.gid, kv.me, args.Op)
-		return
-	}
-
-	// 检查是否已经执行，如果已经执行填入 reply
-	if kv.checkExecuted(args.Identifier.ClientId, args.Identifier.CallId, reply, opType) {
+		DPrintf("[%d:%d] Unknow op %v", kv.gid, kv.me, args.Op)
 		return
 	}
 
@@ -203,14 +170,7 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	rightGroup := kv.checkRightGroup(args.Key)
 	kv.mu.Unlock()
 	if !rightGroup {
-		reply.Err = ErrWrongGroup
-		return
-	}
-
-	kv.mu.Lock()
-	receiving := kv.checkReceivingData(args.Key)
-	kv.mu.Unlock()
-	if receiving {
+		DPrintf("[%d:%d] PutAppend(args %+v) branch 1", kv.gid, kv.me, args)
 		reply.Err = ErrWrongGroup
 		return
 	}
@@ -222,29 +182,30 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		Key: args.Key,
 		Value: args.Value,
 	}
-	index, startTerm, isLeader := kv.rf.Start(op)
+	index, _, isLeader := kv.rf.Start(op)
 	if !isLeader {
+		DPrintf("[%d:%d] PutAppend(args %+v) branch 2", kv.gid, kv.me, args)
 		reply.Err = ErrWrongLeader
 		return
 	}
 
+	currOp := <-kv.index2notifyChan(index)
 
 	kv.mu.Lock()
-	// 阻塞等待，直到任期改变或者 index 对应的操作被提交
-	for kv.check(startTerm, index, args.Key) {
-		kv.notifyCond.Wait()
-	}
 	defer kv.mu.Unlock()
-
-
-	currentTerm, _ := kv.rf.GetState()
-	if !kv.checkRightGroup(args.Key) {
-		reply.Err = ErrWrongGroup
-	} else if currentTerm != startTerm {
-		reply.Err = ErrWrongLeader
+	if !equalOp(op, currOp) {
+		if c, ok := currOp.(Op); ok && c.OpType == ErrChangeGroup {
+			DPrintf("[%d:%d] PutAppend(args %+v) branch 3", kv.gid, kv.me, args)
+			// 可能得到请求的时候还在这一组，但是数据从 Raft 层// 同一个下标不同的命令，拒绝请求返回的时候不在了
+			reply.Err = ErrWrongGroup
+		} else {
+			// 同一个下标不同的命令，拒绝请求
+			reply.Err = ErrWrongLeader
+		}
 	} else {
 		v, ok := kv.LastOp[args.Identifier.ClientId]
 		if !ok || v.CallId != args.Identifier.CallId {
+			DPrintf("[%d:%d] PutAppend(args %+v) branch 4", kv.gid, kv.me, args)
 			reply.Err = ErrWrongLeader
 		} else {
 			reply.Err = OK
@@ -252,89 +213,107 @@ func (kv *ShardKV) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	}
 }
 
-func (kv *ShardKV) ReceiveShardData(args *ReceiveShardDataArgs, reply *ReceiveShardDataReply) {
-	DPrintf("[gid %d][server %d] ReceiveShardData(args %+v)", kv.gid, kv.me, args)
-	defer func() { DPrintf("[gid %d][server %d] ReceiveShardData(args %+v, reply %+v)", kv.gid, kv.me, args, reply) }()
+func (kv *ShardKV) MigrateShard(args *MigrateShardArgs, reply *MigrateShardReply) {
+	DPrintf("[%d:%d] MigrateShard(args %+v)", kv.gid, kv.me, args)
+	defer func() { DPrintf("[%d:%d] MigrateShard(args %+v, reply %+v)", kv.gid, kv.me, args, reply) }()
+	if _, isLeader := kv.rf.GetState(); !isLeader {
+		reply.ErrWrongLeader = true
+		return
+	}
 
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
-	
-	// 过滤需要的 k-v 对数据存放到本地
-	shards := make([]int, 0)
-	for shard, gid := range kv.isReceivingFrom {
-		if gid == args.Gid {
-			for k, v := range args.Data {
-				if key2shard(k) == shard {
-					kv.Data[k] = v
-				}
-			}
-			shards = append(shards, shard)
+	if args.ConfigNum > kv.Config.Num {
+		reply.ErrWrongLeader = true
+		return
+	}
+
+	// 没有对应的数据准备
+	if _, ok := kv.DataForMigration[args.ConfigNum]; ok {
+		if _, ok := kv.DataForMigration[args.ConfigNum][args.Shard]; ok {
+			reply.ErrWrongLeader = false
+		} else {
+			reply.ErrWrongLeader = true
+			return
 		}
+	} else {
+		reply.ErrWrongLeader = true
+		return
 	}
-	// 标记 gid 对应的数据接收完成
-	for _, shard := range shards {
-		kv.isReceivingFrom[shard] = InvalidGid
-	}
-	// 返回成功
-	reply.Ok = true
+
+	reply.ConfigNum = args.ConfigNum
+	reply.Shard = args.Shard
+	reply.Data, reply.LastOperation = kv.cloneDataAndLastOperation(args.ConfigNum, args.Shard)
+
+	// delete(kv.DataForMigration[args.ConfigNum], args.Shard)
+	// if len(kv.DataForMigration[args.ConfigNum]) == 0 {
+	// 	delete(kv.DataForMigration, args.ConfigNum)
+	// }
 }
 
-func (kv *ShardKV) startReconfiguration(config1 shardctrler.Config, config2 shardctrler.Config) {
-	DPrintf("[gid %d][server %d] startReconfiguration(Config Num %v -> Num %v)", kv.gid, kv.me, config1.Num, config2.Num)
-
-	isReceivingFrom := [shardctrler.NShards]int{}
-	sendDataTo := make([][]string, 0)
-	for i := 0; i < shardctrler.NShards; i ++ {
-		gid1 := config1.Shards[i]
-		gid2 := config2.Shards[i]
-		if gid1 != gid2 {
-			if kv.gid == gid1 {
-				// 当前服务器所在的组失去了 shard i，需要给 gid2 发送数据
-				sendDataTo = append(sendDataTo, cloneStringSlice(config2.Groups[gid2]))
-			} else if kv.gid == gid2 {
-				// 当前服务器所在的组得到了 shard i
-				isReceivingFrom[i] = gid1
-			} else {
-				continue
-			}
-		}
+func (kv *ShardKV) cloneDataAndLastOperation(cfgNum int, shard int) (map[string]string, map[int64]LastOperation) {
+	data := make(map[string]string)
+	lastOperation := make(map[int64]LastOperation)
+	for k, v := range kv.DataForMigration[cfgNum][shard] {
+		data[k] = v
 	}
-
-	// TODO:(...)
-	kv.isReceivingFrom = isReceivingFrom
-
-	_, isLeader := kv.rf.GetState()
-	// leader 在组中同步
-	if isLeader {
-		data := cloneData(kv.Data)
-
-		for _, servers := range sendDataTo {
-			op := Op{
-				OpType: Reconfigure,
-				Servers: cloneStringSlice(servers),
-				Data: cloneData(data),	
-			}
-			kv.rf.Start(op)
-		}
+	for k, v := range kv.LastOp {
+		lastOperation[k] = v
 	}
+	return data, lastOperation
 }
 
+// 周期性地检查配置有没有改变
 func (kv *ShardKV) queryConfig() {
 	for !kv.killed() {
-		newConfig := kv.sc.Query(-1)
 		kv.mu.Lock()
-		config := kv.config
-		if config.Num != newConfig.Num {
-			// 配置发生改变
-			// 更新配置
-			// 如果改变了就会使得当前组立刻拒绝执行所有跟失去 shard 相关的请求
-			kv.config = newConfig
-			kv.startReconfiguration(config, newConfig)
+		// 注意每次只同步一个配置，前一个配置没有处理完成就不要拿新数据（因为 ctrler 的客户端不支持并发）
+		if _, isLeader := kv.rf.GetState(); isLeader && len(kv.ShardDataReqs) == 0 {
+			config := kv.sc.Query(kv.Config.Num + 1)
+			// 配置发生改变，leader 开始同步
+			if config.Num == kv.Config.Num + 1 {
+				kv.rf.Start(config)
+			}
 		}
 		kv.mu.Unlock()
 
-
 		time.Sleep(QueryConfigDuration * time.Millisecond)
+	}
+}
+
+// leader 遍历需要发送的 RPC map，发送 RPC 获取数据，并开始同步
+func (kv *ShardKV) tryReqShardData() {
+	for !kv.killed() {
+		if _, isLeader := kv.rf.GetState(); isLeader {
+			kv.mu.Lock()
+			if len(kv.ShardDataReqs) > 0 {
+				DPrintf("[%d:%d] tryReqShardData(): kv.shardDataReqs %+v", kv.gid, kv.me, kv.ShardDataReqs)
+				var wg sync.WaitGroup
+				for shard, cfgNum := range kv.ShardDataReqs {
+					wg.Add(1)
+					go func(shard int, config shardctrler.Config) {
+						// DPrintf("[%d:%d] tryReqShardData(): shard %v, config %+v", kv.gid, kv.me, shard, config)
+						defer wg.Done()
+						args := MigrateShardArgs {
+							ConfigNum: config.Num,
+							Shard: shard,
+						}
+						for _, server := range config.Groups[config.Shards[shard]] {
+							var reply MigrateShardReply
+							if kv.makeCall(server, "ShardKV.MigrateShard", &args, &reply) && !reply.ErrWrongLeader {
+								kv.rf.Start(reply)
+								return
+							}
+						}
+					}(shard, kv.sc.Query(cfgNum))
+				}
+				kv.mu.Unlock()
+				wg.Wait()
+			} else {
+				kv.mu.Unlock()
+			}
+		}
+		time.Sleep(ReqShardDataDuration * time.Millisecond)
 	}
 }
 
@@ -343,8 +322,8 @@ func (kv *ShardKV) applier() {
 	for m := range kv.applyCh {
 		if m.CommandValid {
 			// 提交了命令
-			op := m.Command.(Op)
-			kv.execOp(op, m.CommandIndex)
+			op := m.Command
+			kv.execCommand(op, m.CommandIndex)
 		} else if m.SnapshotValid {
 			// 提交了日志
 			kv.applySnapshot(m.SnapshotIndex, m.Snapshot)
@@ -352,32 +331,42 @@ func (kv *ShardKV) applier() {
 	}
 }
 
-func (kv *ShardKV) execOp(op Op, index int) {
-	DPrintf("[gid %d][server %d] execOp(op %+v, index %v)", kv.gid, kv.me, op, index)
-
+func (kv *ShardKV) execCommand(command interface{}, index int) {
 	kv.mu.Lock()
+	defer func() { 	kv.index2notifyChan(index) <- command }()
 	defer kv.mu.Unlock()
 	if kv.LastApplied + 1 != index {
-		panic(fmt.Sprintf("[gid %d][server %d] kv.lastApplied %v + 1 != index %v", kv.gid, kv.me, kv.LastApplied, index))
+		panic(fmt.Sprintf("[%d:%d] kv.lastApplied %v + 1 != index %v", kv.gid, kv.me, kv.LastApplied, index))
 	}
 	kv.LastApplied ++
 
-	if op.OpType == Reconfigure {
-		// 发送 RPC 时不应该阻塞当前协程
-		go kv.execReconfiguration(op)
+	if c, ok :=  command.(shardctrler.Config); ok {
+		// 应用配置
+		kv.execApplyConfig(c)
+		return
+	}
+	if m, ok := command.(MigrateShardReply); ok {
+		// 应用迁移的数据
+		kv.execMigrationDataSync(m)
 		return
 	}
 
+	op := command.(Op)
 	v, ok := kv.LastOp[op.ClientId]
 	// 这条命令已经执行过
 	if ok && v.CallId >= op.CallId {
+		DPrintf("[%d:%d] execCommand(command %+v, index %v): error command executed", kv.gid, kv.me, command, index)
 		return
 	}
 	// 这个 key 不是当前组负责的，不要执行
 	if !kv.checkRightGroup(op.Key) {
+		DPrintf("[%d:%d] execCommand(command %+v, index %v): error not right group", kv.gid, kv.me, command, index)
+		op.OpType = ErrChangeGroup
+		command = op
 		return
 	}
 
+	DPrintf("[%d:%d] execCommand(command %+v, index %v)", kv.gid, kv.me, command, index)
 	lop := LastOperation{CallId: op.CallId}
 	// 执行操作
 	switch op.OpType {
@@ -397,26 +386,80 @@ func (kv *ShardKV) execOp(op Op, index int) {
 		}
 		kv.Data[op.Key] = value + op.Value
 	default:
-		DPrintf("[gid %d][server %d] execOp(op %+v) error: op.OpType %v", kv.gid, kv.me, op, op.OpType)
+		DPrintf("[%d:%d] execOp(op %+v) error: op.OpType %v", kv.gid, kv.me, op, op.OpType)
 	}
 
 	// 记录最新操作
-	kv.LastOp[op.ClientId] = &lop
-	// 通知 RPC 协程
-	kv.notifyCond.Broadcast()
+	kv.LastOp[op.ClientId] = lop
 }
 
-// 给 op 对应的服务器集群发送数据
-func (kv *ShardKV) execReconfiguration(op Op) {
-	args := ReceiveShardDataArgs{Gid: kv.gid, Data: cloneData(op.Data)}
-	for _, server := range op.Servers {
-		for {
-			var reply ReceiveShardDataReply
-			ok := kv.makeCall(server, "ShardKV.ReceiveShardData", &args, &reply)
-			if ok && reply.Ok {
-				break
+func (kv *ShardKV) execApplyConfig(newConfig shardctrler.Config) {
+	if newConfig.Num <= kv.Config.Num {
+		DPrintf("[%d:%d] newConfig %v <= kv.Config %v", kv.gid, kv.me, newConfig, kv.Config)
+		return
+	}
+	
+	oldConfig := kv.Config
+	lostShards := make([]int, 0)
+	DPrintf("[%d:%d] execApplyConfig(newConfig %+v): oldConfig %+v", kv.gid, kv.me, newConfig, oldConfig)
+	for i := 0; i < shardctrler.NShards; i ++ {
+		gid1 := oldConfig.Shards[i]
+		gid2 := newConfig.Shards[i]
+		if gid1 != gid2 && (gid1 == kv.gid || gid2 == kv.gid) {
+			if gid1 == kv.gid {
+				lostShards = append(lostShards, i)
+			} else {
+				if oldConfig.Num != 0 {
+					// 需要向别人请求
+					kv.ShardDataReqs[i] = oldConfig.Num
+				} else {
+					kv.MyShards[i] = struct{}{}
+				}	
 			}
-			time.Sleep(ClerkCallDuration * time.Millisecond)
+		}
+	}
+	if len(lostShards) > 0 {
+		DPrintf("[%d:%d] kv.MyShards before %v", kv.gid, kv.me, kv.MyShards)
+		for _, shard := range lostShards {
+			delete(kv.MyShards, shard)
+			data := make(map[string]string)
+			for k, v := range kv.Data {
+				if key2shard(k) == shard {
+
+					data[k] = v
+					delete(kv.Data, k)
+				}
+			}			
+			if _, ok := kv.DataForMigration[oldConfig.Num]; !ok {
+				kv.DataForMigration[oldConfig.Num] = make(map[int]map[string]string)
+			}
+			kv.DataForMigration[oldConfig.Num][shard] = data
+			// DPrintf("[%d:%d] execApplyConfig(): lost shard %v, data %v", kv.gid, kv.me, shard, data)
+		}
+		DPrintf("[%d:%d] kv.MyShards after %v", kv.gid, kv.me, kv.MyShards)
+	}
+	// 更新配置
+	kv.Config = newConfig
+}	
+
+
+func (kv *ShardKV) execMigrationDataSync(migrationData MigrateShardReply) {
+	DPrintf("[%d:%d] execMigrationDataSync(migrationData %+v)", kv.gid, kv.me, migrationData)
+	if migrationData.ConfigNum != kv.Config.Num - 1 {
+		DPrintf("[%d:%d] execMigrationDataSync(migrationData %+v): migrationData.ConfigNum %v != kv.config.Num %v - 1", kv.gid, kv.me, migrationData, migrationData.ConfigNum, kv.Config.Num)
+		return
+	}
+	delete(kv.ShardDataReqs, migrationData.Shard)
+
+	if _, ok := kv.MyShards[migrationData.Shard]; !ok {
+		kv.MyShards[migrationData.Shard] = struct{}{}
+		for k, v := range migrationData.Data {
+			kv.Data[k] = v
+		}
+		for k, v := range migrationData.LastOperation {
+			if lop, ok := kv.LastOp[k]; !ok || lop.CallId <= v.CallId {
+				kv.LastOp[k] = v
+			}
 		}
 	}
 }
@@ -431,9 +474,14 @@ func (kv *ShardKV) makeSnapshot() {
 			e.Encode(LastApplied)
 			e.Encode(kv.Data)
 			e.Encode(kv.LastOp)
+
+			e.Encode(kv.Config)
+			e.Encode(kv.MyShards)
+			e.Encode(kv.DataForMigration)
+			e.Encode(kv.ShardDataReqs)
 			kv.mu.Unlock()
 
-			DPrintf("[gid %d][server %d] makeSnapshot(): LastApplied %v", kv.gid, kv.me, LastApplied)
+			DPrintf("[%d:%d] makeSnapshot(): LastApplied %v", kv.gid, kv.me, LastApplied)
 			kv.rf.Snapshot(LastApplied, w.Bytes())
 		}
 		time.Sleep(SnapshotDuration * time.Millisecond)
@@ -441,22 +489,27 @@ func (kv *ShardKV) makeSnapshot() {
 }
 
 func (kv *ShardKV) applySnapshot(snapshotIndex int, snapshot []byte) {
-	DPrintf("[gid %d][server %d] applySnapshot(snapshotIndex %v)", kv.gid, kv.me, snapshotIndex)
+	DPrintf("[%d:%d] applySnapshot(snapshotIndex %v)", kv.gid, kv.me, snapshotIndex)
 
 	w := bytes.NewBuffer(snapshot)
 	e := labgob.NewDecoder(w)
 	var index int
 	data := make(map[string]string)
-	lastOp := make(map[int64]*LastOperation)
+	lastOp := make(map[int64]LastOperation)
 
-	if err := e.Decode(&index); err != nil {
-		log.Printf("applySnapshot()" + err.Error())
-	}
-	if err := e.Decode(&data); err != nil {
-		log.Printf("applySnapshot()" + err.Error())
-	}
-	if err := e.Decode(&lastOp); err != nil {
-		log.Printf("applySnapshot()" + err.Error())
+	config := shardctrler.Config{}
+	myshards := make(map[int]struct{})
+	dataForMigration := make(map[int]map[int]map[string]string)
+	shardDataReqs := make(map[int]int)
+
+	if  e.Decode(&index) != nil ||
+		e.Decode(&data) != nil ||
+		e.Decode(&lastOp) != nil ||
+		e.Decode(&config) != nil ||
+		e.Decode(&myshards) != nil ||
+		e.Decode(&dataForMigration) != nil ||
+		e.Decode(&shardDataReqs) != nil {
+		log.Fatalf("[%d:%d] applySnapshot() error!", kv.gid, kv.me)
 	}
 
 	if index != snapshotIndex {
@@ -473,6 +526,11 @@ func (kv *ShardKV) applySnapshot(snapshotIndex int, snapshot []byte) {
 	kv.LastApplied = snapshotIndex
 	kv.Data = data
 	kv.LastOp = lastOp
+
+	kv.Config = config
+	kv.MyShards = myshards
+	kv.DataForMigration = dataForMigration
+	kv.ShardDataReqs = shardDataReqs
 }
 
 func (kv *ShardKV) restoreState(snapshot []byte) {
@@ -482,14 +540,23 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 
 	var lastApplied int
 	data := make(map[string]string)
-	lastOp := make(map[int64]*LastOperation)
+	lastOp := make(map[int64]LastOperation)
+
+	config := shardctrler.Config{}
+	myshards := make(map[int]struct{})
+	dataForMigration := make(map[int]map[int]map[string]string)
+	shardDataReqs := make(map[int]int)
 
 	w := bytes.NewBuffer(snapshot)
 	e := labgob.NewDecoder(w)
 	if e.Decode(&lastApplied) != nil ||
 		e.Decode(&data) != nil || 
-		e.Decode(&lastOp) != nil {
-		log.Printf("[gid %d][server %d] restoreState error!", kv.gid, kv.me)
+		e.Decode(&lastOp) != nil ||
+		e.Decode(&config) != nil ||
+		e.Decode(&myshards) != nil ||
+		e.Decode(&dataForMigration) != nil ||
+		e.Decode(&shardDataReqs) != nil {
+		log.Printf("[%d:%d] restoreState error!", kv.gid, kv.me)
 		return
 	}
 
@@ -498,9 +565,15 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 	kv.LastApplied = lastApplied
 	kv.Data = data
 	kv.LastOp = lastOp
+
+	kv.Config = config
+	kv.MyShards = myshards
+	kv.DataForMigration = dataForMigration
+	kv.ShardDataReqs = shardDataReqs
 }
 
 func (kv *ShardKV) makeCall(serverName string, methodName string, args interface{}, reply interface{}) bool {
+	DPrintf("[%d:%d] makeCall(serverName %v, methodName %v, args %+v)", kv.gid, kv.me, serverName, methodName, args)
 	ch := make(chan bool, 1)
 	srv := kv.make_end(serverName)
 	go func() {
@@ -508,25 +581,14 @@ func (kv *ShardKV) makeCall(serverName string, methodName string, args interface
 	}()
 	select {
 	case ok := <-ch:
+		// DPrintf("[%d:%d] makeCall(serverName %v, methodName %v, args %+v): reply %+v", kv.gid, kv.me, serverName, methodName, args, reply)
 		return ok
 	case <-time.After(ClerkRPCTimeout * time.Millisecond):
+		// DPrintf("[%d:%d] makeCall(serverName %v, methodName %v, args %+v): no reply", kv.gid, kv.me, serverName, methodName, args)
 		return false
 	}
 }
 
-func cloneStringSlice(a []string) []string {
-	b := make([]string, len(a))
-	copy(b, a)
-	return b
-}
-
-func cloneData(a map[string]string) map[string]string {
-	b := make(map[string]string)
-	for k, v := range a {
-		b[k] = v
-	}
-	return b
-}
 
 // the tester calls Kill() when a ShardKV instance won't
 // be needed again. you are not required to do anything
@@ -570,10 +632,12 @@ func (kv *ShardKV) killed() bool {
 // StartServer() must return quickly, so it should start goroutines
 // for any long-running work.
 func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int, gid int, ctrlers []*labrpc.ClientEnd, make_end func(string) *labrpc.ClientEnd) *ShardKV {
-	DPrintf("[gid %d][server %d] StartKVServer()", gid, me)
+	DPrintf("[%d:%d] StartKVServer()", gid, me)
 	// call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
 	labgob.Register(Op{})
+	labgob.Register(shardctrler.Config{})
+	labgob.Register(MigrateShardReply{})
 
 	kv := new(ShardKV)
 	kv.me = me
@@ -592,11 +656,14 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 
 	kv.Data = make(map[string]string)
 	kv.sc = shardctrler.MakeClerk(kv.ctrlers)
-	kv.notifyCond = sync.NewCond(&kv.mu)
-	kv.LastOp = make(map[int64]*LastOperation)
+	kv.notifyChan = make(map[int]chan interface{})
+	kv.LastOp = make(map[int64]LastOperation)
 	kv.LastApplied = 0
 	kv.persister = persister
-	kv.isReceivingFrom = [shardctrler.NShards]int{}
+
+	kv.MyShards = make(map[int]struct{})
+	kv.DataForMigration = make(map[int]map[int]map[string]string)
+	kv.ShardDataReqs = make(map[int]int)
 
 	// 恢复到保存的快照状态
 	kv.restoreState(kv.persister.ReadSnapshot())
@@ -608,6 +675,7 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	}
 
 	go kv.queryConfig()
+	go kv.tryReqShardData()
 
 	return kv
 }

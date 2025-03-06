@@ -1,15 +1,18 @@
 package shardkv
 
-import "6.5840/porcupine"
-import "6.5840/models"
-import "testing"
-import "strconv"
-import "time"
-import "fmt"
-import "sync/atomic"
-import "sync"
-import "math/rand"
-import "io/ioutil"
+import (
+	"fmt"
+	"io/ioutil"
+	"math/rand"
+	"strconv"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"6.5840/models"
+	"6.5840/porcupine"
+)
 
 const linearizabilityCheckTimeout = 1 * time.Second
 
@@ -385,18 +388,31 @@ func TestConcurrent1_5B(t *testing.T) {
 	fmt.Printf("Test (5B): concurrent puts and configuration changes...\n")
 
 	cfg := make_config(t, 3, false, 100)
+	// cfg := make_config(t, 3, false, -1)
 	defer cfg.cleanup()
 
 	ck := cfg.makeClient(cfg.ctl)
 
 	cfg.join(0)
 
+	// var idx int64 = 1
+	// str := func(cnt int) string {
+	// 	t := atomic.LoadInt64(&idx)
+	// 	atomic.AddInt64(&idx, 1)
+	// 	var res strings.Builder
+	// 	for i := 0; i < cnt; i ++ {
+	// 		res.WriteString(strconv.FormatInt(t, 10))
+	// 	}
+	// 	res.WriteString(":")
+	// 	return res.String()
+	// }
 	n := 10
 	ka := make([]string, n)
 	va := make([]string, n)
 	for i := 0; i < n; i++ {
 		ka[i] = strconv.Itoa(i) // ensure multiple shards
 		va[i] = randstring(5)
+		// va[i] = str(5)
 		ck.Put(ka[i], va[i])
 	}
 
@@ -408,6 +424,7 @@ func TestConcurrent1_5B(t *testing.T) {
 		ck1 := cfg.makeClient(cfg.ctl)
 		for atomic.LoadInt32(&done) == 0 {
 			x := randstring(5)
+			// x := str(5)
 			ck1.Append(ka[i], x)
 			va[i] += x
 			time.Sleep(10 * time.Millisecond)
@@ -417,6 +434,9 @@ func TestConcurrent1_5B(t *testing.T) {
 	for i := 0; i < n; i++ {
 		go ff(i)
 	}
+	// for i := 0; i < 2; i++ {
+	// 	go ff(i)
+	// }
 
 	time.Sleep(150 * time.Millisecond)
 	cfg.join(1)
@@ -450,6 +470,9 @@ func TestConcurrent1_5B(t *testing.T) {
 	for i := 0; i < n; i++ {
 		<-ch
 	}
+	// for i := 0; i < 2; i++ {
+	// 	<-ch
+	// }
 
 	for i := 0; i < n; i++ {
 		check(t, ck, ka[i], va[i])

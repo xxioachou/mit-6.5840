@@ -2,36 +2,71 @@
     一个组失去了一个 shard，必须立刻停止对所有相关 key 的请求，并且把对应 shard 的相关数据转移到得到这个 shard 的组。
     一个组得到一个 shard，必须在接受这个 shard 相关的请求之前，接受所有旧主发送过来的这个 shard 的数据。
 
-每个服务器都周期性地 queryConfig()，如果 config 的 Num 改变，并且自己是 Leader，就 Start 一个 re-configuration 操作
+每个服务器都周期性地 queryConfig()，如果 config 的 Num 改变，就开始数据迁移的准备工作。
+流程：配置改变 --> leader start() 同步新配置（注意每次只同步一个配置，前一个配置没有处理完成就不要拿新数据） 
+--> 应用配置 --> 需要接收 shard 的一方 RPC 请求数据 --> 接收方的 leader 同步得到的请求数据 --> 应用迁移的数据
 
 Get/Put/Append 操作新增：
-    检查是否正在接收 key 对应的 shard 的数据
+    检查是否正在请求 key 对应的 shard 的数据
         是，拒绝操作（ErrWrongGroup）
 
-queryConfig()
-    config1 = kv.config
-    config2 = new config
+新增数据结构：
+    myShards map[int]struct{}                              // 维护当前服务器应该服务哪些 shard 的集合
+    dataForMigration  map[int]map[int]map[string]string    // 表示 config.Num 中和 shard 有关的需要迁移的数据
+    shardDataReqs        struct{config.Num, shard i}       // 需要请求 shard 数据的结构体集合，后台协程会从中读取数据发送 RPC
 
-    if config1.Num != config2.Num（配置发生改变）
-        gid1 = config1.shards[i]
-        gid2 = config2.shards[i]
+新增后台协程：
+    tryReqShardData():
+        从 shardDataReqs 中读取结构体信息:{ConfigNum, Shard}
+        向 controller 请求 ConfigNum 的配置，解析需要向谁请求 RPC
+        发送 MigrateShard RPC 请求数据
+            如果得到数据，并且是 Leader
+                开始同步得到的数据
 
-        if gid1 != gid2
-            if kv.gid == gid1（当前服务器所在的组失去了 shard i）
-                当前 server 是 leader
-                    Start() 一个 re-configuration 操作（把k-v对数据放进 Op）
 
-            else if kv.gid == gid2（当前服务器所在的组得到了 shard i）
-                标记准备/正在从 gid1 接收 shard i 的数据
-            else
-                （无事发生） 
+为什么选择得到 shard 的一方(gid2)主动向失去 shard 的一方(gid1)请求 而不是 gid1 向 gid2 发送？
+    因为这样 gid1 可以立刻更新自己的 config，从而拒绝所有和这个 shard 相关的请求；
+    如果让 gid2 等待 gid1 发送的话，它不知道需要等待多久才能得到数据，比较被动。
+为什么把数据抽出来而不是发送整个 map？
+    因为没有实现清理数据，可能导致数据被污染。
+为什么用 myShards 维护当前 shard 的集合而不是直接通过 kv.config 的判断？
+    因为同步配置时，kv.config 就已经被刷新，同步配置之后需要请求 shard 的数据，但是从同步配置到 shard 数据返回中间这段时间我们需要拒绝
+    相关 shard 的请求。
+
+execApplyConfig(newConfig)：
+    gid1 := oldConfig.shards[i]
+    gid2 := newConfig.shards[i]
+    // gid1 ----> shard i ---> gid2
+    共同行为：更新 config
+   
+    gid1 的行为（server）：
+        立刻从 myShards 中删除 shard i （表示立刻拒绝与 i 有关的请求）
+        把 shard i 相关的数据抽出来，放到 dataForMigration 里，方便 gid2 请求 
+        
+    gid2 的行为（client）：
+        通知 tryReqShardData 请求数据:
+            shardDataReqs[i] = newConfig.Num
+        在 execMigrationDataSync 之前都应该拒绝 shard i 相关的请求
+
+MigrateShard() (RPC)(RPC 通信双方都应该是 Leader)
+    如果自己不是 leader，拒绝
+    如果请求的 configNum > 自己的 configNum，拒绝
+    返回保存的数据
+
+MigrateShardArgs
+    Shard int
+    ConfigNum int
+
+MigrateShardReply
+    ConfigNum
+    ErrWrongLeader
+    Err
+    Data 			
+    LastOperation		// 用来给请求去重
+
+
+execMigrationDataSync()
+    如果 数据的 configNum != config.Num - 1，拒绝执行
+    从 shardDataReqs 中删除对应的 shard
+    更新数据，注意判断 shard 是否存在于 myShards：myShards、Data、lastOperation
     
-    kv.config <- config2（如果改变了就会使得当前组立刻拒绝执行所有跟失去 shard 相关的请求）
-
-ReceiveShardData() (RPC)
-    过滤接收到的 data，为 gid 对应 shard 的 k-v对存放到本地
-    标记从 gid 接收 shard 完毕
-    返回成功
-
-execReconfiguration()
-    遍历对应 gid 的服务器集合，发送 ReceiveShardData RPC 给 leader 直到成功

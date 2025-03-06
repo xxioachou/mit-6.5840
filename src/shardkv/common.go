@@ -22,6 +22,7 @@ const ClerkRPCTimeout = 1000
 const ClerkCallDuration = 100
 const QueryConfigDuration = 100
 const SnapshotDuration = 10
+const ReqShardDataDuration = 100
 
 type Err string
 
@@ -57,11 +58,15 @@ type Identifier struct {
 	CallId			int64
 }
 
-type ReceiveShardDataArgs struct {
-	Gid				int					// 来自哪个组
-	Data 			map[string]string
+type MigrateShardArgs struct {
+	ConfigNum		int
+	Shard 			int
 }
 
-type ReceiveShardDataReply struct {
-	Ok 				bool 
+type MigrateShardReply struct {
+	ConfigNum		int
+	Shard			int
+	ErrWrongLeader	bool
+	Data			map[string]string
+	LastOperation	map[int64]LastOperation		// 用来给请求去重
 }
