@@ -11,9 +11,9 @@ Get/Put/Append 操作新增：
         是，拒绝操作（ErrWrongGroup）
 
 新增数据结构：
-    myShards map[int]struct{}                              // 维护当前服务器应该服务哪些 shard 的集合
-    dataForMigration  map[int]map[int]map[string]string    // 表示 config.Num 中和 shard 有关的需要迁移的数据
-    shardDataReqs        struct{config.Num, shard i}       // 需要请求 shard 数据的结构体集合，后台协程会从中读取数据发送 RPC
+    myShards                map[int]struct{}                     // 维护当前服务器应该服务哪些 shard 的集合
+    dataForMigration        map[int]map[int]map[string]string    // 表示 config.Num 中和 shard 有关的需要迁移的数据
+    shardDataReqs           map[int]int                          // 后台协程会从中读取数据发送 RPC(shard->configNum)
 
 新增后台协程：
     tryReqShardData():
@@ -70,3 +70,35 @@ execMigrationDataSync()
     从 shardDataReqs 中删除对应的 shard
     更新数据，注意判断 shard 是否存在于 myShards：myShards、Data、lastOperation
     
+
+Challenge 内容
+execMigrationDataSync()时，shardDataReqs 对应的 shard 会被删除，在这里新增逻辑：
+    接收方把 cfgNum，shard 放进 garbage list -> 接收方后台协程检测到 garbage list 有内容，并且自己是 leader，就调用发送方的 GC RPC，让他回收垃圾 -> 
+    发送方收到 RPC，就从 dataForMigration 中删除对应的数据，返回 OK -> 接收方从 garbage list 中删除 cfgNum, shard
+
+新增数据结构：
+    GCList map[int]map[int]struct{} (cfgNum, shard)
+
+GCArgs
+    CfgNum
+    Shard
+GCReply
+    ErrWrongLeader 	bool
+
+GC() (RPC，注意只能通信双方都是 leader)
+    如果自己不是 leader，拒绝
+    如果数据还没有被删除
+        开启同步，阻塞等待操作被应用
+    返回 OK
+        
+execGC()
+    如果数据还没有被删除
+        删除 dataForMigration 中的数据
+    向管道发送完成，告知操作被应用
+
+新增后台协程：tryGC()
+    从 GCList 中读取信息:{ConfigNum, Shard}
+    向 controller 请求 ConfigNum 的配置，解析需要向谁请求 RPC
+    发送 execGC RPC 请求
+        如果得到 OK
+            从 GCList 中删除对应的信息

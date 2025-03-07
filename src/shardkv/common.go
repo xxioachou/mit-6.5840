@@ -23,6 +23,7 @@ const ClerkCallDuration = 100
 const QueryConfigDuration = 100
 const SnapshotDuration = 10
 const ReqShardDataDuration = 100
+const GCDuration = 100
 
 type Err string
 
@@ -69,4 +70,12 @@ type MigrateShardReply struct {
 	ErrWrongLeader	bool
 	Data			map[string]string
 	LastOperation	map[int64]LastOperation		// 用来给请求去重
+}
+
+type GCArgs struct {
+    CfgNum			int
+    Shard			int
+}
+type GCReply struct {
+    ErrWrongLeader 	bool
 }

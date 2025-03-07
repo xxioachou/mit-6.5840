@@ -7,6 +7,7 @@ package shardctrler
 import (
 	"crypto/rand"
 	"math/big"
+	"sync/atomic"
 	"time"
 
 	"6.5840/labrpc"
@@ -17,7 +18,7 @@ type Clerk struct {
 	// Your data here.
 	ClientID	int64			
 	NextCallID	int64	
-	lastLeader	int		
+	lastLeader	int32		
 }
 
 func nrand() int64 {
@@ -47,9 +48,10 @@ func (ck *Clerk) Query(num int) Config {
 	DPrintf("[client %v] Query(args %+v)", ck.ClientID, args)
 
 	for {
-		if ck.lastLeader != InvalidServer {
+		l := atomic.LoadInt32(&ck.lastLeader)
+		if l != InvalidServer {
 			var reply QueryReply
-			if ck.makeCall(ck.lastLeader, "ShardCtrler.Query", args, &reply) && !reply.WrongLeader {
+			if ck.makeCall(l, "ShardCtrler.Query", args, &reply) && !reply.WrongLeader {
 				return reply.Config
 			}
 		}
@@ -57,8 +59,8 @@ func (ck *Clerk) Query(num int) Config {
 		// try each known server.
 		for i := range ck.servers {
 			var reply QueryReply
-			if ck.makeCall(i, "ShardCtrler.Query", args, &reply) && !reply.WrongLeader {
-				ck.lastLeader = i
+			if ck.makeCall(int32(i), "ShardCtrler.Query", args, &reply) && !reply.WrongLeader {
+				atomic.StoreInt32(&ck.lastLeader, int32(i))
 				return reply.Config
 			}
 		}
@@ -75,9 +77,10 @@ func (ck *Clerk) Join(servers map[int][]string) {
 	DPrintf("[client %v] Join(args %+v)", ck.ClientID, args)
 
 	for {
-		if ck.lastLeader != InvalidServer {
+		l := atomic.LoadInt32(&ck.lastLeader)
+		if l != InvalidServer {
 			var reply JoinReply
-			if ck.makeCall(ck.lastLeader, "ShardCtrler.Join", args, &reply) && !reply.WrongLeader {
+			if ck.makeCall(l, "ShardCtrler.Join", args, &reply) && !reply.WrongLeader {
 				return
 			}
 		}
@@ -85,8 +88,8 @@ func (ck *Clerk) Join(servers map[int][]string) {
 		// try each known server.
 		for i := range ck.servers {
 			var reply JoinReply
-			if ck.makeCall(i, "ShardCtrler.Join", args, &reply) && !reply.WrongLeader {
-				ck.lastLeader = i
+			if ck.makeCall(int32(i), "ShardCtrler.Join", args, &reply) && !reply.WrongLeader {
+				atomic.StoreInt32(&ck.lastLeader, int32(i))
 				return
 			}
 		}
@@ -103,9 +106,10 @@ func (ck *Clerk) Leave(gids []int) {
 	DPrintf("[client %v] Leave(args %+v)", ck.ClientID, args)
 
 	for {
-		if ck.lastLeader != InvalidServer {
+		l := atomic.LoadInt32(&ck.lastLeader)
+		if l != InvalidServer {
 			var reply LeaveReply
-			if ck.makeCall(ck.lastLeader, "ShardCtrler.Leave", args, &reply) && !reply.WrongLeader {
+			if ck.makeCall(l, "ShardCtrler.Leave", args, &reply) && !reply.WrongLeader {
 				return
 			}
 		}
@@ -113,8 +117,8 @@ func (ck *Clerk) Leave(gids []int) {
 		// try each known server.
 		for i := range ck.servers {
 			var reply LeaveReply
-			if ck.makeCall(i, "ShardCtrler.Leave", args, &reply) && !reply.WrongLeader {
-				ck.lastLeader = i
+			if ck.makeCall(int32(i), "ShardCtrler.Leave", args, &reply) && !reply.WrongLeader {
+				atomic.StoreInt32(&ck.lastLeader, int32(i))
 				return
 			}
 		}
@@ -131,17 +135,18 @@ func (ck *Clerk) Move(shard int, gid int) {
 	DPrintf("[client %v] Move(args %+v)", ck.ClientID, args)
 
 	for {
-		if ck.lastLeader != InvalidServer {
+		l := atomic.LoadInt32(&ck.lastLeader)
+		if l != InvalidServer {
 			var reply MoveReply
-			if ck.makeCall(ck.lastLeader, "ShardCtrler.Move", args, &reply) && !reply.WrongLeader {
+			if ck.makeCall(l, "ShardCtrler.Move", args, &reply) && !reply.WrongLeader {
 				return
 			}
 		}
 		// try each known server.
 		for i := range ck.servers {
 			var reply MoveReply
-			if ck.makeCall(i, "ShardCtrler.Move", args, &reply) && !reply.WrongLeader {
-				ck.lastLeader = i
+			if ck.makeCall(int32(i), "ShardCtrler.Move", args, &reply) && !reply.WrongLeader {
+				atomic.StoreInt32(&ck.lastLeader, int32(i))
 				return
 			}
 		}
@@ -156,7 +161,7 @@ func (ck *Clerk) makeIdentifier() Identifier {
 	return id
 }
 
-func (ck *Clerk) makeCall(server int, methodName string, args interface{}, reply interface{}) bool {
+func (ck *Clerk) makeCall(server int32, methodName string, args interface{}, reply interface{}) bool {
 	ch := make(chan bool, 1)
 	go func() {
 		ch <- ck.servers[server].Call(methodName, args, reply)

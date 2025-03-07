@@ -33,6 +33,10 @@ type Op struct {
 	Key      string
 	Value    string
 }
+type GCOp struct {
+	CfgNum	 int
+	Shard    int
+}
 
 type LastOperation struct {
 	CallId 	int64
@@ -62,6 +66,8 @@ type ShardKV struct {
 	MyShards			map[int]struct{}		 			// 维护当前服务器应该服务哪些 shard 的集合
 	DataForMigration  	map[int]map[int]map[string]string	// 需要迁移的数据(configNum, shard -> data)
 	ShardDataReqs       map[int]int       					// 后台协程会从中读取数据发送 RPC(shard->configNum)
+
+	GCList 				map[int]map[int]struct{}			// 后台协程从中读取数据发送 GC RPC (cfgNum, shard)
 }
 
 func (kv *ShardKV) checkRightGroup(key string) bool {
@@ -97,6 +103,12 @@ func equalOp(a, b interface{}) bool {
 	msr2, ok2 := b.(MigrateShardReply)
 	if ok1 && ok2 {
 		return msr1.ConfigNum == msr2.ConfigNum && msr1.Shard == msr2.Shard
+	}
+
+	gc1, ok1 := a.(GCOp)
+	gc2, ok2 := b.(GCOp)
+	if ok1 && ok2 {
+		return gc1.CfgNum == gc2.CfgNum && gc1.Shard == gc2.Shard
 	}
 
 	return false
@@ -263,6 +275,41 @@ func (kv *ShardKV) cloneDataAndLastOperation(cfgNum int, shard int) (map[string]
 	return data, lastOperation
 }
 
+func (kv *ShardKV) GC(args *GCArgs, reply *GCReply) {
+	var op int32
+	DPrintf("[%d:%d] GC(args %+v)", kv.gid, kv.me, args)
+	defer func() { DPrintf("[%d:%d] GC(args %+v, reply %+v, op %v)", kv.gid, kv.me, args, reply, op) }()
+
+	reply.ErrWrongLeader = true
+
+	// kv.mu.Lock()
+	// if _, ok := kv.DataForMigration[args.CfgNum]; !ok {
+	// 	op = 1
+	// 	kv.mu.Unlock()
+	// 	return
+	// }
+	// if _, ok := kv.DataForMigration[args.CfgNum][args.Shard]; !ok {
+	// 	op = 2
+	// 	kv.mu.Unlock()
+	// 	return
+	// }
+	// kv.mu.Unlock()
+
+	gcop := GCOp{CfgNum: args.CfgNum, Shard: args.Shard}
+	index, _, isLeader := kv.rf.Start(gcop)
+	if !isLeader {
+		op = 3
+		return
+	}
+
+	currGCop := <-kv.index2notifyChan(index)
+	if equalOp(currGCop, gcop) {
+		reply.ErrWrongLeader = false
+	} else {
+		op = 4
+	}
+}
+
 // 周期性地检查配置有没有改变
 func (kv *ShardKV) queryConfig() {
 	for !kv.killed() {
@@ -317,6 +364,45 @@ func (kv *ShardKV) tryReqShardData() {
 	}
 }
 
+func (kv *ShardKV) tryGC() {
+	for !kv.killed() {
+		if _, isLeader := kv.rf.GetState(); isLeader {
+			kv.mu.Lock()
+			if len(kv.GCList) > 0 {
+				DPrintf("[%d:%d] tryGC(): kv.GCList %+v", kv.gid, kv.me, kv.GCList)
+				var wg sync.WaitGroup
+				for cfgNum, shards := range kv.GCList {
+					for shard := range shards {
+						wg.Add(1)
+						go func(shard int, config shardctrler.Config) {
+							defer wg.Done()
+							args := GCArgs{CfgNum: config.Num, Shard: shard}
+							for _, server := range config.Groups[config.Shards[shard]] {
+								var reply GCReply
+								if kv.makeCall(server, "ShardKV.GC", &args, &reply) && !reply.ErrWrongLeader {
+									kv.mu.Lock()
+									delete(kv.GCList[config.Num], shard)
+									if len(kv.GCList[config.Num]) == 0 {
+										delete(kv.GCList, config.Num)
+									}
+									kv.mu.Unlock()	
+									return
+								}
+							}
+
+						}(shard, kv.sc.Query(cfgNum))
+					}
+				}
+				kv.mu.Unlock()
+				wg.Wait()
+			} else {
+				kv.mu.Unlock()
+			}
+		}
+		time.Sleep(GCDuration * time.Millisecond)
+	}
+}
+
 // 从 applyCh 中读取已经提交的命令
 func (kv *ShardKV) applier() {
 	for m := range kv.applyCh {
@@ -348,6 +434,10 @@ func (kv *ShardKV) execCommand(command interface{}, index int) {
 	if m, ok := command.(MigrateShardReply); ok {
 		// 应用迁移的数据
 		kv.execMigrationDataSync(m)
+		return
+	}
+	if g, ok := command.(GCOp); ok {
+		kv.execGC(g)
 		return
 	}
 
@@ -449,7 +539,6 @@ func (kv *ShardKV) execMigrationDataSync(migrationData MigrateShardReply) {
 		DPrintf("[%d:%d] execMigrationDataSync(migrationData %+v): migrationData.ConfigNum %v != kv.config.Num %v - 1", kv.gid, kv.me, migrationData, migrationData.ConfigNum, kv.Config.Num)
 		return
 	}
-	delete(kv.ShardDataReqs, migrationData.Shard)
 
 	if _, ok := kv.MyShards[migrationData.Shard]; !ok {
 		kv.MyShards[migrationData.Shard] = struct{}{}
@@ -461,6 +550,30 @@ func (kv *ShardKV) execMigrationDataSync(migrationData MigrateShardReply) {
 				kv.LastOp[k] = v
 			}
 		}
+	}
+	if _, ok := kv.ShardDataReqs[migrationData.Shard]; ok {
+		delete(kv.ShardDataReqs, migrationData.Shard)
+		// 放进 GCList 让后台协程处理
+		if _, ok := kv.GCList[migrationData.ConfigNum]; !ok {
+			kv.GCList[migrationData.ConfigNum] = make(map[int]struct{})
+		}
+		kv.GCList[migrationData.ConfigNum][migrationData.Shard] = struct{}{}
+	}
+
+}
+
+func (kv *ShardKV) execGC(gcop GCOp) {
+	DPrintf("[%d:%d] execGC(gcop %+v)", kv.gid, kv.me, gcop)
+	if _, ok := kv.DataForMigration[gcop.CfgNum]; !ok {
+		return
+	}
+	if _, ok := kv.DataForMigration[gcop.CfgNum][gcop.Shard]; !ok {
+		return
+	}
+
+	delete(kv.DataForMigration[gcop.CfgNum], gcop.Shard)
+	if len(kv.DataForMigration[gcop.CfgNum]) == 0 {
+		delete(kv.DataForMigration, gcop.CfgNum)
 	}
 }
 
@@ -479,6 +592,8 @@ func (kv *ShardKV) makeSnapshot() {
 			e.Encode(kv.MyShards)
 			e.Encode(kv.DataForMigration)
 			e.Encode(kv.ShardDataReqs)
+			
+			e.Encode(kv.GCList)
 			kv.mu.Unlock()
 
 			DPrintf("[%d:%d] makeSnapshot(): LastApplied %v", kv.gid, kv.me, LastApplied)
@@ -501,6 +616,7 @@ func (kv *ShardKV) applySnapshot(snapshotIndex int, snapshot []byte) {
 	myshards := make(map[int]struct{})
 	dataForMigration := make(map[int]map[int]map[string]string)
 	shardDataReqs := make(map[int]int)
+	gcList := make(map[int]map[int]struct{})
 
 	if  e.Decode(&index) != nil ||
 		e.Decode(&data) != nil ||
@@ -508,7 +624,8 @@ func (kv *ShardKV) applySnapshot(snapshotIndex int, snapshot []byte) {
 		e.Decode(&config) != nil ||
 		e.Decode(&myshards) != nil ||
 		e.Decode(&dataForMigration) != nil ||
-		e.Decode(&shardDataReqs) != nil {
+		e.Decode(&shardDataReqs) != nil ||
+		e.Decode(&gcList) != nil {
 		log.Fatalf("[%d:%d] applySnapshot() error!", kv.gid, kv.me)
 	}
 
@@ -531,6 +648,8 @@ func (kv *ShardKV) applySnapshot(snapshotIndex int, snapshot []byte) {
 	kv.MyShards = myshards
 	kv.DataForMigration = dataForMigration
 	kv.ShardDataReqs = shardDataReqs
+
+	kv.GCList = gcList
 }
 
 func (kv *ShardKV) restoreState(snapshot []byte) {
@@ -546,6 +665,7 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 	myshards := make(map[int]struct{})
 	dataForMigration := make(map[int]map[int]map[string]string)
 	shardDataReqs := make(map[int]int)
+	gcList := make(map[int]map[int]struct{})
 
 	w := bytes.NewBuffer(snapshot)
 	e := labgob.NewDecoder(w)
@@ -555,7 +675,8 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 		e.Decode(&config) != nil ||
 		e.Decode(&myshards) != nil ||
 		e.Decode(&dataForMigration) != nil ||
-		e.Decode(&shardDataReqs) != nil {
+		e.Decode(&shardDataReqs) != nil ||
+		e.Decode(&gcList) != nil {
 		log.Printf("[%d:%d] restoreState error!", kv.gid, kv.me)
 		return
 	}
@@ -570,6 +691,8 @@ func (kv *ShardKV) restoreState(snapshot []byte) {
 	kv.MyShards = myshards
 	kv.DataForMigration = dataForMigration
 	kv.ShardDataReqs = shardDataReqs
+
+	kv.GCList = gcList
 }
 
 func (kv *ShardKV) makeCall(serverName string, methodName string, args interface{}, reply interface{}) bool {
@@ -638,6 +761,7 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	labgob.Register(Op{})
 	labgob.Register(shardctrler.Config{})
 	labgob.Register(MigrateShardReply{})
+	labgob.Register(GCOp{})
 
 	kv := new(ShardKV)
 	kv.me = me
@@ -665,6 +789,8 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	kv.DataForMigration = make(map[int]map[int]map[string]string)
 	kv.ShardDataReqs = make(map[int]int)
 
+	kv.GCList = make(map[int]map[int]struct{})
+
 	// 恢复到保存的快照状态
 	kv.restoreState(kv.persister.ReadSnapshot())
 
@@ -676,6 +802,7 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 
 	go kv.queryConfig()
 	go kv.tryReqShardData()
+	go kv.tryGC()
 
 	return kv
 }

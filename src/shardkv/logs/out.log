@@ -1,39 +1,58 @@
-
+=== RUN   TestStaticShards5A
+Test (5A): static shards ...
+  ... Passed
+--- PASS: TestStaticShards5A (3.70s)
+=== RUN   TestRejection5A
+Test (5A): rejection ...
+  ... Passed
+--- PASS: TestRejection5A (3.63s)
 === RUN   TestJoinLeave5B
 Test (5B): join then leave ...
   ... Passed
---- PASS: TestJoinLeave5B (1.87s)
+--- PASS: TestJoinLeave5B (2.22s)
 === RUN   TestSnapshot5B
 Test (5B): snapshots, join, and leave ...
   ... Passed
---- PASS: TestSnapshot5B (4.41s)
+--- PASS: TestSnapshot5B (4.38s)
 === RUN   TestMissChange5B
 Test (5B): servers miss configuration changes...
   ... Passed
---- PASS: TestMissChange5B (8.06s)
+--- PASS: TestMissChange5B (7.93s)
 === RUN   TestConcurrent1_5B
 Test (5B): concurrent puts and configuration changes...
   ... Passed
---- PASS: TestConcurrent1_5B (4.08s)
+--- PASS: TestConcurrent1_5B (4.20s)
 === RUN   TestConcurrent2_5B
 Test (5B): more concurrent puts and configuration changes...
   ... Passed
---- PASS: TestConcurrent2_5B (13.49s)
+--- PASS: TestConcurrent2_5B (13.71s)
 === RUN   TestConcurrent3_5B
 Test (5B): concurrent configuration change and restart...
   ... Passed
---- PASS: TestConcurrent3_5B (20.74s)
+--- PASS: TestConcurrent3_5B (23.39s)
 === RUN   TestUnreliable1_5B
 Test (5B): unreliable 1...
   ... Passed
---- PASS: TestUnreliable1_5B (7.89s)
+--- PASS: TestUnreliable1_5B (12.08s)
 === RUN   TestUnreliable2_5B
 Test (5B): unreliable 2...
   ... Passed
---- PASS: TestUnreliable2_5B (7.38s)
+--- PASS: TestUnreliable2_5B (6.27s)
 === RUN   TestUnreliable3_5B
 Test (5B): unreliable 3...
   ... Passed
---- PASS: TestUnreliable3_5B (7.08s)
+--- PASS: TestUnreliable3_5B (6.32s)
+=== RUN   TestChallenge1Delete
+Test: shard deletion (challenge 1) ...
+  ... Passed
+--- PASS: TestChallenge1Delete (16.68s)
+=== RUN   TestChallenge2Unaffected
+Test: unaffected shard access (challenge 2) ...
+  ... Passed
+--- PASS: TestChallenge2Unaffected (6.82s)
+=== RUN   TestChallenge2Partial
+Test: partial migration shard access (challenge 2) ...
+  ... Passed
+--- PASS: TestChallenge2Partial (5.58s)
 PASS
-ok  	6.5840/shardkv	76.096s
+ok  	6.5840/shardkv	117.981s
