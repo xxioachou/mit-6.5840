@@ -35,7 +35,7 @@ const InvalidServer = -1
 const InvalidGid = 0
 const ClerkRPCTimeout = 1000
 const ClerkCallDuration = 100
-const ServerCheckTermDuration = 100
+// const ServerCheckTermDuration = 100
 
 type Err string
 

@@ -20,10 +20,10 @@ const InvalidServer = -1
 const InvalidGid = 0
 const ClerkRPCTimeout = 1000
 const ClerkCallDuration = 100
-const QueryConfigDuration = 100
+const QueryConfigDuration = 30
 const SnapshotDuration = 10
-const ReqShardDataDuration = 100
-const GCDuration = 100
+const ReqShardDataDuration = 30
+const GCDuration = 30
 
 type Err string
 

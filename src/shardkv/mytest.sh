@@ -14,20 +14,20 @@ echo "" > $out
 # go test -run=TestChallenge1Delete -race -v >> $out
 # go test -run Challenge -race -v >> $out
 
-iters=10
-i=1
-while (( $i <= $iters))
-do
+# iters=10
+# i=1
+# while (( $i <= $iters))
+# do
 
-    go test -race -v > $out
-    if [ $? -ne 0 ]; then
-        echo "Test failed on test $i!"
-        fail="./logs/fail_${i}.log"
-        cp $out $fail
-        exit 1  
-    fi
-    echo "Test $i passed."
-    let "i++"
-done
+#     go test -race -v > $out
+#     if [ $? -ne 0 ]; then
+#         echo "Test failed on test $i!"
+#         fail="./logs/fail_${i}.log"
+#         cp $out $fail
+#         exit 1  
+#     fi
+#     echo "Test $i passed."
+#     let "i++"
+# done
 
-echo "Test passed $iters times!"
+# echo "Test passed $iters times!"
