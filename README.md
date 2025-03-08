@@ -8,3 +8,4 @@
 
 ## lab5 shardkv 通过 400 遍
 ![shardkv 通过测试 400 遍](./src/shardctrler/notes/通过400遍测试.png)
+
